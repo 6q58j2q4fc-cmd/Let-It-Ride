@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/_core/hooks/useAuth';
+import { trpc } from '@/lib/trpc';
 import { getLoginUrl } from '@/const';
 import { toast } from 'sonner';
 import { 
@@ -51,20 +52,64 @@ export default function Admin() {
     { id: 2, platform: 'facebook', content: 'New blog post: Best trails in Bend', scheduledFor: '2026-01-14 14:00', status: 'scheduled' }
   ];
 
+  const generateBlogMutation = trpc.automation.generateBlogPost.useMutation({
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success(`Blog post generated: ${data.title}`);
+      } else {
+        toast.error(`Failed to generate blog: ${data.error}`);
+      }
+      setGeneratingBlog(false);
+    },
+    onError: (error) => {
+      toast.error(`Error: ${error.message}`);
+      setGeneratingBlog(false);
+    }
+  });
+
   const handleGenerateBlog = async () => {
     setGeneratingBlog(true);
-    toast.info('Generating SEO-optimized blog post...');
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    toast.success('Blog post generated and scheduled!');
-    setGeneratingBlog(false);
+    toast.info('Generating SEO-optimized blog post with AI...');
+    generateBlogMutation.mutate();
   };
+
+  const generateSocialMutation = trpc.automation.generateSocialPost.useMutation({
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success('Social media post generated and queued!');
+      } else {
+        toast.error(`Failed to generate social post: ${data.error}`);
+      }
+      setPostingSocial(false);
+    },
+    onError: (error) => {
+      toast.error(`Error: ${error.message}`);
+      setPostingSocial(false);
+    }
+  });
+
+  const runDailyMutation = trpc.automation.runDaily.useMutation({
+    onSuccess: (data) => {
+      if (data.blog.success && data.social.success) {
+        toast.success('Daily automation completed successfully!');
+      } else {
+        toast.warning('Automation completed with some issues');
+      }
+    },
+    onError: (error) => {
+      toast.error(`Automation error: ${error.message}`);
+    }
+  });
 
   const handlePostSocial = async () => {
     setPostingSocial(true);
-    toast.info('Posting to social media...');
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    toast.success('Posted to Instagram and Facebook!');
-    setPostingSocial(false);
+    toast.info('Generating social media post with AI...');
+    generateSocialMutation.mutate();
+  };
+
+  const handleRunDailyAutomation = () => {
+    toast.info('Running daily automation (blog + social)...');
+    runDailyMutation.mutate();
   };
 
   if (loading) {
@@ -228,6 +273,10 @@ export default function Admin() {
                 <Button variant="outline">
                   <Mail className="h-4 w-4 mr-2" />
                   Send Review Requests
+                </Button>
+                <Button onClick={handleRunDailyAutomation} variant="secondary" disabled={runDailyMutation.isPending}>
+                  <BarChart3 className={`h-4 w-4 mr-2 ${runDailyMutation.isPending ? 'animate-spin' : ''}`} />
+                  Run Daily Automation
                 </Button>
               </CardContent>
             </Card>

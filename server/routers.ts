@@ -18,6 +18,7 @@ import {
 import { invokeLLM } from "./_core/llm";
 import Stripe from "stripe";
 import { ENV } from "./_core/env";
+import { generateDailyBlogPost, generateDailySocialPost, runDailyAutomation } from "./automation";
 
 const stripe = new Stripe(ENV.stripeSecretKey || "", { apiVersion: "2025-12-15.clover" });
 
@@ -605,6 +606,24 @@ Return JSON with: caption, hashtags (array), callToAction`
     
     getMyPlays: protectedProcedure.query(async ({ ctx }) => {
       return getGamePlaysByUser(ctx.user.id);
+    })
+  }),
+
+  // Automation
+  automation: router({
+    generateBlogPost: protectedProcedure.mutation(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') throw new Error('Unauthorized');
+      return generateDailyBlogPost();
+    }),
+    
+    generateSocialPost: protectedProcedure.mutation(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') throw new Error('Unauthorized');
+      return generateDailySocialPost();
+    }),
+    
+    runDaily: protectedProcedure.mutation(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') throw new Error('Unauthorized');
+      return runDailyAutomation();
     })
   }),
 

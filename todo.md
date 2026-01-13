@@ -116,3 +116,12 @@
 - [x] Update blog images with Central Oregon landscapes
 - [x] Update about page with local Bend imagery
 - [x] Update rentals page with e-bike rental scenes
+
+
+## Scheduled Tasks Automation
+- [x] Create API endpoint for automated blog generation
+- [x] Create API endpoint for automated social media posting
+- [x] Add scheduler configuration UI in admin panel
+- [x] Set up daily cron job for blog post generation (9 AM)
+- [x] Set up daily cron job for social media posting (10 AM)
+- [x] Add scheduler status display in admin dashboard
