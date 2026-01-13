@@ -25,7 +25,7 @@ const tours = [
     duration: '1.5 hours',
     price: 75,
     description: 'Perfect introduction to Bend! Breeze through town on our guided tour, learn local history, and discover great photo spots.',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop',
+    image: '/images/ebike-tour-group.jpg',
     icon: Bike,
     highlights: ['Local history', 'Photo opportunities', 'Downtown Bend']
   },
@@ -35,7 +35,7 @@ const tours = [
     duration: '2 hours',
     price: 100,
     description: 'Cruise along the beautiful Deschutes River, enjoy stunning scenery and wildlife while your guide shares historic stories.',
-    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop',
+    image: '/images/deschutes-river-trail.jpg',
     icon: Mountain,
     highlights: ['River views', 'Wildlife spotting', 'Scenic trails']
   },
@@ -45,7 +45,7 @@ const tours = [
     duration: '2 hours',
     price: 150,
     description: 'Experience Bend\'s famous craft beverage scene! Visit breweries, cider houses, and tasting rooms on this delicious adventure.',
-    image: 'https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=600&h=400&fit=crop',
+    image: '/images/bend-brewery-patio.jpg',
     icon: Wine,
     highlights: ['Craft breweries', 'Local tastings', 'Food & drink']
   }
@@ -106,7 +106,7 @@ export default function Home() {
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop)'
+            backgroundImage: 'url(/images/cascade-mountains.jpg)'
           }}
         >
           <div className="absolute inset-0 hero-gradient" />
@@ -272,7 +272,7 @@ export default function Home() {
             </div>
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=600&h=500&fit=crop"
+                src="/images/ebike-lake-tour.jpg"
                 alt="E-bike tour in Bend"
                 className="rounded-2xl shadow-2xl"
               />

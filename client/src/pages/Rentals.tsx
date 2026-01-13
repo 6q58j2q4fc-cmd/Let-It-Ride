@@ -42,7 +42,7 @@ const rentalOptions = [
 const bikeTypes = [
   {
     name: 'Pedego Cruiser',
-    image: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=400&h=300&fit=crop',
+    image: '/images/pedego-element.jpg',
     description: 'Comfortable upright riding position, perfect for casual rides',
     range: '40+ miles',
     speed: '20 mph',
@@ -50,7 +50,7 @@ const bikeTypes = [
   },
   {
     name: 'Pedego Ridge Rider',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
+    image: '/images/ebike-mountain-trail.jpg',
     description: 'Full suspension mountain e-bike for trail adventures',
     range: '35+ miles',
     speed: '20 mph',
@@ -58,7 +58,7 @@ const bikeTypes = [
   },
   {
     name: 'Pedego Tandem',
-    image: 'https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=400&h=300&fit=crop',
+    image: '/images/ebike-lake-tour.jpg',
     description: 'Two-person e-bike for couples and friends',
     range: '30+ miles',
     speed: '20 mph',

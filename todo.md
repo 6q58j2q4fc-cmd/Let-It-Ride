@@ -107,3 +107,12 @@
 ## Technical
 - [x] Stripe webhook handler
 - [x] Unit tests for core functionality
+
+
+## Image Updates
+- [x] Update hero section with Bend, Oregon mountain scenery
+- [x] Update tour images with Deschutes River, local trails, brewery scenes
+- [x] Update e-bike product images with Pedego bikes
+- [x] Update blog images with Central Oregon landscapes
+- [x] Update about page with local Bend imagery
+- [x] Update rentals page with e-bike rental scenes
