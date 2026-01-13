@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { EcoSavingsCalculator } from '@/components/EcoSavingsCalculator';
+import { GreenEnergySection } from '@/components/GreenEnergySection';
 import { 
   Star, 
   Clock, 
@@ -15,7 +17,10 @@ import {
   Play,
   Award,
   Shield,
-  Heart
+  Heart,
+  Zap,
+  Leaf,
+  Battery
 } from 'lucide-react';
 
 const tours = [
@@ -118,6 +123,7 @@ export default function Home() {
               Bend, Oregon's Premier E-Bike Experience
             </span>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              <Zap className="inline-block w-12 h-12 text-yellow-400 lightning-icon mr-2" />
               Hello Fun!<br />
               <span className="text-accent">Miles of Smiles</span> Await
             </h1>
@@ -127,7 +133,8 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/tours">
-                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground btn-glow text-lg px-8">
+                <Button size="lg" className="btn-lightning text-lg px-8">
+                  <Zap className="mr-2 h-5 w-5" />
                   Book a Tour
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -149,17 +156,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features bar */}
-      <section className="bg-secondary py-8">
+      {/* Features bar with electric theme */}
+      <section className="bg-gradient-to-r from-primary/5 via-secondary to-primary/5 py-8 border-y border-primary/10">
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-primary/10">
+              <div key={index} className="flex items-center gap-3 group">
+                <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors electric-glow">
                   <feature.icon className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-sm">{feature.title}</h3>
+                  <h3 className="font-semibold text-sm flex items-center gap-1">
+                    {feature.title}
+                    {index === 0 && <Zap className="w-3 h-3 text-yellow-500" />}
+                  </h3>
                   <p className="text-xs text-muted-foreground">{feature.description}</p>
                 </div>
               </div>
@@ -234,6 +244,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Green Energy Section */}
+      <GreenEnergySection />
 
       {/* About Section */}
       <section className="py-20 bg-secondary">
@@ -339,16 +352,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Eco Savings Calculator */}
+      <EcoSavingsCalculator />
+
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
+      <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden">
+        {/* Electric background pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-20 h-20 border-2 border-primary-foreground rounded-full animate-ping" style={{animationDuration: '3s'}} />
+          <div className="absolute bottom-10 right-10 w-32 h-32 border-2 border-primary-foreground rounded-full animate-ping" style={{animationDuration: '4s'}} />
+          <div className="absolute top-1/2 left-1/4 w-16 h-16 border-2 border-primary-foreground rounded-full animate-ping" style={{animationDuration: '5s'}} />
+        </div>
         <div className="container text-center">
-          <h2 className="text-4xl font-bold mb-4">Ready for Miles of Smiles?</h2>
+          <h2 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
+            <Zap className="w-10 h-10 text-yellow-300 lightning-icon" />
+            Ready for Miles of Smiles?
+            <Zap className="w-10 h-10 text-yellow-300 lightning-icon" />
+          </h2>
           <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
             Book your e-bike adventure today and discover why Bend is the perfect place for a ride!
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/tours">
-              <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground btn-glow text-lg px-8">
+              <Button size="lg" className="btn-lightning text-lg px-8">
+                <Zap className="mr-2 h-5 w-5" />
                 Book a Tour
               </Button>
             </Link>

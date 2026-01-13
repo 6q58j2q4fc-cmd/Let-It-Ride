@@ -40,49 +40,56 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-electric: var(--electric);
+  --color-electric-glow: var(--electric-glow);
 }
 
-/* Let It Ride Bend - Outdoor Adventure Theme */
-/* Color palette inspired by Oregon's natural beauty: evergreen forests, mountain peaks, river blues */
+/* Let It Ride Bend - Electric Green Energy Theme */
+/* Color palette: Electric green, lightning yellow, eco-friendly vibes */
 
 :root {
-  /* Primary - Forest Green (Let It Ride brand) */
-  --primary: oklch(0.50 0.15 145);
+  /* Primary - Electric Green */
+  --primary: oklch(0.55 0.18 145);
   --primary-foreground: oklch(0.99 0.002 240);
-  --sidebar-primary: oklch(0.50 0.15 145);
+  --sidebar-primary: oklch(0.55 0.18 145);
   --sidebar-primary-foreground: oklch(0.99 0.002 240);
   
-  /* Chart colors */
-  --chart-1: oklch(0.50 0.15 145);
-  --chart-2: oklch(0.60 0.15 200);
-  --chart-3: oklch(0.70 0.18 50);
-  --chart-4: oklch(0.65 0.12 280);
-  --chart-5: oklch(0.55 0.15 30);
+  /* Electric accent colors */
+  --electric: oklch(0.75 0.20 130);
+  --electric-glow: oklch(0.85 0.25 100);
+  --lightning: oklch(0.90 0.18 95);
   
-  --radius: 0.625rem;
+  /* Chart colors - Green energy spectrum */
+  --chart-1: oklch(0.55 0.18 145);
+  --chart-2: oklch(0.65 0.20 130);
+  --chart-3: oklch(0.75 0.18 95);
+  --chart-4: oklch(0.60 0.15 200);
+  --chart-5: oklch(0.70 0.18 50);
+  
+  --radius: 0.75rem;
   
   /* Core colors - Light theme */
-  --background: oklch(0.99 0.002 240);
-  --foreground: oklch(0.20 0.02 240);
+  --background: oklch(0.99 0.005 145);
+  --foreground: oklch(0.18 0.03 145);
   
   /* Card surfaces */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.20 0.02 240);
+  --card-foreground: oklch(0.18 0.03 145);
   
   /* Popover */
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.20 0.02 240);
+  --popover-foreground: oklch(0.18 0.03 145);
   
-  /* Secondary - Mountain Gray */
-  --secondary: oklch(0.94 0.01 240);
-  --secondary-foreground: oklch(0.25 0.02 240);
+  /* Secondary - Eco Gray-Green */
+  --secondary: oklch(0.95 0.02 145);
+  --secondary-foreground: oklch(0.25 0.03 145);
   
   /* Muted */
-  --muted: oklch(0.95 0.01 240);
-  --muted-foreground: oklch(0.50 0.02 240);
+  --muted: oklch(0.96 0.015 145);
+  --muted-foreground: oklch(0.45 0.03 145);
   
-  /* Accent - Sunset Orange (CTA buttons) */
-  --accent: oklch(0.70 0.18 50);
+  /* Accent - Electric Orange (CTA buttons) */
+  --accent: oklch(0.72 0.19 50);
   --accent-foreground: oklch(0.99 0.002 240);
   
   /* Destructive */
@@ -90,68 +97,73 @@
   --destructive-foreground: oklch(0.99 0.002 240);
   
   /* Border and input */
-  --border: oklch(0.88 0.01 240);
-  --input: oklch(0.88 0.01 240);
-  --ring: oklch(0.50 0.15 145);
+  --border: oklch(0.90 0.02 145);
+  --input: oklch(0.90 0.02 145);
+  --ring: oklch(0.55 0.18 145);
   
   /* Sidebar */
-  --sidebar: oklch(0.97 0.01 240);
-  --sidebar-foreground: oklch(0.20 0.02 240);
-  --sidebar-accent: oklch(0.93 0.01 240);
-  --sidebar-accent-foreground: oklch(0.25 0.02 240);
-  --sidebar-border: oklch(0.88 0.01 240);
-  --sidebar-ring: oklch(0.50 0.15 145);
+  --sidebar: oklch(0.97 0.015 145);
+  --sidebar-foreground: oklch(0.18 0.03 145);
+  --sidebar-accent: oklch(0.94 0.02 145);
+  --sidebar-accent-foreground: oklch(0.25 0.03 145);
+  --sidebar-border: oklch(0.90 0.02 145);
+  --sidebar-ring: oklch(0.55 0.18 145);
   
   /* Custom brand colors */
-  --brand-green: oklch(0.50 0.15 145);
-  --brand-orange: oklch(0.70 0.18 50);
-  --brand-blue: oklch(0.55 0.12 230);
-  --brand-brown: oklch(0.45 0.08 60);
+  --brand-green: oklch(0.55 0.18 145);
+  --brand-electric: oklch(0.75 0.20 130);
+  --brand-lightning: oklch(0.90 0.18 95);
+  --brand-orange: oklch(0.72 0.19 50);
+  --brand-eco: oklch(0.60 0.15 160);
 }
 
 .dark {
-  --primary: oklch(0.60 0.15 145);
-  --primary-foreground: oklch(0.15 0.02 240);
-  --sidebar-primary: oklch(0.60 0.15 145);
-  --sidebar-primary-foreground: oklch(0.15 0.02 240);
+  --primary: oklch(0.65 0.18 145);
+  --primary-foreground: oklch(0.12 0.02 145);
+  --sidebar-primary: oklch(0.65 0.18 145);
+  --sidebar-primary-foreground: oklch(0.12 0.02 145);
   
-  --background: oklch(0.15 0.02 240);
-  --foreground: oklch(0.95 0.01 240);
+  --electric: oklch(0.75 0.22 130);
+  --electric-glow: oklch(0.85 0.25 100);
+  --lightning: oklch(0.92 0.20 95);
   
-  --card: oklch(0.18 0.02 240);
-  --card-foreground: oklch(0.95 0.01 240);
+  --background: oklch(0.12 0.03 145);
+  --foreground: oklch(0.95 0.01 145);
   
-  --popover: oklch(0.18 0.02 240);
-  --popover-foreground: oklch(0.95 0.01 240);
+  --card: oklch(0.15 0.03 145);
+  --card-foreground: oklch(0.95 0.01 145);
   
-  --secondary: oklch(0.25 0.02 240);
-  --secondary-foreground: oklch(0.95 0.01 240);
+  --popover: oklch(0.15 0.03 145);
+  --popover-foreground: oklch(0.95 0.01 145);
   
-  --muted: oklch(0.25 0.02 240);
-  --muted-foreground: oklch(0.65 0.01 240);
+  --secondary: oklch(0.22 0.03 145);
+  --secondary-foreground: oklch(0.95 0.01 145);
   
-  --accent: oklch(0.70 0.18 50);
-  --accent-foreground: oklch(0.15 0.02 240);
+  --muted: oklch(0.22 0.03 145);
+  --muted-foreground: oklch(0.65 0.02 145);
+  
+  --accent: oklch(0.72 0.19 50);
+  --accent-foreground: oklch(0.12 0.02 145);
   
   --destructive: oklch(0.55 0.20 25);
-  --destructive-foreground: oklch(0.95 0.01 240);
+  --destructive-foreground: oklch(0.95 0.01 145);
   
-  --border: oklch(0.30 0.02 240);
-  --input: oklch(0.30 0.02 240);
-  --ring: oklch(0.60 0.15 145);
+  --border: oklch(0.28 0.03 145);
+  --input: oklch(0.28 0.03 145);
+  --ring: oklch(0.65 0.18 145);
   
-  --chart-1: oklch(0.60 0.15 145);
-  --chart-2: oklch(0.65 0.15 200);
-  --chart-3: oklch(0.75 0.18 50);
-  --chart-4: oklch(0.70 0.12 280);
-  --chart-5: oklch(0.60 0.15 30);
+  --chart-1: oklch(0.65 0.18 145);
+  --chart-2: oklch(0.70 0.20 130);
+  --chart-3: oklch(0.80 0.18 95);
+  --chart-4: oklch(0.65 0.15 200);
+  --chart-5: oklch(0.75 0.18 50);
   
-  --sidebar: oklch(0.18 0.02 240);
-  --sidebar-foreground: oklch(0.95 0.01 240);
-  --sidebar-accent: oklch(0.25 0.02 240);
-  --sidebar-accent-foreground: oklch(0.95 0.01 240);
-  --sidebar-border: oklch(0.30 0.02 240);
-  --sidebar-ring: oklch(0.60 0.15 145);
+  --sidebar: oklch(0.15 0.03 145);
+  --sidebar-foreground: oklch(0.95 0.01 145);
+  --sidebar-accent: oklch(0.22 0.03 145);
+  --sidebar-accent-foreground: oklch(0.95 0.01 145);
+  --sidebar-border: oklch(0.28 0.03 145);
+  --sidebar-ring: oklch(0.65 0.18 145);
 }
 
 @layer base {
@@ -194,39 +206,185 @@
   background: var(--muted-foreground);
 }
 
-/* Hero section gradient overlay */
+/* ⚡ ELECTRIC LIGHTNING BOLT THEME ⚡ */
+
+/* Hero section gradient with electric effect */
 .hero-gradient {
   background: linear-gradient(
     135deg,
-    oklch(0.50 0.15 145 / 0.9) 0%,
-    oklch(0.35 0.10 145 / 0.8) 50%,
-    oklch(0.25 0.05 240 / 0.7) 100%
+    oklch(0.55 0.18 145 / 0.95) 0%,
+    oklch(0.40 0.15 145 / 0.90) 40%,
+    oklch(0.30 0.10 160 / 0.85) 100%
   );
 }
 
-/* Card hover effects */
+/* Electric glow effect */
+.electric-glow {
+  box-shadow: 
+    0 0 20px oklch(0.75 0.20 130 / 0.4),
+    0 0 40px oklch(0.75 0.20 130 / 0.2),
+    0 0 60px oklch(0.75 0.20 130 / 0.1);
+}
+
+.electric-glow:hover {
+  box-shadow: 
+    0 0 30px oklch(0.75 0.20 130 / 0.6),
+    0 0 60px oklch(0.75 0.20 130 / 0.3),
+    0 0 90px oklch(0.75 0.20 130 / 0.15);
+}
+
+/* Lightning bolt button effect */
+.btn-lightning {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, oklch(0.72 0.19 50) 0%, oklch(0.65 0.20 45) 100%);
+  box-shadow: 
+    0 4px 15px oklch(0.72 0.19 50 / 0.4),
+    inset 0 1px 0 oklch(1 0 0 / 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-lightning::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    oklch(1 0 0 / 0.1) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg);
+  animation: lightning-sweep 3s ease-in-out infinite;
+}
+
+.btn-lightning:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 25px oklch(0.72 0.19 50 / 0.5),
+    0 0 40px oklch(0.90 0.18 95 / 0.3),
+    inset 0 1px 0 oklch(1 0 0 / 0.3);
+}
+
+@keyframes lightning-sweep {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  50%, 100% { transform: translateX(100%) rotate(45deg); }
+}
+
+/* Animated lightning bolt icon */
+.lightning-icon {
+  animation: lightning-pulse 2s ease-in-out infinite;
+}
+
+@keyframes lightning-pulse {
+  0%, 100% { 
+    filter: drop-shadow(0 0 5px oklch(0.90 0.18 95 / 0.8));
+    transform: scale(1);
+  }
+  50% { 
+    filter: drop-shadow(0 0 15px oklch(0.90 0.18 95 / 1));
+    transform: scale(1.1);
+  }
+}
+
+/* Electric border animation */
+.electric-border {
+  position: relative;
+  border: 2px solid transparent;
+  background: linear-gradient(var(--card), var(--card)) padding-box,
+              linear-gradient(135deg, oklch(0.55 0.18 145), oklch(0.75 0.20 130), oklch(0.90 0.18 95)) border-box;
+}
+
+.electric-border::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, oklch(0.55 0.18 145), oklch(0.75 0.20 130), oklch(0.90 0.18 95));
+  z-index: -1;
+  animation: electric-rotate 4s linear infinite;
+  filter: blur(8px);
+  opacity: 0.5;
+}
+
+@keyframes electric-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Green energy gradient text */
+.text-electric-gradient {
+  background: linear-gradient(135deg, oklch(0.55 0.18 145) 0%, oklch(0.75 0.20 130) 50%, oklch(0.90 0.18 95) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Eco savings counter animation */
+.counter-animate {
+  animation: counter-pop 0.5s ease-out;
+}
+
+@keyframes counter-pop {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Ticker animation for eco facts */
+.eco-ticker {
+  animation: ticker-scroll 30s linear infinite;
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Pulse animation for live stats */
+.pulse-green {
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 oklch(0.55 0.18 145 / 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 0 15px oklch(0.55 0.18 145 / 0);
+  }
+}
+
+/* Card hover effects with electric theme */
 .card-hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px -12px oklch(0.20 0.02 240 / 0.25);
+  transform: translateY(-6px);
+  box-shadow: 
+    0 15px 40px -12px oklch(0.55 0.18 145 / 0.25),
+    0 0 20px oklch(0.75 0.20 130 / 0.1);
 }
 
 /* Button glow effect for CTAs */
 .btn-glow {
-  box-shadow: 0 0 20px oklch(0.70 0.18 50 / 0.4);
-  transition: box-shadow 0.3s ease;
+  box-shadow: 0 0 25px oklch(0.72 0.19 50 / 0.5);
+  transition: all 0.3s ease;
 }
 
 .btn-glow:hover {
-  box-shadow: 0 0 30px oklch(0.70 0.18 50 / 0.6);
+  box-shadow: 
+    0 0 35px oklch(0.72 0.19 50 / 0.7),
+    0 0 60px oklch(0.90 0.18 95 / 0.3);
 }
 
 /* Text gradient for headings */
 .text-gradient {
-  background: linear-gradient(135deg, oklch(0.50 0.15 145) 0%, oklch(0.55 0.12 230) 100%);
+  background: linear-gradient(135deg, oklch(0.55 0.18 145) 0%, oklch(0.60 0.15 160) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -234,16 +392,17 @@
 
 /* Review stars */
 .star-filled {
-  color: oklch(0.75 0.18 85);
+  color: oklch(0.80 0.18 95);
 }
 
-/* Price tag styling */
+/* Price tag styling with electric theme */
 .price-tag {
-  background: linear-gradient(135deg, oklch(0.50 0.15 145) 0%, oklch(0.45 0.12 145) 100%);
+  background: linear-gradient(135deg, oklch(0.55 0.18 145) 0%, oklch(0.50 0.15 145) 100%);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-weight: 600;
+  box-shadow: 0 4px 15px oklch(0.55 0.18 145 / 0.3);
 }
 
 /* Animated underline for links */
@@ -258,7 +417,7 @@
   height: 2px;
   bottom: -2px;
   left: 0;
-  background: var(--primary);
+  background: linear-gradient(90deg, oklch(0.55 0.18 145), oklch(0.75 0.20 130));
   transition: width 0.3s ease;
 }
 
@@ -269,42 +428,137 @@
 /* Game card styling */
 .game-card {
   background: linear-gradient(145deg, #1a472a 0%, #0d2818 100%);
-  border: 2px solid oklch(0.45 0.10 85);
+  border: 2px solid oklch(0.75 0.20 130);
   border-radius: 8px;
-  box-shadow: 0 4px 20px oklch(0 0 0 / 0.3);
+  box-shadow: 
+    0 4px 20px oklch(0 0 0 / 0.3),
+    inset 0 0 30px oklch(0.75 0.20 130 / 0.1);
 }
 
 /* Coupon code styling */
 .coupon-code {
   font-family: monospace;
-  background: oklch(0.95 0.02 85);
-  border: 2px dashed oklch(0.70 0.18 50);
+  background: linear-gradient(135deg, oklch(0.95 0.02 95) 0%, oklch(0.92 0.03 130) 100%);
+  border: 2px dashed oklch(0.55 0.18 145);
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: 0.1em;
+  box-shadow: 0 4px 15px oklch(0.55 0.18 145 / 0.2);
+}
+
+/* Eco stats card */
+.eco-stat-card {
+  background: linear-gradient(135deg, oklch(0.98 0.01 145) 0%, oklch(0.95 0.02 130) 100%);
+  border: 1px solid oklch(0.55 0.18 145 / 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.eco-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 10px 30px oklch(0.55 0.18 145 / 0.15),
+    0 0 20px oklch(0.75 0.20 130 / 0.1);
+  border-color: oklch(0.55 0.18 145 / 0.4);
+}
+
+/* Savings calculator input */
+.calc-input {
+  background: oklch(0.98 0.01 145);
+  border: 2px solid oklch(0.90 0.02 145);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.calc-input:focus {
+  border-color: oklch(0.55 0.18 145);
+  box-shadow: 
+    0 0 0 3px oklch(0.55 0.18 145 / 0.2),
+    0 0 20px oklch(0.75 0.20 130 / 0.1);
+  outline: none;
+}
+
+/* Progress bar with electric fill */
+.progress-electric {
+  background: oklch(0.92 0.02 145);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-electric-fill {
+  background: linear-gradient(90deg, oklch(0.55 0.18 145), oklch(0.75 0.20 130), oklch(0.90 0.18 95));
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 1s ease-out;
+  position: relative;
+}
+
+.progress-electric-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.3), transparent);
+  animation: progress-shine 2s ease-in-out infinite;
+}
+
+@keyframes progress-shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Floating animation for icons */
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Sparkle effect */
+.sparkle {
+  position: relative;
+}
+
+.sparkle::before,
+.sparkle::after {
+  content: '⚡';
+  position: absolute;
+  font-size: 0.75rem;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.sparkle::before {
+  top: -5px;
+  left: -10px;
+  animation-delay: 0s;
+}
+
+.sparkle::after {
+  bottom: -5px;
+  right: -10px;
+  animation-delay: 1s;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1); }
 }
 
 @layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
   .container {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
+    padding-left: 1rem;
     padding-right: 1rem;
   }
 
@@ -315,16 +569,16 @@
 
   @media (min-width: 640px) {
     .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
 
   @media (min-width: 1024px) {
     .container {
-      padding-left: 2rem; /* 32px - desktop padding */
+      padding-left: 2rem;
       padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
+      max-width: 1280px;
     }
   }
 }
