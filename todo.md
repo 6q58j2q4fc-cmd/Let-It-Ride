@@ -167,3 +167,7 @@
 - [x] Add meta keywords tag
 - [x] Add Open Graph meta tags for social sharing
 - [x] Add structured data (JSON-LD) for LocalBusiness
+
+
+## Bug Fixes
+- [x] Fix sidebar/mobile menu text visibility - Let It Ride text covered by colors

@@ -304,11 +304,47 @@ export function Header() {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[320px] p-0">
+            <SheetContent side="right" className="w-[320px] p-0 bg-background">
               <div className="flex flex-col h-full">
                 {/* Mobile Header */}
-                <div className="p-6 bg-gradient-to-br from-primary to-green-600 text-white">
-                  <AnimatedLogo size="large" />
+                <div className="p-6 bg-gradient-to-br from-primary to-green-600">
+                  {/* Custom mobile logo with white text */}
+                  <div className="flex items-center gap-3">
+                    {/* Logo Mark */}
+                    <div className="relative w-14 h-14">
+                      <div className="absolute inset-0 rounded-full bg-white/20 blur-md" />
+                      <div className="relative w-14 h-14 rounded-full bg-white/20 backdrop-blur flex items-center justify-center shadow-lg">
+                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                          <svg viewBox="0 0 24 24" className="w-7 h-7 text-white" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <circle cx="5" cy="17" r="3" />
+                            <circle cx="19" cy="17" r="3" />
+                            <path d="M5 17h6l3-8h4" />
+                            <path d="M11 17l2-5" />
+                            <path d="M14 9l-1 3" />
+                            <path d="M15 4l-2 3h3l-2 3" strokeWidth="2" />
+                          </svg>
+                        </div>
+                        <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg">
+                          <Zap className="w-3.5 h-3.5 text-white fill-white" />
+                        </div>
+                      </div>
+                    </div>
+                    {/* Logo Text - White for visibility */}
+                    <div className="flex flex-col">
+                      <span className="text-2xl font-black tracking-tight text-white">
+                        Let It Ride
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-white/90 tracking-wide uppercase">
+                          Electric Bikes
+                        </span>
+                        <span className="w-1 h-1 rounded-full bg-white/60" />
+                        <span className="text-xs text-white/80">
+                          Bend, OR
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 
                 {/* Mobile Navigation */}
