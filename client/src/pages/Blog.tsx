@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { SEOHead, PAGE_SEO } from '@/components/SEOHead';
 import { Calendar, Clock, ChevronRight, User } from 'lucide-react';
 
 const blogPosts = [
@@ -80,6 +81,13 @@ const categories = ['All', 'Trails & Routes', 'Travel Tips', 'E-Bike Guide', 'Lo
 export default function Blog() {
   return (
     <div className="min-h-screen flex flex-col">
+      <SEOHead
+        title={PAGE_SEO.blog.title}
+        description={PAGE_SEO.blog.description}
+        keywords={PAGE_SEO.blog.keywords}
+        canonicalUrl="https://letitridebend.com/blog"
+        structuredData={PAGE_SEO.blog.structuredData}
+      />
       <Header />
       
       {/* Hero */}

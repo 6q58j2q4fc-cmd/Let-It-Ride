@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { SEOHead, PAGE_SEO } from '@/components/SEOHead';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from 'sonner';
 import { ShoppingCart, ChevronRight, Filter, Star } from 'lucide-react';
@@ -125,6 +126,13 @@ export default function Shop() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEOHead
+        title={PAGE_SEO.shop.title}
+        description={PAGE_SEO.shop.description}
+        keywords={PAGE_SEO.shop.keywords}
+        canonicalUrl="https://letitridebend.com/shop"
+        structuredData={PAGE_SEO.shop.structuredData}
+      />
       <Header />
       
       {/* Hero */}

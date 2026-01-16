@@ -1,5 +1,6 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { SEOHead, PAGE_SEO } from '@/components/SEOHead';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -69,6 +70,13 @@ const bikeTypes = [
 export default function Rentals() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <SEOHead
+        title={PAGE_SEO.rentals.title}
+        description={PAGE_SEO.rentals.description}
+        keywords={PAGE_SEO.rentals.keywords}
+        canonicalUrl="https://letitridebend.com/rentals"
+        structuredData={PAGE_SEO.rentals.structuredData}
+      />
       <Header />
       
       {/* Hero Section */}

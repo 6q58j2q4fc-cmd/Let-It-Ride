@@ -1,6 +1,7 @@
 import { invokeLLM } from "./_core/llm";
 import { createBlogPost, createSocialPost, getPublishedBlogPosts } from "./db";
 import { nanoid } from "nanoid";
+import { generateAndPostDailyArticle, WORDPRESS_BLOG_URL } from "./wordpress";
 
 // Blog topics for SEO optimization
 export const BLOG_TOPICS = [
@@ -187,17 +188,31 @@ export async function generateDailySocialPost(): Promise<{ success: boolean; pos
 export async function runDailyAutomation(): Promise<{
   blog: { success: boolean; title?: string; error?: string };
   social: { success: boolean; error?: string };
+  wordpress: { success: boolean; title?: string; postUrl?: string; error?: string };
 }> {
   console.log('[Automation] Starting daily automation run...');
   
+  // Generate and post to local blog
   const blogResult = await generateDailyBlogPost();
-  console.log('[Automation] Blog generation:', blogResult.success ? 'Success' : 'Failed');
+  console.log('[Automation] Local blog generation:', blogResult.success ? 'Success' : 'Failed');
   
+  // Generate and post to WordPress
+  console.log('[Automation] Posting to WordPress:', WORDPRESS_BLOG_URL);
+  const wordpressResult = await generateAndPostDailyArticle();
+  console.log('[Automation] WordPress posting:', wordpressResult.success ? 'Success' : 'Failed');
+  
+  // Generate social media post
   const socialResult = await generateDailySocialPost();
   console.log('[Automation] Social post generation:', socialResult.success ? 'Success' : 'Failed');
   
   return {
     blog: blogResult,
-    social: socialResult
+    social: socialResult,
+    wordpress: {
+      success: wordpressResult.success,
+      title: wordpressResult.article?.title,
+      postUrl: wordpressResult.postUrl,
+      error: wordpressResult.error
+    }
   };
 }

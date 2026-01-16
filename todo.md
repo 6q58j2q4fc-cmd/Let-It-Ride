@@ -173,3 +173,12 @@
 - [x] Fix sidebar/mobile menu text visibility - Let It Ride text covered by colors
 - [x] Reduce meta keywords from 10 to 6 focused keywords
 - [x] Shorten meta description from 162 to 131 characters
+
+
+## WordPress Integration & Page-Specific SEO
+- [x] Set up WordPress REST API integration for automatic posting
+- [x] Connect daily cron job to post SEO-optimized articles to WordPress
+- [x] Add unique meta tags to /tours page
+- [x] Add unique meta tags to /shop page
+- [x] Add unique meta tags to /rentals page
+- [x] Add unique meta tags to /blog page

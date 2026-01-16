@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { SEOHead, PAGE_SEO } from '@/components/SEOHead';
 import { trpc } from '@/lib/trpc';
 import { Clock, Users, MapPin, Bike, Mountain, Wine, ChevronRight, Star, Check } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -61,6 +62,13 @@ export default function Tours() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEOHead
+        title={PAGE_SEO.tours.title}
+        description={PAGE_SEO.tours.description}
+        keywords={PAGE_SEO.tours.keywords}
+        canonicalUrl="https://letitridebend.com/tours"
+        structuredData={PAGE_SEO.tours.structuredData}
+      />
       <Header />
       
       {/* Hero */}
