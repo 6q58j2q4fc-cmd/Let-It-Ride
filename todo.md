@@ -171,3 +171,5 @@
 
 ## Bug Fixes
 - [x] Fix sidebar/mobile menu text visibility - Let It Ride text covered by colors
+- [x] Reduce meta keywords from 10 to 6 focused keywords
+- [x] Shorten meta description from 162 to 131 characters
