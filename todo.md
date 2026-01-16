@@ -182,3 +182,9 @@
 - [x] Add unique meta tags to /shop page
 - [x] Add unique meta tags to /rentals page
 - [x] Add unique meta tags to /blog page
+
+
+## Customer Review Schema
+- [x] Add AggregateRating JSON-LD structured data to homepage
+- [x] Include 189+ reviews with 5-star rating from TripAdvisor
+- [x] Add individual review samples for rich snippets

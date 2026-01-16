@@ -94,7 +94,189 @@
       "touristType": ["Adventure Tourism", "Eco Tourism", "Cultural Tourism"],
       "availableLanguage": "English",
       "isAccessibleForFree": false,
-      "publicAccess": true
+      "publicAccess": true,
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "bestRating": "5",
+        "worstRating": "1",
+        "ratingCount": "189",
+        "reviewCount": "189"
+      }
+    }
+    </script>
+    
+    <!-- Structured Data - Product with Reviews (E-Bike Tours) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Let It Ride Electric Bike Tours",
+      "description": "Premium guided electric bike tours in Bend, Oregon featuring Pedego e-bikes, scenic Deschutes River trails, and local brewery visits.",
+      "brand": {
+        "@type": "Brand",
+        "name": "Let It Ride Electric Bikes"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "lowPrice": "75",
+        "highPrice": "150",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "offerCount": "3"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "bestRating": "5",
+        "worstRating": "1",
+        "ratingCount": "189",
+        "reviewCount": "189"
+      },
+      "review": [
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Sarah M."
+          },
+          "datePublished": "2025-12-15",
+          "reviewBody": "Amazing experience! The Deschutes River tour was absolutely beautiful. Our guide was knowledgeable and the e-bikes made it effortless to enjoy the scenery. Highly recommend!"
+        },
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Mike T."
+          },
+          "datePublished": "2025-11-28",
+          "reviewBody": "Best way to see Bend! We did the Taste of Bend tour and visited 3 amazing breweries. The electric bikes were so easy to ride and our guide knew all the best spots."
+        },
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Jennifer L."
+          },
+          "datePublished": "2025-10-20",
+          "reviewBody": "Perfect for our family vacation! The Short & Sweet tour was ideal for us with kids. Everyone had a blast and the photos we got were incredible. Will definitely be back!"
+        },
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "David R."
+          },
+          "datePublished": "2025-09-15",
+          "reviewBody": "Outstanding service and top-quality Pedego bikes. The river trail tour was the highlight of our Oregon trip. Can't say enough good things about this company!"
+        },
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Amanda K."
+          },
+          "datePublished": "2025-08-10",
+          "reviewBody": "We rented bikes for a full day and explored all of Bend. The staff gave us great recommendations and the bikes had plenty of battery. Such a fun, eco-friendly way to travel!"
+        }
+      ]
+    }
+    </script>
+    
+    <!-- Structured Data - Service -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Electric Bike Tours and Rentals",
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": "Let It Ride Electric Bikes",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "25 NW Minnesota Ave #6",
+          "addressLocality": "Bend",
+          "addressRegion": "OR",
+          "postalCode": "97703",
+          "addressCountry": "US"
+        }
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Bend",
+        "containedInPlace": {
+          "@type": "State",
+          "name": "Oregon"
+        }
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "E-Bike Tours",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Short & Sweet Tour",
+              "description": "1.5 hour guided e-bike tour through downtown Bend"
+            },
+            "price": "75",
+            "priceCurrency": "USD"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Deschutes River Tour",
+              "description": "2 hour scenic tour along the Deschutes River"
+            },
+            "price": "100",
+            "priceCurrency": "USD"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Taste of Bend Tour",
+              "description": "2 hour brewery and food tour by e-bike"
+            },
+            "price": "150",
+            "priceCurrency": "USD"
+          }
+        ]
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "bestRating": "5",
+        "worstRating": "1",
+        "ratingCount": "189"
+      }
     }
     </script>
     
