@@ -8,6 +8,8 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { handleStripeWebhook } from "../stripe-webhook";
+import { generateSitemap, generateRSSFeed, generateAtomFeed, generateRobotsTxt } from "../seo-feeds";
+import { handleDailyCron, getAutomationStatus, healthCheck } from "../cron-handler";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -34,6 +36,17 @@ async function startServer() {
   
   // Stripe webhook must be before body parser for signature verification
   app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
+  
+  // SEO feeds - sitemap, RSS, Atom, robots.txt
+  app.get('/sitemap.xml', generateSitemap);
+  app.get('/rss.xml', generateRSSFeed);
+  app.get('/atom.xml', generateAtomFeed);
+  app.get('/robots.txt', generateRobotsTxt);
+  
+  // Cron job endpoints for daily automation
+  app.post('/api/cron/daily', handleDailyCron);
+  app.get('/api/cron/status', getAutomationStatus);
+  app.get('/api/cron/health', healthCheck);
   
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));

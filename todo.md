@@ -188,3 +188,14 @@
 - [x] Add AggregateRating JSON-LD structured data to homepage
 - [x] Include 189+ reviews with 5-star rating from TripAdvisor
 - [x] Add individual review samples for rich snippets
+
+
+## XML Sitemap, RSS Feeds & Daily Automation
+- [x] Create dynamic XML sitemap endpoint (/sitemap.xml)
+- [x] Create RSS feed endpoint (/rss.xml) for blog posts
+- [x] Create Atom feed endpoint (/atom.xml) for blog posts
+- [x] Create robots.txt with sitemap reference
+- [x] Set up daily cron job endpoint for automated blog generation
+- [x] Set up daily cron job endpoint for social media posting
+- [x] Add RSS/Atom feed links to HTML head
+- [x] Create cron status and health check endpoints
