@@ -21,6 +21,7 @@ import Admin from "./pages/Admin";
 import Rentals from "./pages/Rentals";
 import Service from "./pages/Service";
 import Gallery from "./pages/Gallery";
+import Urtopia from "./pages/Urtopia";
 import BookingSuccess from "./pages/BookingSuccess";
 import OrderSuccess from "./pages/OrderSuccess";
 import { EmailPopup } from "./components/EmailPopup";
@@ -45,6 +46,7 @@ function Router() {
       <Route path="/rentals" component={Rentals} />
       <Route path="/service" component={Service} />
       <Route path="/gallery" component={Gallery} />
+      <Route path="/urtopia" component={Urtopia} />
       <Route path="/booking-success" component={BookingSuccess} />
       <Route path="/order-success" component={OrderSuccess} />
       

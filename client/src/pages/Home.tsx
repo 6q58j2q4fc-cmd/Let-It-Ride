@@ -31,7 +31,7 @@ const tours = [
     duration: '1.5 hours',
     price: 75,
     description: 'Perfect introduction to Bend! Breeze through town on our guided tour, learn local history, and discover great photo spots.',
-    image: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=800&h=600&fit=crop',
+    image: '/tour-rental-center.webp',
     icon: Bike,
     highlights: ['Local history', 'Photo opportunities', 'Downtown Bend'],
     popular: false
@@ -42,7 +42,7 @@ const tours = [
     duration: '2 hours',
     price: 100,
     description: 'Cruise along the beautiful Deschutes River, enjoy stunning scenery and wildlife while your guide shares historic stories.',
-    image: 'https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?w=800&h=600&fit=crop',
+    image: '/ebike-tours-scenic.webp',
     icon: Mountain,
     highlights: ['River views', 'Wildlife spotting', 'Scenic trails'],
     popular: true
@@ -53,7 +53,7 @@ const tours = [
     duration: '2 hours',
     price: 150,
     description: 'Experience Bend\'s famous craft beverage scene! Visit breweries, cider houses, and tasting rooms on this delicious adventure.',
-    image: 'https://images.unsplash.com/photo-1559526324-593bc073d938?w=800&h=600&fit=crop',
+    image: '/showroom-rentals.webp',
     icon: Wine,
     highlights: ['Craft breweries', 'Local tastings', 'Food & drink'],
     popular: false
@@ -160,7 +160,7 @@ export default function Home() {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-fixed"
             style={{
-              backgroundImage: 'url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop)'
+              backgroundImage: 'url(/hero-group-bikes.webp)'
             }}
           />
           {/* Premium gradient overlay */}
@@ -250,7 +250,7 @@ export default function Home() {
                 <Card className="relative glass-card border-white/20 overflow-hidden hover-lift">
                   <div className="relative h-64 overflow-hidden">
                     <img 
-                      src="https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?w=800&h=600&fit=crop"
+                      src="/ebike-tours-scenic.webp"
                       alt="Deschutes River Tour"
                       className="w-full h-full object-cover"
                     />

@@ -45,7 +45,7 @@ const rentalOptions = [
 const bikeTypes = [
   {
     name: 'StepThru Boomerang Cruiser',
-    image: 'https://images.unsplash.com/photo-1593764592116-bfb2a97c642a?w=600',
+    image: '/pedego-boomerang-red.webp',
     description: 'Easy step-through design, comfortable upright riding position. Our most popular rental!',
     range: '40+ miles',
     speed: '20 mph',
@@ -54,7 +54,7 @@ const bikeTypes = [
   },
   {
     name: 'Pedego Tandem',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600',
+    image: '/pedego-tandem-red.webp',
     description: 'Two-person electric bike - double the fun! Perfect for couples and friends.',
     range: '30+ miles',
     speed: '20 mph',
@@ -63,7 +63,7 @@ const bikeTypes = [
   },
   {
     name: 'Pedego Cargo',
-    image: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=600',
+    image: '/tour-rental-center.webp',
     description: 'Extended cargo area for kids, pets, or gear. Great for family adventures!',
     range: '40+ miles',
     speed: '20 mph',
@@ -72,7 +72,7 @@ const bikeTypes = [
   },
   {
     name: 'Fat-Tire E-Bike',
-    image: 'https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?w=600',
+    image: '/ebike-rentals-shop.webp',
     description: 'Wide tires for extra stability on trails, sand, and varied terrain.',
     range: '35+ miles',
     speed: '20 mph',

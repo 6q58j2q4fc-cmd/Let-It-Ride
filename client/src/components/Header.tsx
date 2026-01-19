@@ -43,6 +43,7 @@ import {
 const navigation = [
   { name: 'Tours', href: '/tours', icon: Mountain },
   { name: 'Shop', href: '/shop', icon: Store },
+  { name: 'Urtopia', href: '/urtopia', icon: Sparkles },
   { name: 'Rentals', href: '/rentals', icon: Bike },
   { name: 'Service', href: '/service', icon: Wrench },
   { name: 'Gallery', href: '/gallery', icon: Camera },
