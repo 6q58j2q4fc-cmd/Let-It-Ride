@@ -5,80 +5,98 @@ import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { SEOHead, PAGE_SEO } from '@/components/SEOHead';
-import { Calendar, Clock, ChevronRight, User } from 'lucide-react';
+import { Calendar, Clock, ChevronRight, User, Loader2 } from 'lucide-react';
+import { trpc } from '@/lib/trpc';
 
-const blogPosts = [
+// Default static posts for fallback
+const defaultBlogPosts = [
   {
     id: 1,
     slug: 'best-ebike-trails-bend-oregon',
     title: 'The 10 Best E-Bike Trails in Bend, Oregon',
     excerpt: 'Discover the most scenic and enjoyable e-bike trails in Central Oregon, from riverside paths to mountain adventures.',
-    image: '/images/cascade-mountains.jpg',
+    featuredImage: '/images/cascade-mountains.jpg',
     category: 'Trails & Routes',
-    author: 'Let It Ride Team',
-    publishedAt: '2026-01-10',
-    readTime: '8 min read'
+    publishedAt: new Date('2026-01-10'),
+    content: '',
+    isAiGenerated: false
   },
   {
     id: 2,
     slug: 'why-ebikes-perfect-bend-vacation',
     title: 'Why E-Bikes Are Perfect for Your Bend Vacation',
     excerpt: 'Learn why electric bikes are the ideal way to explore Bend, Oregon during your visit to Central Oregon.',
-    image: '/images/ebike-scenic.jpg',
+    featuredImage: '/images/ebike-scenic.jpg',
     category: 'Travel Tips',
-    author: 'Let It Ride Team',
-    publishedAt: '2026-01-08',
-    readTime: '5 min read'
+    publishedAt: new Date('2026-01-08'),
+    content: '',
+    isAiGenerated: false
   },
   {
     id: 3,
     slug: 'pedego-electric-bike-guide',
     title: 'Complete Guide to Pedego Electric Bikes',
     excerpt: 'Everything you need to know about Pedego e-bikes, from choosing the right model to maintenance tips.',
-    image: '/images/pedego-element.jpg',
+    featuredImage: '/images/pedego-element.jpg',
     category: 'E-Bike Guide',
-    author: 'Let It Ride Team',
-    publishedAt: '2026-01-05',
-    readTime: '10 min read'
+    publishedAt: new Date('2026-01-05'),
+    content: '',
+    isAiGenerated: false
   },
   {
     id: 4,
     slug: 'bend-brewery-tour-guide',
     title: 'The Ultimate Bend Brewery Tour Guide',
     excerpt: 'Plan your perfect brewery hopping adventure in Bend with our comprehensive guide to the best craft breweries.',
-    image: '/images/bend-brewery-patio.jpg',
+    featuredImage: '/images/bend-brewery-patio.jpg',
     category: 'Local Guide',
-    author: 'Let It Ride Team',
-    publishedAt: '2026-01-03',
-    readTime: '7 min read'
+    publishedAt: new Date('2026-01-03'),
+    content: '',
+    isAiGenerated: false
   },
   {
     id: 5,
     slug: 'deschutes-river-trail-ebike',
     title: 'Exploring the Deschutes River Trail by E-Bike',
     excerpt: 'A detailed guide to riding the beautiful Deschutes River Trail, including tips, stops, and what to expect.',
-    image: '/images/deschutes-river-trail.jpg',
+    featuredImage: '/images/deschutes-river-trail.jpg',
     category: 'Trails & Routes',
-    author: 'Let It Ride Team',
-    publishedAt: '2026-01-01',
-    readTime: '6 min read'
+    publishedAt: new Date('2026-01-01'),
+    content: '',
+    isAiGenerated: false
   },
   {
     id: 6,
     slug: 'family-ebike-adventures-bend',
     title: 'Family E-Bike Adventures in Bend',
     excerpt: 'Tips and ideas for enjoying e-bike rides with the whole family, including kid-friendly routes and equipment.',
-    image: '/images/ebike-tour-group.jpg',
+    featuredImage: '/images/ebike-tour-group.jpg',
     category: 'Family Fun',
-    author: 'Let It Ride Team',
-    publishedAt: '2025-12-28',
-    readTime: '5 min read'
+    publishedAt: new Date('2025-12-28'),
+    content: '',
+    isAiGenerated: false
   }
 ];
 
-const categories = ['All', 'Trails & Routes', 'Travel Tips', 'E-Bike Guide', 'Local Guide', 'Family Fun'];
+const categories = ['All', 'Trails & Routes', 'Travel Tips', 'E-Bike Guide', 'Local Guide', 'Family Fun', 'Adventures'];
+
+// Helper to estimate read time from content
+function estimateReadTime(content: string): string {
+  const wordsPerMinute = 200;
+  const wordCount = content?.split(/\s+/).length || 0;
+  const minutes = Math.ceil(wordCount / wordsPerMinute);
+  return `${Math.max(minutes, 3)} min read`;
+}
 
 export default function Blog() {
+  // Fetch blog posts from database
+  const { data: dbPosts, isLoading } = trpc.blog.getAll.useQuery();
+  
+  // Combine database posts with default posts, prioritizing database posts
+  const blogPosts = dbPosts && dbPosts.length > 0 
+    ? [...dbPosts, ...defaultBlogPosts.filter(dp => !dbPosts.some(p => p.slug === dp.slug))]
+    : defaultBlogPosts;
+
   return (
     <div className="min-h-screen flex flex-col">
       <SEOHead
@@ -127,98 +145,114 @@ export default function Blog() {
       {/* Blog Posts */}
       <section className="py-12">
         <div className="container">
-          {/* Featured Post */}
-          <Card className="mb-12 overflow-hidden">
-            <div className="grid md:grid-cols-2 gap-0">
-              <div className="relative h-64 md:h-auto">
-                <img 
-                  src={blogPosts[0].image} 
-                  alt={blogPosts[0].title}
-                  className="w-full h-full object-cover"
-                />
-                <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground">
-                  Featured
-                </Badge>
-              </div>
-              <div className="p-8 flex flex-col justify-center">
-                <Badge variant="outline" className="w-fit mb-4">
-                  {blogPosts[0].category}
-                </Badge>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  {blogPosts[0].title}
-                </h2>
-                <p className="text-muted-foreground mb-4">
-                  {blogPosts[0].excerpt}
-                </p>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
-                    {new Date(blogPosts[0].publishedAt).toLocaleDateString('en-US', { 
-                      month: 'long', 
-                      day: 'numeric', 
-                      year: 'numeric' 
-                    })}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    {blogPosts[0].readTime}
-                  </span>
-                </div>
-                <Link href={`/blog/${blogPosts[0].slug}`}>
-                  <Button>
-                    Read Article
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="ml-2 text-muted-foreground">Loading posts...</span>
             </div>
-          </Card>
-
-          {/* Post Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.slice(1).map((post) => (
-              <Card key={post.id} className="card-hover overflow-hidden">
-                <div className="relative h-48">
-                  <img 
-                    src={post.image} 
-                    alt={post.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <CardHeader>
-                  <Badge variant="outline" className="w-fit mb-2">
-                    {post.category}
-                  </Badge>
-                  <CardTitle className="line-clamp-2">{post.title}</CardTitle>
-                  <CardDescription className="line-clamp-2">
-                    {post.excerpt}
-                  </CardDescription>
-                </CardHeader>
-                <CardFooter className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    {new Date(post.publishedAt).toLocaleDateString('en-US', { 
-                      month: 'short', 
-                      day: 'numeric' 
-                    })}
+          ) : (
+            <>
+              {/* Featured Post */}
+              {blogPosts.length > 0 && (
+                <Card className="mb-12 overflow-hidden">
+                  <div className="grid md:grid-cols-2 gap-0">
+                    <div className="relative h-64 md:h-auto">
+                      <img 
+                        src={blogPosts[0].featuredImage || '/images/cascade-mountains.jpg'} 
+                        alt={blogPosts[0].title}
+                        className="w-full h-full object-cover"
+                      />
+                      <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground">
+                        {blogPosts[0].isAiGenerated ? 'New' : 'Featured'}
+                      </Badge>
+                    </div>
+                    <div className="p-8 flex flex-col justify-center">
+                      <Badge variant="outline" className="w-fit mb-4">
+                        {blogPosts[0].category || 'Adventures'}
+                      </Badge>
+                      <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                        {blogPosts[0].title}
+                      </h2>
+                      <p className="text-muted-foreground mb-4">
+                        {blogPosts[0].excerpt}
+                      </p>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="h-4 w-4" />
+                          {new Date(blogPosts[0].publishedAt || new Date()).toLocaleDateString('en-US', { 
+                            month: 'long', 
+                            day: 'numeric', 
+                            year: 'numeric' 
+                          })}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          {estimateReadTime(blogPosts[0].content || '')}
+                        </span>
+                      </div>
+                      <Link href={`/blog/${blogPosts[0].slug}`}>
+                        <Button>
+                          Read Article
+                          <ChevronRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
-                  <Link href={`/blog/${post.slug}`}>
-                    <Button variant="ghost" size="sm">
-                      Read More
-                      <ChevronRight className="ml-1 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
+                </Card>
+              )}
 
-          {/* Load More */}
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg">
-              Load More Articles
-            </Button>
-          </div>
+              {/* Post Grid */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {blogPosts.slice(1).map((post) => (
+                  <Card key={post.id} className="card-hover overflow-hidden">
+                    <div className="relative h-48">
+                      <img 
+                        src={post.featuredImage || '/images/cascade-mountains.jpg'} 
+                        alt={post.title}
+                        className="w-full h-full object-cover"
+                      />
+                      {post.isAiGenerated && (
+                        <Badge className="absolute top-2 right-2 bg-blue-500 text-white text-xs">
+                          AI Generated
+                        </Badge>
+                      )}
+                    </div>
+                    <CardHeader>
+                      <Badge variant="outline" className="w-fit mb-2">
+                        {post.category || 'Adventures'}
+                      </Badge>
+                      <CardTitle className="line-clamp-2">{post.title}</CardTitle>
+                      <CardDescription className="line-clamp-2">
+                        {post.excerpt}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardFooter className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Calendar className="h-4 w-4" />
+                        {new Date(post.publishedAt || new Date()).toLocaleDateString('en-US', { 
+                          month: 'short', 
+                          day: 'numeric' 
+                        })}
+                      </div>
+                      <Link href={`/blog/${post.slug}`}>
+                        <Button variant="ghost" size="sm">
+                          Read More
+                          <ChevronRight className="ml-1 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Load More */}
+              <div className="text-center mt-12">
+                <Button variant="outline" size="lg">
+                  Load More Articles
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </section>
 

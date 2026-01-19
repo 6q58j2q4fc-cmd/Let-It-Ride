@@ -1,0 +1,18 @@
+{
+  "query": "SELECT id, title, slug, status, publishedAt, isAiGenerated FROM blog_posts ORDER BY id DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user mexMZK3NDs3KsAz.621f19aaac4c --database JAjQFNXBbA5Quy72adLon7 --execute SELECT id, title, slug, status, publishedAt, isAiGenerated FROM blog_posts ORDER BY id DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "title": "Conquer the Cascade Views: How E-Bikes Make Bend, Oregon Accessible to Everyone",
+      "slug": "conquer-the-cascade-views-how-e-bikes-make-bend-oregon-accessible-to-everyone-Iy6yaP",
+      "status": "published",
+      "publishedAt": "2026-01-19 14:58:54",
+      "isAiGenerated": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttitle\tslug\tstatus\tpublishedAt\tisAiGenerated\n1\tConquer the Cascade Views: How E-Bikes Make Bend, Oregon Accessible to Everyone\tconquer-the-cascade-views-how-e-bikes-make-bend-oregon-accessible-to-everyone-Iy6yaP\tpublished\t2026-01-19 14:58:54\t1\n",
+  "stderr": "",
+  "execution_time_ms": 370
+}
