@@ -164,23 +164,32 @@ export function Footer() {
                 </span>
               </li>
               <li>
-                <a href="tel:5416472331" className="flex items-center gap-2 opacity-80 hover:opacity-100">
+                <a href="tel:5413063177" className="flex items-center gap-2 opacity-80 hover:opacity-100">
                   <Phone className="h-4 w-4" />
-                  (541) 647-2331
+                  Rentals: (541) 306-3177
                 </a>
               </li>
               <li>
-                <a href="mailto:info@letitridebend.com" className="flex items-center gap-2 opacity-80 hover:opacity-100">
+                <a href="tel:5416472331" className="flex items-center gap-2 opacity-80 hover:opacity-100">
+                  <Phone className="h-4 w-4" />
+                  Tours: (541) 647-2331
+                </a>
+              </li>
+              <li>
+  <a href="mailto:info@pedegobend.com" className="flex items-center gap-2 opacity-80 hover:opacity-100">
                   <Mail className="h-4 w-4" />
-                  info@letitridebend.com
+                  info@pedegobend.com
                 </a>
               </li>
             </ul>
             
-            <div className="mt-4">
+<div className="mt-4">
               <h4 className="font-medium text-sm mb-2">Hours</h4>
               <p className="text-sm opacity-80">
-                Mon - Sun: 9:00 AM - 5:00 PM
+                Tue/Wed/Fri: 11AM - 5PM<br />
+                Sat: 10AM - 4PM<br />
+                Sun: 11AM - 4PM<br />
+                Mon/Thu: Closed
               </p>
             </div>
           </div>

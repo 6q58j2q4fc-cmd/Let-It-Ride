@@ -14,12 +14,12 @@ const productsData: Record<string, any> = {
     id: 1,
     slug: 'pedego-boomerang',
     name: 'Pedego Boomerang',
-    category: 'cruiser',
-    price: 2995,
+    category: 'low-step',
+    price: 2495,
     salePrice: null,
-    image: '/images/products/pedego-interceptor.jpg',
+    image: '/images/products/pedego-boomerang.jpg',
     gallery: [
-      '/images/products/pedego-interceptor.jpg'
+      '/images/products/pedego-boomerang.jpg'
     ],
     shortDescription: 'Step-through cruiser for easy on/off riding',
     description: 'The Pedego Boomerang is the ultimate step-through electric bike, designed for riders who want easy on-and-off access. Perfect for cruising around town, running errands, or enjoying a leisurely ride along the river. Features a powerful 500W motor, long-range battery, and Pedego\'s signature comfort.',
@@ -34,7 +34,7 @@ const productsData: Record<string, any> = {
     slug: 'pedego-interceptor',
     name: 'Pedego Interceptor',
     category: 'cruiser',
-    price: 2795,
+    price: 1949,
     salePrice: null,
     image: '/images/products/pedego-interceptor.jpg',
     gallery: ['/images/products/pedego-interceptor.jpg'],
@@ -63,15 +63,15 @@ const productsData: Record<string, any> = {
     rating: 4.7,
     stock: 1
   },
-  'pedego-stretch': {
+  'pedego-cargo': {
     id: 4,
-    slug: 'pedego-stretch',
-    name: 'Pedego Stretch',
+    slug: 'pedego-cargo',
+    name: 'Pedego Cargo',
     category: 'cargo',
-    price: 3995,
-    salePrice: null,
-    image: '/images/products/pedego-stretch.jpg',
-    gallery: ['/images/products/pedego-stretch.jpg'],
+    price: 3895,
+    salePrice: 3495,
+    image: '/images/products/pedego-cargo.jpg',
+    gallery: ['/images/products/pedego-cargo.jpg'],
     shortDescription: 'Cargo bike perfect for families',
     description: 'The Pedego Stretch is the ultimate family cargo bike. With an extended rear rack that can carry kids, groceries, or gear, it\'s perfect for replacing car trips around town. Powerful motor handles the extra weight with ease.',
     brand: 'Pedego',
