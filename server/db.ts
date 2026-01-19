@@ -14,7 +14,8 @@ import {
   socialPosts, SocialPost, InsertSocialPost,
   gamePlays, GamePlay, InsertGamePlay,
   reviewRequests, ReviewRequest, InsertReviewRequest,
-  siteSettings, SiteSetting, InsertSiteSetting
+  siteSettings, SiteSetting, InsertSiteSetting,
+  serviceAppointments, ServiceAppointment, InsertServiceAppointment
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -558,3 +559,42 @@ export async function getGamePlaysByUser(userId: number) {
   return db.select().from(gamePlays).where(eq(gamePlays.userId, userId)).orderBy(desc(gamePlays.createdAt));
 }
 
+
+// Service appointment functions
+
+export async function createServiceAppointment(appointment: InsertServiceAppointment) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(serviceAppointments).values(appointment);
+}
+
+export async function getAllServiceAppointments() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(serviceAppointments).orderBy(desc(serviceAppointments.createdAt));
+}
+
+export async function getServiceAppointmentById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(serviceAppointments).where(eq(serviceAppointments.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateServiceAppointment(id: number, data: Partial<InsertServiceAppointment>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(serviceAppointments).set(data).where(eq(serviceAppointments.id, id));
+}
+
+export async function getServiceAppointmentsByStatus(status: ServiceAppointment["status"]) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(serviceAppointments).where(eq(serviceAppointments.status, status)).orderBy(desc(serviceAppointments.createdAt));
+}
+
+export async function getServiceAppointmentsByEmail(email: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(serviceAppointments).where(eq(serviceAppointments.customerEmail, email)).orderBy(desc(serviceAppointments.createdAt));
+}

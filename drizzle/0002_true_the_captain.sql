@@ -1,0 +1,21 @@
+CREATE TABLE `service_appointments` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`customerName` varchar(255) NOT NULL,
+	`customerEmail` varchar(320) NOT NULL,
+	`customerPhone` varchar(20) NOT NULL,
+	`bikeType` varchar(100) NOT NULL,
+	`bikeBrand` varchar(100),
+	`bikeModel` varchar(100),
+	`serviceType` varchar(100) NOT NULL,
+	`preferredDate` timestamp NOT NULL,
+	`preferredTime` varchar(20),
+	`issueDescription` text,
+	`status` enum('pending','confirmed','in_progress','completed','cancelled') NOT NULL DEFAULT 'pending',
+	`notes` text,
+	`estimatedCost` decimal(10,2),
+	`actualCost` decimal(10,2),
+	`completedAt` timestamp,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `service_appointments_id` PRIMARY KEY(`id`)
+);

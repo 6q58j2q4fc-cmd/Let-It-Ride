@@ -222,3 +222,12 @@
 - [x] Add route in App.tsx for /service
 - [x] Add navigation link in Header
 - [x] Add SEO meta tags for service page
+
+
+## New Features - Service Booking, Accessories, Gallery
+- [x] Create online service booking form with bike details and date selection
+- [x] Add database table for service appointments
+- [x] Create tRPC endpoint for service booking submissions
+- [x] Add parts/accessories section to shop (helmets, locks, baskets, lights)
+- [x] Create photo gallery page with images from letitridebend.com
+- [x] Add gallery route and navigation link

@@ -19,8 +19,10 @@ import {
   CircleDot,
   Cable,
   Gauge,
-  Gift
+  Gift,
+  Calendar
 } from 'lucide-react';
+import { ServiceBookingForm } from '@/components/ServiceBookingForm';
 
 const services = [
   {
@@ -368,13 +370,75 @@ export default function Service() {
         </div>
       </section>
 
+      {/* Online Booking Section */}
+      <section id="book-service" className="py-16 bg-gradient-to-br from-primary/5 via-background to-primary/5">
+        <div className="container">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div>
+              <Badge className="mb-4 bg-primary/10 text-primary gap-2">
+                <Calendar className="w-3 h-3" />
+                Online Booking
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Schedule Your Service Online
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                Skip the phone call! Fill out our online service request form and we'll 
+                contact you within 24 hours to confirm your appointment.
+              </p>
+              
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-primary mt-0.5" />
+                  <div>
+                    <p className="font-medium">Free Estimates</p>
+                    <p className="text-sm text-muted-foreground">No obligation quotes for all repairs</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-primary mt-0.5" />
+                  <div>
+                    <p className="font-medium">Fast Turnaround</p>
+                    <p className="text-sm text-muted-foreground">Most repairs completed same day or next day</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-primary mt-0.5" />
+                  <div>
+                    <p className="font-medium">Expert Technicians</p>
+                    <p className="text-sm text-muted-foreground">Certified Pedego service specialists</p>
+                  </div>
+                </div>
+              </div>
+
+              <Card className="bg-muted/50">
+                <CardContent className="p-6">
+                  <p className="font-medium mb-2">Prefer to call?</p>
+                  <a href="tel:5413063177" className="flex items-center gap-2 text-primary font-bold text-lg hover:underline">
+                    <Phone className="w-5 h-5" />
+                    (541) 306-3177
+                  </a>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Tue/Wed/Fri: 11AM-5PM | Sat: 10AM-4PM | Sun: 11AM-4PM
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <div>
+              <ServiceBookingForm />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-16 bg-muted/30">
         <div className="container text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Schedule Service?</h2>
+          <h2 className="text-3xl font-bold mb-4">Questions About Service?</h2>
           <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-            Give us a call or stop by the shop. We offer free estimates and 
-            fast turnaround times to get you back on the road.
+            Our expert technicians are here to help. Stop by the shop for a free estimate 
+            or give us a call to discuss your bike's needs.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="tel:5413063177">
@@ -391,7 +455,7 @@ export default function Service() {
             </Link>
           </div>
           <p className="mt-6 text-sm text-muted-foreground">
-            <strong>Hours:</strong> Monday - Saturday: 10am - 6pm | Sunday: Closed
+            <strong>Hours:</strong> Tue/Wed/Fri: 11AM-5PM | Sat: 10AM-4PM | Sun: 11AM-4PM
           </p>
         </div>
       </section>

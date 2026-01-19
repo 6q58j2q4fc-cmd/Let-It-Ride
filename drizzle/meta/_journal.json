@@ -15,6 +15,13 @@
       "when": 1768330357242,
       "tag": "0001_damp_psylocke",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1768826142263,
+      "tag": "0002_true_the_captain",
+      "breakpoints": true
     }
   ]
 }

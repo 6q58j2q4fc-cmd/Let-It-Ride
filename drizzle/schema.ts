@@ -275,3 +275,29 @@ export const siteSettings = mysqlTable("site_settings", {
 
 export type SiteSetting = typeof siteSettings.$inferSelect;
 export type InsertSiteSetting = typeof siteSettings.$inferInsert;
+
+
+// Service appointments table
+export const serviceAppointments = mysqlTable("service_appointments", {
+  id: int("id").autoincrement().primaryKey(),
+  customerName: varchar("customerName", { length: 255 }).notNull(),
+  customerEmail: varchar("customerEmail", { length: 320 }).notNull(),
+  customerPhone: varchar("customerPhone", { length: 20 }).notNull(),
+  bikeType: varchar("bikeType", { length: 100 }).notNull(),
+  bikeBrand: varchar("bikeBrand", { length: 100 }),
+  bikeModel: varchar("bikeModel", { length: 100 }),
+  serviceType: varchar("serviceType", { length: 100 }).notNull(),
+  preferredDate: timestamp("preferredDate").notNull(),
+  preferredTime: varchar("preferredTime", { length: 20 }),
+  issueDescription: text("issueDescription"),
+  status: mysqlEnum("status", ["pending", "confirmed", "in_progress", "completed", "cancelled"]).default("pending").notNull(),
+  notes: text("notes"),
+  estimatedCost: decimal("estimatedCost", { precision: 10, scale: 2 }),
+  actualCost: decimal("actualCost", { precision: 10, scale: 2 }),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ServiceAppointment = typeof serviceAppointments.$inferSelect;
+export type InsertServiceAppointment = typeof serviceAppointments.$inferInsert;

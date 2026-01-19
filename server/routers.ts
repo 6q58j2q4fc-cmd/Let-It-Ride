@@ -13,7 +13,8 @@ import {
   createAffiliateSale, getAffiliateSales,
   createSocialPost, getPendingSocialPosts, getAllSocialPosts,
   createReviewRequest, getPendingReviewRequests,
-  createGamePlay, getGamePlaysByUser
+  createGamePlay, getGamePlaysByUser,
+  createServiceAppointment, getAllServiceAppointments, getServiceAppointmentById, updateServiceAppointment
 } from "./db";
 import { invokeLLM } from "./_core/llm";
 import Stripe from "stripe";
@@ -625,6 +626,68 @@ Return JSON with: caption, hashtags (array), callToAction`
       if (ctx.user.role !== 'admin') throw new Error('Unauthorized');
       return runDailyAutomation();
     })
+  }),
+
+  // Service Appointments
+  service: router({
+    requestAppointment: publicProcedure
+      .input(z.object({
+        name: z.string(),
+        email: z.string().email(),
+        phone: z.string(),
+        bikeType: z.string(),
+        bikeBrand: z.string().optional(),
+        bikeModel: z.string().optional(),
+        serviceType: z.string(),
+        preferredDate: z.string(),
+        preferredTime: z.string().optional(),
+        issueDescription: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        return createServiceAppointment({
+          customerName: input.name,
+          customerEmail: input.email,
+          customerPhone: input.phone,
+          bikeType: input.bikeType,
+          bikeBrand: input.bikeBrand,
+          bikeModel: input.bikeModel,
+          serviceType: input.serviceType,
+          preferredDate: new Date(input.preferredDate),
+          preferredTime: input.preferredTime,
+          issueDescription: input.issueDescription,
+          status: 'pending'
+        });
+      }),
+    
+    getAll: protectedProcedure.query(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') throw new Error('Unauthorized');
+      return getAllServiceAppointments();
+    }),
+    
+    getById: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ ctx, input }) => {
+        if (ctx.user.role !== 'admin') throw new Error('Unauthorized');
+        return getServiceAppointmentById(input.id);
+      }),
+    
+    updateStatus: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        status: z.enum(['pending', 'confirmed', 'in_progress', 'completed', 'cancelled']),
+        notes: z.string().optional(),
+        estimatedCost: z.string().optional(),
+        actualCost: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== 'admin') throw new Error('Unauthorized');
+        const updateData: Record<string, unknown> = { status: input.status };
+        if (input.notes) updateData.notes = input.notes;
+        if (input.estimatedCost) updateData.estimatedCost = input.estimatedCost;
+        if (input.actualCost) updateData.actualCost = input.actualCost;
+        if (input.status === 'completed') updateData.completedAt = new Date();
+        return updateServiceAppointment(input.id, updateData);
+      })
   }),
 
   // Admin Stats
