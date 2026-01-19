@@ -11,12 +11,14 @@ import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/_core/hooks/useAuth';
 import { trpc } from '@/lib/trpc';
 import { getLoginUrl } from '@/const';
+import { ServiceAppointmentsTab } from '@/components/ServiceAppointmentsTab';
 import { toast } from 'sonner';
 import { 
   LayoutDashboard, Calendar, ShoppingBag, FileText, Users, 
   Settings, DollarSign, TrendingUp, Eye, Star, Plus,
   Edit, Trash2, Send, RefreshCw, Instagram, Facebook,
-  Mail, Gift, Gamepad2, BarChart3
+  Mail, Gift, Gamepad2, BarChart3, Wrench, Clock, CheckCircle,
+  XCircle, AlertCircle, Phone
 } from 'lucide-react';
 
 export default function Admin() {
@@ -191,6 +193,10 @@ export default function Admin() {
             <TabsTrigger value="emails" className="gap-2">
               <Mail className="h-4 w-4" />
               Emails
+            </TabsTrigger>
+            <TabsTrigger value="service" className="gap-2">
+              <Wrench className="h-4 w-4" />
+              Service
             </TabsTrigger>
           </TabsList>
 
@@ -508,6 +514,10 @@ export default function Admin() {
                 <p className="text-muted-foreground">Email management interface coming soon...</p>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="service">
+            <ServiceAppointmentsTab />
           </TabsContent>
         </Tabs>
       </div>

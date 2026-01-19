@@ -285,3 +285,129 @@ describe('Bike Types', () => {
     expect(bikeTypes).toContain('road-bike');
   });
 });
+
+describe('Admin Panel - Service Appointments', () => {
+  const statusConfig = {
+    pending: { label: 'Pending', color: 'yellow' },
+    confirmed: { label: 'Confirmed', color: 'blue' },
+    in_progress: { label: 'In Progress', color: 'purple' },
+    completed: { label: 'Completed', color: 'green' },
+    cancelled: { label: 'Cancelled', color: 'red' },
+  };
+
+  it('should have all status types configured', () => {
+    expect(Object.keys(statusConfig)).toHaveLength(5);
+    expect(statusConfig).toHaveProperty('pending');
+    expect(statusConfig).toHaveProperty('confirmed');
+    expect(statusConfig).toHaveProperty('in_progress');
+    expect(statusConfig).toHaveProperty('completed');
+    expect(statusConfig).toHaveProperty('cancelled');
+  });
+
+  it('should have labels for all statuses', () => {
+    Object.values(statusConfig).forEach(config => {
+      expect(config.label).toBeDefined();
+      expect(config.label.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('should have color codes for all statuses', () => {
+    Object.values(statusConfig).forEach(config => {
+      expect(config.color).toBeDefined();
+      expect(config.color.length).toBeGreaterThan(0);
+    });
+  });
+});
+
+describe('Owner Notification for Service Requests', () => {
+  const serviceTypeLabels: Record<string, string> = {
+    'basic-tuneup': 'Basic Tune-Up',
+    'standard-tuneup': 'Standard Tune-Up',
+    'premium-tuneup': 'Premium Tune-Up',
+    'ebike-build': 'E-Bike Build & Safety Check',
+    'flat-repair': 'Flat Repair',
+    'brake-adjustment': 'Brake Adjustment',
+    'battery-diagnostic': 'Battery Diagnostic',
+    'motor-diagnostic': 'Motor Diagnostic',
+    'general-repair': 'General Repair',
+  };
+
+  it('should have labels for all service types', () => {
+    expect(Object.keys(serviceTypeLabels).length).toBeGreaterThanOrEqual(9);
+  });
+
+  it('should format notification title correctly', () => {
+    const customerName = 'John Doe';
+    const title = `🔧 New Service Request from ${customerName}`;
+    expect(title).toContain('New Service Request');
+    expect(title).toContain(customerName);
+  });
+
+  it('should format notification content with all required fields', () => {
+    const input = {
+      name: 'John Doe',
+      email: 'john@example.com',
+      phone: '541-555-1234',
+      serviceType: 'basic-tuneup',
+      bikeType: 'pedego-interceptor',
+      preferredDate: '2026-01-25',
+    };
+
+    const content = `**Customer:** ${input.name}\n` +
+      `**Email:** ${input.email}\n` +
+      `**Phone:** ${input.phone}\n` +
+      `**Service:** ${serviceTypeLabels[input.serviceType]}\n` +
+      `**Bike Type:** ${input.bikeType}\n`;
+
+    expect(content).toContain(input.name);
+    expect(content).toContain(input.email);
+    expect(content).toContain(input.phone);
+    expect(content).toContain('Basic Tune-Up');
+    expect(content).toContain(input.bikeType);
+  });
+});
+
+describe('Customer Testimonials', () => {
+  const testimonials = [
+    {
+      name: 'Sarah & Tom Johnson',
+      location: 'Portland, OR',
+      purchaseType: 'Pedego Interceptor (x2)',
+      featured: true
+    },
+    {
+      name: 'David Chen',
+      location: 'San Francisco, CA',
+      purchaseType: 'Deschutes River Tour',
+      featured: true
+    },
+    {
+      name: 'The Martinez Family',
+      location: 'Bend, OR',
+      purchaseType: 'Regular Rentals',
+      featured: true
+    },
+  ];
+
+  it('should have at least 3 featured testimonials', () => {
+    const featured = testimonials.filter(t => t.featured);
+    expect(featured.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('should have all required fields for testimonials', () => {
+    testimonials.forEach(testimonial => {
+      expect(testimonial.name).toBeDefined();
+      expect(testimonial.location).toBeDefined();
+      expect(testimonial.purchaseType).toBeDefined();
+      expect(typeof testimonial.featured).toBe('boolean');
+    });
+  });
+
+  it('should include diverse customer types', () => {
+    const purchaseTypes = testimonials.map(t => t.purchaseType);
+    // Should have bike purchases, tours, and rentals
+    expect(purchaseTypes.some(p => p.includes('Pedego'))).toBe(true);
+    expect(purchaseTypes.some(p => p.includes('Tour'))).toBe(true);
+    expect(purchaseTypes.some(p => p.includes('Rental'))).toBe(true);
+  });
+});

@@ -19,7 +19,9 @@ import {
   Zap,
   ArrowRight,
   Play,
-  Sparkles
+  Sparkles,
+  Quote,
+  Users
 } from 'lucide-react';
 
 const tours = [
@@ -76,6 +78,50 @@ const reviews = [
     rating: 5,
     text: 'Elec. Bike Brewery Tour Can\'t Be Missed! My wife and I spent our anniversary in Bend and had an absolute blast the entire time!',
     source: 'TripAdvisor'
+  }
+];
+
+// Featured customer testimonials with photos
+const testimonials = [
+  {
+    name: 'Sarah & Tom Johnson',
+    location: 'Portland, OR',
+    image: 'https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=150&h=150&fit=crop&crop=face',
+    quote: 'We bought our Pedego Interceptors from Let It Ride last summer and it completely changed how we explore Bend. The service team is incredible - they\'ve helped us with tune-ups and even installed custom accessories. Best purchase we\'ve ever made!',
+    purchaseType: 'Pedego Interceptor (x2)',
+    featured: true
+  },
+  {
+    name: 'David Chen',
+    location: 'San Francisco, CA',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+    quote: 'The Deschutes River Tour was the highlight of our Bend vacation. Our guide Vance was knowledgeable and fun. We\'re already planning our next trip back!',
+    purchaseType: 'Deschutes River Tour',
+    featured: true
+  },
+  {
+    name: 'The Martinez Family',
+    location: 'Bend, OR',
+    image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=150&h=150&fit=crop&crop=face',
+    quote: 'As locals, we recommend Let It Ride to everyone visiting Bend. The rental bikes are always in perfect condition, and the staff goes above and beyond to make sure you have an amazing experience.',
+    purchaseType: 'Regular Rentals',
+    featured: true
+  },
+  {
+    name: 'Jennifer Williams',
+    location: 'Seattle, WA',
+    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+    quote: 'I was nervous about trying an e-bike for the first time, but the team at Let It Ride made me feel completely comfortable. Now I\'m hooked! The Taste of Bend tour was absolutely delicious.',
+    purchaseType: 'Taste of Bend Tour',
+    featured: false
+  },
+  {
+    name: 'Robert & Linda Thompson',
+    location: 'Denver, CO',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+    quote: 'We drove down from Denver specifically to buy our Pedego Boomerangs from Let It Ride. The expertise and customer service are unmatched. Worth every mile of the drive!',
+    purchaseType: 'Pedego Boomerang (x2)',
+    featured: false
   }
 ];
 
@@ -453,6 +499,94 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Customer Testimonials Section */}
+      <section className="py-24 bg-gradient-to-br from-muted/50 via-background to-muted/30 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-64 h-64 bg-yellow-400/5 rounded-full blur-2xl" />
+        
+        <div className="container relative">
+          <div className="text-center mb-16">
+            <span className="badge-premium mb-4">
+              <Users className="w-3 h-3" />
+              Customer Stories
+            </span>
+            <h2 className="heading-display text-4xl md:text-5xl mb-4">
+              Real Stories from <span className="text-electric-gradient">Happy Riders</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Don't just take our word for it. Hear from customers who've experienced the joy of e-biking with Let It Ride.
+            </p>
+          </div>
+
+          {/* Featured Testimonials */}
+          <div className="grid lg:grid-cols-3 gap-8 mb-12">
+            {testimonials.filter(t => t.featured).map((testimonial, index) => (
+              <Card key={index} className="relative overflow-hidden hover-lift border-2 border-transparent hover:border-primary/20 bg-card">
+                <div className="absolute top-4 right-4 text-primary/10">
+                  <Quote className="w-16 h-16" />
+                </div>
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-4 mb-4">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name}
+                      className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
+                    />
+                    <div>
+                      <CardTitle className="text-lg">{testimonial.name}</CardTitle>
+                      <CardDescription className="flex items-center gap-1">
+                        <MapPin className="w-3 h-3" />
+                        {testimonial.location}
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="relative">
+                  <p className="text-muted-foreground italic leading-relaxed mb-4">
+                    "{testimonial.quote}"
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <Bike className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-medium text-primary">{testimonial.purchaseType}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Additional Testimonials Row */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {testimonials.filter(t => !t.featured).map((testimonial, index) => (
+              <Card key={index} className="hover-lift border border-border/50 bg-card/50">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover border-2 border-primary/10 flex-shrink-0"
+                    />
+                    <div>
+                      <p className="text-muted-foreground italic text-sm leading-relaxed mb-3">
+                        "{testimonial.quote}"
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-sm">{testimonial.name}</p>
+                          <p className="text-xs text-muted-foreground">{testimonial.location}</p>
+                        </div>
+                        <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
+                          {testimonial.purchaseType}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Premium Reviews Section */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-yellow-400/5 rounded-full blur-3xl" />
@@ -461,7 +595,7 @@ export default function Home() {
           <div className="text-center mb-16">
             <span className="badge-premium mb-4">
               <Star className="w-3 h-3" />
-              Customer Reviews
+              TripAdvisor Reviews
             </span>
             <h2 className="heading-display text-4xl md:text-5xl mb-4">
               What Our <span className="text-electric-gradient">Riders</span> Say

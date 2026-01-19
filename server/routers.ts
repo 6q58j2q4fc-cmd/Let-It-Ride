@@ -20,6 +20,7 @@ import { invokeLLM } from "./_core/llm";
 import Stripe from "stripe";
 import { ENV } from "./_core/env";
 import { generateDailyBlogPost, generateDailySocialPost, runDailyAutomation } from "./automation";
+import { notifyOwner } from "./_core/notification";
 
 const stripe = new Stripe(ENV.stripeSecretKey || "", { apiVersion: "2025-12-15.clover" });
 
@@ -644,7 +645,7 @@ Return JSON with: caption, hashtags (array), callToAction`
         issueDescription: z.string().optional(),
       }))
       .mutation(async ({ input }) => {
-        return createServiceAppointment({
+        const result = await createServiceAppointment({
           customerName: input.name,
           customerEmail: input.email,
           customerPhone: input.phone,
@@ -657,6 +658,49 @@ Return JSON with: caption, hashtags (array), callToAction`
           issueDescription: input.issueDescription,
           status: 'pending'
         });
+
+        // Send notification to owner about new service request
+        const serviceTypeLabels: Record<string, string> = {
+          'basic-tuneup': 'Basic Tune-Up',
+          'standard-tuneup': 'Standard Tune-Up',
+          'premium-tuneup': 'Premium Tune-Up',
+          'ebike-build': 'E-Bike Build & Safety Check',
+          'flat-repair': 'Flat Repair',
+          'brake-adjustment': 'Brake Adjustment',
+          'battery-diagnostic': 'Battery Diagnostic',
+          'motor-diagnostic': 'Motor Diagnostic',
+          'general-repair': 'General Repair',
+        };
+
+        const formattedDate = new Date(input.preferredDate).toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+
+        try {
+          await notifyOwner({
+            title: `🔧 New Service Request from ${input.name}`,
+            content: `**New Service Appointment Request**\n\n` +
+              `**Customer:** ${input.name}\n` +
+              `**Email:** ${input.email}\n` +
+              `**Phone:** ${input.phone}\n\n` +
+              `**Service:** ${serviceTypeLabels[input.serviceType] || input.serviceType}\n` +
+              `**Bike Type:** ${input.bikeType}\n` +
+              `${input.bikeBrand ? `**Brand:** ${input.bikeBrand}\n` : ''}` +
+              `${input.bikeModel ? `**Model:** ${input.bikeModel}\n` : ''}\n` +
+              `**Preferred Date:** ${formattedDate}\n` +
+              `${input.preferredTime ? `**Preferred Time:** ${input.preferredTime}\n` : ''}\n` +
+              `${input.issueDescription ? `**Issue Description:**\n${input.issueDescription}\n\n` : ''}` +
+              `---\n` +
+              `Please review and confirm this appointment in the admin panel.`
+          });
+        } catch (e) {
+          console.error('Failed to send service notification:', e);
+        }
+
+        return result;
       }),
     
     getAll: protectedProcedure.query(async ({ ctx }) => {
