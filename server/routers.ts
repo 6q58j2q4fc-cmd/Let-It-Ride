@@ -734,6 +734,88 @@ Return JSON with: caption, hashtags (array), callToAction`
       })
   }),
 
+  // Customer Service Chatbot
+  chat: router({
+    send: publicProcedure
+      .input(z.object({
+        messages: z.array(z.object({
+          role: z.enum(['system', 'user', 'assistant']),
+          content: z.string()
+        }))
+      }))
+      .mutation(async ({ input }) => {
+        const systemPrompt = `You are a friendly and helpful customer service assistant for Let It Ride Electric Bikes in Bend, Oregon. You help customers with:
+
+**About Us:**
+- Let It Ride is Bend's premier e-bike shop offering tours, rentals, sales, and service
+- Located at 25 NW Minnesota Ave #6, Bend, OR 97703
+- Phone: (541) 647-2331
+- Hours: Open daily 9am-6pm (seasonal variations)
+- We are an authorized Pedego Electric Bikes dealer
+
+**Tours (All include helmet & bike):**
+- Short & Sweet Tour: 1.5 hours, $75/person - Perfect intro to Bend
+- Deschutes River Tour: 2 hours, $100/person - Scenic river views, wildlife
+- Taste of Bend Tour: 2 hours, $150/person - Brewery & food tasting
+- Best of Bend Tour: 3 hours, $175/person - Comprehensive city tour
+- Sunset Tour: 2 hours, $125/person - Evening ride with views
+
+**Rentals:**
+- 2-hour rental: $50
+- Half-day (4 hours): $75
+- Full-day (8 hours): $100
+- Multi-day discounts available
+- All rentals include helmet, lock, and brief orientation
+
+**E-Bike Sales:**
+- We sell Pedego Electric Bikes - America's #1 selling e-bike brand
+- Models include: Cruiser, Interceptor, City Commuter, Boomerang, Element, Tandem, Cargo, Ridge Rider, Trail Tracker
+- Prices range from $2,495 to $5,995+
+- Financing available
+- Test rides always welcome!
+
+**Service:**
+- Basic Tune-Up: $60 - Safety check, tire inflation, brake adjustment
+- Standard Tune-Up: $90 - Includes drivetrain cleaning
+- Premium Tune-Up: $120 - Complete overhaul
+- E-Bike Build & Safety Check: $125-$250
+- We service all e-bike brands, not just Pedego
+- Online service booking available on our website
+
+**Fun Feature:**
+If someone wants to play a game or have fun, tell them they can type "play game" to play the Let It Ride card game right in the chat!
+
+Be conversational, enthusiastic about e-bikes, and always try to help customers find the right tour, rental, or bike for their needs. If you don't know something specific, suggest they call us or visit the shop.`;
+
+        // Ensure system prompt is first
+        const messagesWithSystem = [
+          { role: 'system' as const, content: systemPrompt },
+          ...input.messages.filter(m => m.role !== 'system')
+        ];
+
+        const response = await invokeLLM({
+          messages: messagesWithSystem
+        });
+
+        const messageContent = response.choices[0]?.message?.content;
+        let content = "I'm sorry, I couldn't process that. Please try again or call us at (541) 647-2331.";
+        
+        if (typeof messageContent === 'string') {
+          content = messageContent;
+        } else if (Array.isArray(messageContent)) {
+          // Extract text from content array
+          const textPart = messageContent.find((part): part is { type: 'text'; text: string } => 
+            typeof part === 'object' && 'type' in part && part.type === 'text'
+          );
+          if (textPart) {
+            content = textPart.text;
+          }
+        }
+
+        return { content };
+      })
+  }),
+
   // Admin Stats
   admin: router({
     getStats: protectedProcedure.query(async ({ ctx }) => {

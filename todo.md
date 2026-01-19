@@ -243,3 +243,21 @@
 - [x] Add customer testimonials section to homepage
 - [x] Display featured customer quotes with names and photos
 - [x] Integrate testimonials with TripAdvisor reviews display
+
+
+## SMS Notifications
+- [ ] Integrate SMS service provider (Twilio)
+- [ ] Create SMS notification helper function
+- [ ] Send SMS confirmation when service appointment is confirmed
+- [ ] Include appointment details in SMS (date, time, service type)
+- [ ] Write tests for SMS notification functionality
+
+
+## Customer Service Chatbot with Let It Ride Game
+- [x] Create customer service chatbot component with LLM integration
+- [x] Train chatbot on Let It Ride business info (tours, rentals, service, pricing)
+- [x] Add chatbot floating button to all pages
+- [x] Integrate Let It Ride card game as optional feature within chat window
+- [x] Add game trigger command/button in chatbot interface
+- [x] Create engaging game UI within chat context
+- [x] Test chatbot responses and game functionality

@@ -24,7 +24,7 @@ import Gallery from "./pages/Gallery";
 import BookingSuccess from "./pages/BookingSuccess";
 import OrderSuccess from "./pages/OrderSuccess";
 import { EmailPopup } from "./components/EmailPopup";
-import { GameChatbot } from "./components/GameChatbot";
+import { CustomerServiceChat } from "./components/CustomerServiceChat";
 import { CartProvider } from "./contexts/CartContext";
 
 function Router() {
@@ -72,7 +72,7 @@ function App() {
             <Toaster />
             <Router />
             <EmailPopup />
-            <GameChatbot />
+            <CustomerServiceChat />
           </TooltipProvider>
         </CartProvider>
       </ThemeProvider>
