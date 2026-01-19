@@ -19,6 +19,7 @@ import Affiliate from "./pages/Affiliate";
 import AffiliateDashboard from "./pages/AffiliateDashboard";
 import Admin from "./pages/Admin";
 import Rentals from "./pages/Rentals";
+import Service from "./pages/Service";
 import BookingSuccess from "./pages/BookingSuccess";
 import OrderSuccess from "./pages/OrderSuccess";
 import { EmailPopup } from "./components/EmailPopup";
@@ -41,6 +42,7 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/rentals" component={Rentals} />
+      <Route path="/service" component={Service} />
       <Route path="/booking-success" component={BookingSuccess} />
       <Route path="/order-success" component={OrderSuccess} />
       

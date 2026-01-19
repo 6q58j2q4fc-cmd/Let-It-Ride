@@ -213,3 +213,12 @@
 - [x] Update all product images to match
 - [x] Verify all pricing matches
 - [x] Final verification of all pages
+
+
+## Service/Repair Page
+- [x] Create Service.tsx page component with all service offerings
+- [x] Add $100/hour labor rate and service pricing (updated from research)
+- [x] Add tune-up packages ($60-$120) and repair services
+- [x] Add route in App.tsx for /service
+- [x] Add navigation link in Header
+- [x] Add SEO meta tags for service page

@@ -20,7 +20,8 @@ import {
   LogOut,
   Zap,
   ChevronDown,
-  Sparkles
+  Sparkles,
+  Wrench
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -42,6 +43,7 @@ const navigation = [
   { name: 'Tours', href: '/tours', icon: Mountain },
   { name: 'Shop', href: '/shop', icon: Store },
   { name: 'Rentals', href: '/rentals', icon: Bike },
+  { name: 'Service', href: '/service', icon: Wrench },
   { name: 'Blog', href: '/blog', icon: BookOpen },
   { name: 'About', href: '/about', icon: Users },
   { name: 'Contact', href: '/contact', icon: Mail },
