@@ -3,8 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { EcoSavingsCalculator } from '@/components/EcoSavingsCalculator';
-import { GreenEnergySection } from '@/components/GreenEnergySection';
+
 import { 
   Star, 
   Clock, 
@@ -153,157 +152,57 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       <Header />
       
-      {/* Premium Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Background with parallax effect */}
+      {/* Clean Hero Section - Inspired by New Wheel & Visit Bend */}
+      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+        {/* Full-bleed background image */}
         <div className="absolute inset-0">
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-fixed"
-            style={{
-              backgroundImage: 'url(/hero-group-bikes.webp)'
-            }}
+          <img 
+            src="/hero-group-bikes.webp"
+            alt="E-bike adventures in Bend, Oregon"
+            className="w-full h-full object-cover"
           />
-          {/* Premium gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-green-800/90 to-primary/85" />
-          {/* Animated pattern overlay */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }} />
-          </div>
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
         </div>
         
-        <div className="container relative z-10 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left content */}
-            <div className="text-white">
-              {/* Premium badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6 stagger-item">
-                <Sparkles className="w-4 h-4 text-yellow-400" />
-                <span className="text-sm font-semibold tracking-wide">Bend, Oregon's Premier E-Bike Experience</span>
-              </div>
-              
-              {/* Main headline */}
-              <h1 className="heading-display text-5xl md:text-7xl mb-6 stagger-item">
-                <span className="flex items-center gap-3 mb-2">
-                  <Zap className="w-14 h-14 md:w-20 md:h-20 text-yellow-400 lightning-icon drop-shadow-lg" />
-                  <span>Hello Fun!</span>
-                </span>
-                <span className="block">
-                  <span className="text-yellow-400">Miles of Smiles</span>
-                </span>
-                <span className="block text-white/90">Await</span>
-              </h1>
-              
-              {/* Subheadline */}
-              <p className="text-xl md:text-2xl mb-8 text-white/80 leading-relaxed max-w-xl stagger-item">
-                Experience the joy, freedom, and fun of electric bikes in beautiful Central Oregon. 
-                Guided tours, rentals, and sales of premium Pedego e-bikes.
-              </p>
-              
-              {/* CTA buttons */}
-              <div className="flex flex-wrap gap-4 stagger-item">
-                <Link href="/tours">
-                  <Button size="lg" className="btn-lightning btn-premium text-lg px-8 py-6 group">
-                    <Zap className="mr-2 h-5 w-5 group-hover:animate-pulse" />
-                    Book a Tour
-                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </Link>
-                <Link href="/shop">
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
-                    className="bg-white/10 backdrop-blur-md border-2 border-white/30 text-white hover:bg-white/20 hover:border-white/50 text-lg px-8 py-6 transition-all duration-300"
-                  >
-                    <Bike className="mr-2 h-5 w-5" />
-                    Shop E-Bikes
-                  </Button>
-                </Link>
-              </div>
-              
-              {/* Trust indicators */}
-              <div className="flex items-center gap-6 mt-10 pt-8 border-t border-white/20 stagger-item">
-                <div className="flex items-center gap-2">
-                  <div className="flex -space-x-1">
-                    {[1,2,3,4,5].map(i => (
-                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <span className="text-sm font-semibold">189+ Reviews</span>
-                </div>
-                <div className="h-8 w-px bg-white/30" />
-                <div className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-yellow-400" />
-                  <span className="text-sm font-semibold">#1 Rated in Bend</span>
-                </div>
-              </div>
-            </div>
+        <div className="container relative z-10 py-16">
+          <div className="max-w-2xl">
+            {/* Simple, bold headline */}
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+              Hello Fun.
+            </h1>
             
-            {/* Right content - Featured tour card */}
-            <div className="hidden lg:block stagger-item">
-              <div className="relative">
-                {/* Glow effect */}
-                <div className="absolute -inset-4 bg-gradient-to-br from-yellow-400/30 to-primary/30 rounded-3xl blur-2xl" />
-                
-                {/* Card */}
-                <Card className="relative glass-card border-white/20 overflow-hidden hover-lift">
-                  <div className="relative h-64 overflow-hidden">
-                    <img 
-                      src="/ebike-tours-scenic.webp"
-                      alt="Deschutes River Tour"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <div className="absolute top-4 left-4">
-                      <span className="badge-premium bg-yellow-400/90 text-yellow-900 border-yellow-500">
-                        <Sparkles className="w-3 h-3" />
-                        Most Popular
-                      </span>
-                    </div>
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-2xl font-bold text-white mb-1">Deschutes River Tour</h3>
-                      <div className="flex items-center gap-3 text-white/80 text-sm">
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          2 hours
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
-                          Scenic Trail
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <span className="text-3xl font-black text-primary">$100</span>
-                        <span className="text-muted-foreground ml-1">/person</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-yellow-500">
-                        {[1,2,3,4,5].map(i => (
-                          <Star key={i} className="w-4 h-4 fill-current" />
-                        ))}
-                      </div>
-                    </div>
-                    <Link href="/tours/deschutes-river">
-                      <Button className="w-full btn-lightning">
-                        Book This Tour
-                        <ChevronRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              </div>
+            {/* Clean subheadline */}
+            <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
+              E-bike tours, rentals & sales in Bend, Oregon.
+            </p>
+            
+            {/* Simple CTA buttons */}
+            <div className="flex flex-wrap gap-4">
+              <Link href="/tours">
+                <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 font-semibold">
+                  Book a Tour
+                </Button>
+              </Link>
+              <Link href="/rentals">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 font-semibold bg-transparent"
+                >
+                  Rent a Bike
+                </Button>
+              </Link>
+              <Link href="/shop">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 font-semibold bg-transparent"
+                >
+                  Shop E-Bikes
+                </Button>
+              </Link>
             </div>
-          </div>
-        </div>
-        
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-10 h-14 rounded-full border-2 border-white/40 flex items-start justify-center p-2">
-            <div className="w-1.5 h-4 bg-white/60 rounded-full animate-pulse" />
           </div>
         </div>
       </section>
@@ -427,8 +326,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Green Energy Section */}
-      <GreenEnergySection />
+
 
       {/* Premium About Section */}
       <section className="py-24 bg-gradient-to-br from-secondary/50 via-background to-secondary/30 relative overflow-hidden">
@@ -653,8 +551,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Eco Savings Calculator */}
-      <EcoSavingsCalculator />
+
 
       {/* Premium CTA Section */}
       <section className="py-24 bg-gradient-to-br from-primary via-green-600 to-primary relative overflow-hidden">

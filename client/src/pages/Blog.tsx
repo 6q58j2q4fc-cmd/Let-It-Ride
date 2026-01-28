@@ -211,11 +211,7 @@ export default function Blog() {
                         alt={post.title}
                         className="w-full h-full object-cover"
                       />
-                      {post.isAiGenerated && (
-                        <Badge className="absolute top-2 right-2 bg-blue-500 text-white text-xs">
-                          AI Generated
-                        </Badge>
-                      )}
+
                     </div>
                     <CardHeader>
                       <Badge variant="outline" className="w-fit mb-2">

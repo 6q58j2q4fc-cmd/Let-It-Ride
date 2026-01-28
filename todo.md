@@ -348,3 +348,14 @@
 - [x] Add TripAdvisor review CTA with coupon incentive
 - [x] Add reading progress indicator to articles
 - [x] Test all social share buttons work correctly
+
+
+## Homepage Simplification & Design Refinement
+- [x] Remove "AI generated" labels from blog article images
+- [x] Fix duplicate photos in blog and gallery sections
+- [x] Remove "Go Green with Electric Power" section from homepage
+- [x] Remove "E-Bikes Pay for Themselves" section from homepage
+- [x] Simplify homepage with less text and more breathing room
+- [x] Align design aesthetic with New Wheel and Visit Bend (calm, easy, approachable)
+- [x] Create clear path from landing to booking/buying
+- [x] Test all design changes

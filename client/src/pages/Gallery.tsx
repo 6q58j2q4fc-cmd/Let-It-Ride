@@ -72,10 +72,10 @@ const galleryImages = [
   },
   {
     id: 10,
-    src: '/hero-group-bikes.webp',
-    title: 'Deschutes River at Old Mill',
-    category: 'scenery',
-    description: 'Kayakers and paddleboarders enjoy the Deschutes River near the Old Mill District.',
+    src: '/urtopia-carbon-1-pro.webp',
+    title: 'Urtopia Carbon 1 Pro',
+    category: 'bikes',
+    description: 'The ultra-lightweight Urtopia Carbon 1 Pro - smart e-bike technology meets stunning design.',
   },
 ];
 
