@@ -10,6 +10,10 @@ import { serveStatic, setupVite } from "./vite";
 import { handleStripeWebhook } from "../stripe-webhook";
 import { generateSitemap, generateRSSFeed, generateAtomFeed, generateRobotsTxt } from "../seo-feeds";
 import { handleDailyCron, getAutomationStatus, healthCheck } from "../cron-handler";
+import { storagePut } from "../storage";
+import multer from "multer";
+import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -51,6 +55,50 @@ async function startServer() {
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  app.use(cookieParser());
+  
+  // File upload endpoint for admin panel
+  const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
+  
+  app.post('/api/upload', upload.single('file'), async (req, res) => {
+    try {
+      // Verify admin session
+      const token = req.cookies?.admin_session;
+      if (!token) {
+        return res.status(401).json({ error: 'Not authenticated' });
+      }
+      
+      try {
+        jwt.verify(token, process.env.JWT_SECRET || 'admin-secret-key');
+      } catch {
+        return res.status(401).json({ error: 'Invalid session' });
+      }
+      
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file provided' });
+      }
+      
+      const file = req.file;
+      const timestamp = Date.now();
+      const randomSuffix = Math.random().toString(36).substring(2, 8);
+      const ext = file.originalname.split('.').pop() || 'jpg';
+      const fileKey = `site-images/${timestamp}-${randomSuffix}.${ext}`;
+      
+      const { url } = await storagePut(fileKey, file.buffer, file.mimetype);
+      
+      res.json({ 
+        success: true, 
+        url, 
+        fileKey,
+        fileName: file.originalname,
+        mimeType: file.mimetype,
+        fileSize: file.size
+      });
+    } catch (error) {
+      console.error('[Upload] Error:', error);
+      res.status(500).json({ error: 'Upload failed' });
+    }
+  });
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
   // tRPC API

@@ -14,13 +14,16 @@ import {
   createSocialPost, getPendingSocialPosts, getAllSocialPosts,
   createReviewRequest, getPendingReviewRequests,
   createGamePlay, getGamePlaysByUser,
-  createServiceAppointment, getAllServiceAppointments, getServiceAppointmentById, updateServiceAppointment
+  createServiceAppointment, getAllServiceAppointments, getServiceAppointmentById, updateServiceAppointment,
+  createAdminCredential, verifyAdminCredentials, getAdminByUsername, getAdminById, getAllAdmins, updateAdminPassword,
+  createSiteImage, getAllSiteImages, getSiteImagesByCategory, getSiteImageById, updateSiteImage, deleteSiteImage, searchSiteImages
 } from "./db";
 import { invokeLLM } from "./_core/llm";
 import Stripe from "stripe";
 import { ENV } from "./_core/env";
 import { generateDailyBlogPost, generateDailySocialPost, runDailyAutomation } from "./automation";
 import { notifyOwner } from "./_core/notification";
+import jwt from 'jsonwebtoken';
 
 const stripe = new Stripe(ENV.stripeSecretKey || "", { apiVersion: "2025-12-15.clover" });
 
@@ -841,6 +844,213 @@ Be conversational, enthusiastic about e-bikes, and always try to help customers 
         pendingBookings: bookings.filter(b => b.status === 'pending').length
       };
     })
+  }),
+
+  // Custom Admin Authentication (separate from Manus OAuth)
+  adminAuth: router({
+    login: publicProcedure
+      .input(z.object({
+        username: z.string().min(1),
+        password: z.string().min(1)
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const admin = await verifyAdminCredentials(input.username, input.password);
+        if (!admin) {
+          throw new Error('Invalid username or password');
+        }
+        
+        // Set admin session cookie
+        const token = jwt.sign(
+          { adminId: admin.id, username: admin.username, isAdmin: true },
+          ENV.jwtSecret || 'admin-secret-key',
+          { expiresIn: '24h' }
+        );
+        
+        ctx.res.cookie('admin_session', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
+        
+        return {
+          success: true,
+          admin: {
+            id: admin.id,
+            username: admin.username,
+            displayName: admin.displayName,
+            email: admin.email
+          }
+        };
+      }),
+    
+    logout: publicProcedure.mutation(({ ctx }) => {
+      ctx.res.clearCookie('admin_session');
+      return { success: true };
+    }),
+    
+    me: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token) return null;
+      
+      try {
+        const decoded = jwt.verify(token, ENV.jwtSecret || 'admin-secret-key') as { adminId: number };
+        const admin = await getAdminById(decoded.adminId);
+        if (!admin || !admin.isActive) return null;
+        
+        return {
+          id: admin.id,
+          username: admin.username,
+          displayName: admin.displayName,
+          email: admin.email
+        };
+      } catch {
+        return null;
+      }
+    }),
+    
+    createAdmin: publicProcedure
+      .input(z.object({
+        username: z.string().min(3),
+        password: z.string().min(8),
+        displayName: z.string().optional(),
+        email: z.string().email().optional(),
+        setupKey: z.string() // Required for first-time setup
+      }))
+      .mutation(async ({ input }) => {
+        // Check setup key for security
+        if (input.setupKey !== 'letitride-admin-setup-2024') {
+          throw new Error('Invalid setup key');
+        }
+        
+        // Check if username exists
+        const existing = await getAdminByUsername(input.username);
+        if (existing) {
+          throw new Error('Username already exists');
+        }
+        
+        await createAdminCredential({
+          username: input.username,
+          password: input.password,
+          displayName: input.displayName,
+          email: input.email
+        });
+        
+        return { success: true };
+      }),
+    
+    changePassword: publicProcedure
+      .input(z.object({
+        currentPassword: z.string(),
+        newPassword: z.string().min(8)
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token) throw new Error('Not authenticated');
+        
+        const decoded = jwt.verify(token, ENV.jwtSecret || 'admin-secret-key') as { adminId: number; username: string };
+        
+        // Verify current password
+        const admin = await verifyAdminCredentials(decoded.username, input.currentPassword);
+        if (!admin) throw new Error('Current password is incorrect');
+        
+        await updateAdminPassword(decoded.adminId, input.newPassword);
+        return { success: true };
+      }),
+    
+    getAll: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token) throw new Error('Not authenticated');
+      
+      return getAllAdmins();
+    })
+  }),
+
+  // Site Images Management
+  siteImages: router({
+    getAll: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token) throw new Error('Not authenticated');
+      return getAllSiteImages();
+    }),
+    
+    getByCategory: publicProcedure
+      .input(z.object({
+        category: z.enum(['tours', 'rentals', 'products', 'blog', 'gallery', 'hero', 'about', 'general'])
+      }))
+      .query(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token) throw new Error('Not authenticated');
+        return getSiteImagesByCategory(input.category);
+      }),
+    
+    getById: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token) throw new Error('Not authenticated');
+        return getSiteImageById(input.id);
+      }),
+    
+    create: publicProcedure
+      .input(z.object({
+        name: z.string(),
+        category: z.enum(['tours', 'rentals', 'products', 'blog', 'gallery', 'hero', 'about', 'general']),
+        url: z.string(),
+        fileKey: z.string().optional(),
+        altText: z.string().optional(),
+        description: z.string().optional(),
+        width: z.number().optional(),
+        height: z.number().optional(),
+        fileSize: z.number().optional(),
+        mimeType: z.string().optional(),
+        usedIn: z.array(z.string()).optional()
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token) throw new Error('Not authenticated');
+        
+        const decoded = jwt.verify(token, ENV.jwtSecret || 'admin-secret-key') as { adminId: number };
+        
+        return createSiteImage({
+          ...input,
+          uploadedBy: decoded.adminId
+        });
+      }),
+    
+    update: publicProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        category: z.enum(['tours', 'rentals', 'products', 'blog', 'gallery', 'hero', 'about', 'general']).optional(),
+        url: z.string().optional(),
+        altText: z.string().optional(),
+        description: z.string().optional(),
+        usedIn: z.array(z.string()).optional()
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token) throw new Error('Not authenticated');
+        
+        const { id, ...data } = input;
+        return updateSiteImage(id, data);
+      }),
+    
+    delete: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token) throw new Error('Not authenticated');
+        return deleteSiteImage(input.id);
+      }),
+    
+    search: publicProcedure
+      .input(z.object({ query: z.string() }))
+      .query(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token) throw new Error('Not authenticated');
+        return searchSiteImages(input.query);
+      })
   })
 });
 

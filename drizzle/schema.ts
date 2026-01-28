@@ -301,3 +301,43 @@ export const serviceAppointments = mysqlTable("service_appointments", {
 
 export type ServiceAppointment = typeof serviceAppointments.$inferSelect;
 export type InsertServiceAppointment = typeof serviceAppointments.$inferInsert;
+
+
+// Admin credentials table for custom admin login (separate from Manus OAuth)
+export const adminCredentials = mysqlTable("admin_credentials", {
+  id: int("id").autoincrement().primaryKey(),
+  username: varchar("username", { length: 100 }).notNull().unique(),
+  passwordHash: varchar("passwordHash", { length: 255 }).notNull(),
+  displayName: varchar("displayName", { length: 255 }),
+  email: varchar("email", { length: 320 }),
+  isActive: boolean("isActive").default(true).notNull(),
+  lastLoginAt: timestamp("lastLoginAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type AdminCredential = typeof adminCredentials.$inferSelect;
+export type InsertAdminCredential = typeof adminCredentials.$inferInsert;
+
+// Site images table for managing all website images
+export const siteImages = mysqlTable("site_images", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  category: mysqlEnum("category", ["tours", "rentals", "products", "blog", "gallery", "hero", "about", "general"]).notNull(),
+  url: text("url").notNull(),
+  fileKey: varchar("fileKey", { length: 500 }),
+  altText: varchar("altText", { length: 500 }),
+  description: text("description"),
+  width: int("width"),
+  height: int("height"),
+  fileSize: int("fileSize"),
+  mimeType: varchar("mimeType", { length: 100 }),
+  usedIn: json("usedIn"), // Array of page/component names where image is used
+  isActive: boolean("isActive").default(true).notNull(),
+  uploadedBy: int("uploadedBy"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SiteImage = typeof siteImages.$inferSelect;
+export type InsertSiteImage = typeof siteImages.$inferInsert;

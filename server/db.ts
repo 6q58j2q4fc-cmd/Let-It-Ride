@@ -15,7 +15,9 @@ import {
   gamePlays, GamePlay, InsertGamePlay,
   reviewRequests, ReviewRequest, InsertReviewRequest,
   siteSettings, SiteSetting, InsertSiteSetting,
-  serviceAppointments, ServiceAppointment, InsertServiceAppointment
+  serviceAppointments, ServiceAppointment, InsertServiceAppointment,
+  adminCredentials, AdminCredential, InsertAdminCredential,
+  siteImages, SiteImage, InsertSiteImage
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -597,4 +599,143 @@ export async function getServiceAppointmentsByEmail(email: string) {
   const db = await getDb();
   if (!db) return [];
   return db.select().from(serviceAppointments).where(eq(serviceAppointments.customerEmail, email)).orderBy(desc(serviceAppointments.createdAt));
+}
+
+
+// Admin credentials functions
+import bcrypt from 'bcrypt';
+
+const SALT_ROUNDS = 10;
+
+export async function createAdminCredential(data: { username: string; password: string; displayName?: string; email?: string }) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS);
+  
+  return db.insert(adminCredentials).values({
+    username: data.username,
+    passwordHash,
+    displayName: data.displayName,
+    email: data.email
+  });
+}
+
+export async function verifyAdminCredentials(username: string, password: string): Promise<AdminCredential | null> {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.select().from(adminCredentials)
+    .where(and(eq(adminCredentials.username, username), eq(adminCredentials.isActive, true)))
+    .limit(1);
+  
+  if (result.length === 0) return null;
+  
+  const admin = result[0];
+  const isValid = await bcrypt.compare(password, admin.passwordHash);
+  
+  if (!isValid) return null;
+  
+  // Update last login
+  await db.update(adminCredentials)
+    .set({ lastLoginAt: new Date() })
+    .where(eq(adminCredentials.id, admin.id));
+  
+  return admin;
+}
+
+export async function getAdminByUsername(username: string) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.select().from(adminCredentials)
+    .where(eq(adminCredentials.username, username))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function getAdminById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const result = await db.select().from(adminCredentials)
+    .where(eq(adminCredentials.id, id))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function updateAdminPassword(id: number, newPassword: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const passwordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+  return db.update(adminCredentials).set({ passwordHash }).where(eq(adminCredentials.id, id));
+}
+
+export async function getAllAdmins() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select({
+    id: adminCredentials.id,
+    username: adminCredentials.username,
+    displayName: adminCredentials.displayName,
+    email: adminCredentials.email,
+    isActive: adminCredentials.isActive,
+    lastLoginAt: adminCredentials.lastLoginAt,
+    createdAt: adminCredentials.createdAt
+  }).from(adminCredentials).orderBy(desc(adminCredentials.createdAt));
+}
+
+// Site images functions
+export async function createSiteImage(data: InsertSiteImage) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(siteImages).values(data);
+}
+
+export async function getAllSiteImages() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(siteImages).where(eq(siteImages.isActive, true)).orderBy(desc(siteImages.createdAt));
+}
+
+export async function getSiteImagesByCategory(category: SiteImage["category"]) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(siteImages)
+    .where(and(eq(siteImages.category, category), eq(siteImages.isActive, true)))
+    .orderBy(desc(siteImages.createdAt));
+}
+
+export async function getSiteImageById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(siteImages).where(eq(siteImages.id, id)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function updateSiteImage(id: number, data: Partial<InsertSiteImage>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(siteImages).set(data).where(eq(siteImages.id, id));
+}
+
+export async function deleteSiteImage(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  // Soft delete
+  return db.update(siteImages).set({ isActive: false }).where(eq(siteImages.id, id));
+}
+
+export async function searchSiteImages(query: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(siteImages)
+    .where(and(
+      eq(siteImages.isActive, true),
+      sql`(${siteImages.name} LIKE ${`%${query}%`} OR ${siteImages.altText} LIKE ${`%${query}%`})`
+    ))
+    .orderBy(desc(siteImages.createdAt));
 }

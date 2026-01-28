@@ -27,6 +27,8 @@ import OrderSuccess from "./pages/OrderSuccess";
 import { EmailPopup } from "./components/EmailPopup";
 import { CustomerServiceChat } from "./components/CustomerServiceChat";
 import { CartProvider } from "./contexts/CartContext";
+import AdminLogin from "./pages/AdminLogin";
+import AdminPanel from "./pages/AdminPanel";
 
 function Router() {
   return (
@@ -57,6 +59,10 @@ function Router() {
       {/* Admin panel */}
       <Route path="/admin" component={Admin} />
       <Route path="/admin/:section" component={Admin} />
+      
+      {/* Custom Admin Login (separate from Manus OAuth) */}
+      <Route path="/admin-login" component={AdminLogin} />
+      <Route path="/admin-panel" component={AdminPanel} />
       
       {/* 404 */}
       <Route path="/404" component={NotFound} />
