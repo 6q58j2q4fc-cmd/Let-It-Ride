@@ -13,9 +13,28 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Loader2, LogOut, Image as ImageIcon, Upload, Trash2, Edit, Search, 
-  Grid, List, Zap, User, Settings, RefreshCw, Eye, Download, FolderUp, Replace
+  Grid, List, Zap, User, Settings, RefreshCw, Eye, Download, FolderUp, Replace, Crop, GripVertical, MapPin
 } from "lucide-react";
 import { toast } from "sonner";
+import { ImageEditor } from "@/components/ImageEditor";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  rectSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { SortableImageCard } from '@/components/SortableImageCard';
 
 type SiteImage = {
   id: number;
@@ -30,6 +49,7 @@ type SiteImage = {
   fileSize?: number | null;
   mimeType?: string | null;
   usedIn?: unknown;
+  displayOrder?: number;
   isActive: boolean;
   uploadedBy?: number | null;
   createdAt: Date;
@@ -66,6 +86,11 @@ export default function AdminPanel() {
   const [isReplaceOpen, setIsReplaceOpen] = useState(false);
   const [replaceFile, setReplaceFile] = useState<File | null>(null);
   const [replacePreview, setReplacePreview] = useState<string | null>(null);
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [editorFile, setEditorFile] = useState<File | null>(null);
+  const [draggedImageId, setDraggedImageId] = useState<number | null>(null);
+  const [isUsageOpen, setIsUsageOpen] = useState(false);
+  const [usageImage, setUsageImage] = useState<SiteImage | null>(null);
 
   // Form state for upload
   const [uploadForm, setUploadForm] = useState({
@@ -135,6 +160,43 @@ export default function AdminPanel() {
     }
   });
 
+  const reorderMutation = trpc.siteImages.reorder.useMutation({
+    onSuccess: () => {
+      toast.success("Images reordered successfully");
+      refetchImages();
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    }
+  });
+
+  // DnD sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Handle drag end
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (over && active.id !== over.id) {
+      const oldIndex = filteredImages.findIndex((img) => img.id === active.id);
+      const newIndex = filteredImages.findIndex((img) => img.id === over.id);
+      
+      const newOrder = arrayMove(filteredImages, oldIndex, newIndex);
+      const imageIds = newOrder.map(img => img.id);
+      
+      reorderMutation.mutate({ imageIds });
+    }
+  };
+
   // Redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !admin) {
@@ -160,6 +222,24 @@ export default function AdminPanel() {
       reader.onload = (e) => setPreviewImage(e.target?.result as string);
       reader.readAsDataURL(file);
     }
+  };
+
+  // Open image editor
+  const openImageEditor = () => {
+    if (uploadForm.file) {
+      setEditorFile(uploadForm.file);
+      setIsEditorOpen(true);
+    }
+  };
+
+  // Handle edited image from editor
+  const handleEditorSave = (editedFile: File) => {
+    setUploadForm(prev => ({ ...prev, file: editedFile }));
+    const reader = new FileReader();
+    reader.onload = (e) => setPreviewImage(e.target?.result as string);
+    reader.readAsDataURL(editedFile);
+    setIsEditorOpen(false);
+    toast.success("Image edited successfully");
   };
 
   // Handle upload
@@ -580,6 +660,18 @@ export default function AdminPanel() {
                           />
                         </div>
 
+                        {/* Crop/Edit Button */}
+                        {uploadForm.file && (
+                          <Button 
+                            variant="outline"
+                            className="w-full border-orange-500 text-orange-600 hover:bg-orange-50"
+                            onClick={openImageEditor}
+                          >
+                            <Crop className="w-4 h-4 mr-2" />
+                            Crop / Resize Image
+                          </Button>
+                        )}
+
                         <Button 
                           className="w-full bg-green-600 hover:bg-green-700"
                           onClick={handleUpload}
@@ -744,42 +836,34 @@ export default function AdminPanel() {
                 </CardContent>
               </Card>
             ) : viewMode === "grid" ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {filteredImages.map((image) => (
-                  <Card key={image.id} className="overflow-hidden group">
-                    <div className="aspect-square relative bg-gray-100">
-                      <img
-                        src={image.url}
-                        alt={image.altText || image.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/placeholder-image.svg';
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={filteredImages.map(img => img.id)}
+                  strategy={rectSortingStrategy}
+                >
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {filteredImages.map((image) => (
+                      <SortableImageCard
+                        key={image.id}
+                        image={image}
+                        onView={() => window.open(image.url, '_blank')}
+                        onReplace={() => openReplaceDialog(image)}
+                        onEdit={() => handleEdit(image)}
+                        onDelete={() => handleDelete(image.id)}
+                        onShowUsage={() => {
+                          setUsageImage(image);
+                          setIsUsageOpen(true);
                         }}
+                        categoryLabel={CATEGORIES.find(c => c.value === image.category)?.label || image.category}
                       />
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                        <Button size="sm" variant="secondary" onClick={() => window.open(image.url, '_blank')}>
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        <Button size="sm" variant="secondary" onClick={() => openReplaceDialog(image)}>
-                          <Replace className="w-4 h-4" />
-                        </Button>
-                        <Button size="sm" variant="secondary" onClick={() => handleEdit(image)}>
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button size="sm" variant="destructive" onClick={() => handleDelete(image.id)}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                    <CardContent className="p-3">
-                      <p className="font-medium text-sm truncate">{image.name}</p>
-                      <Badge variant="secondary" className="mt-1 text-xs">
-                        {CATEGORIES.find(c => c.value === image.category)?.label || image.category}
-                      </Badge>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
             ) : (
               <Card>
                 <div className="divide-y">
@@ -935,6 +1019,14 @@ export default function AdminPanel() {
         </DialogContent>
       </Dialog>
 
+      {/* Image Editor */}
+      <ImageEditor
+        isOpen={isEditorOpen}
+        onClose={() => setIsEditorOpen(false)}
+        imageFile={editorFile}
+        onSave={handleEditorSave}
+      />
+
       {/* Replace Image Dialog */}
       <Dialog open={isReplaceOpen} onOpenChange={setIsReplaceOpen}>
         <DialogContent className="max-w-md">
@@ -1014,6 +1106,59 @@ export default function AdminPanel() {
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Image Usage Dialog */}
+      <Dialog open={isUsageOpen} onOpenChange={setIsUsageOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-blue-500" />
+              Image Usage
+            </DialogTitle>
+            <DialogDescription>
+              Where "{usageImage?.name}" is used on the website
+            </DialogDescription>
+          </DialogHeader>
+          
+          {usageImage && (
+            <div className="space-y-4">
+              <img 
+                src={usageImage.url} 
+                alt={usageImage.altText || usageImage.name}
+                className="w-full h-32 object-cover rounded"
+              />
+              
+              {Array.isArray(usageImage.usedIn) && usageImage.usedIn.length > 0 ? (
+                <div className="space-y-2">
+                  <Label>Used in {usageImage.usedIn.length} location(s):</Label>
+                  <div className="max-h-48 overflow-y-auto space-y-2">
+                    {(usageImage.usedIn as string[]).map((location, index) => (
+                      <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                        <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                        <span className="text-sm">{location}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Alert>
+                    <AlertDescription>
+                      Replacing or deleting this image will affect all locations listed above.
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              ) : (
+                <div className="text-center py-4">
+                  <p className="text-gray-500">This image is not currently used on any pages.</p>
+                  <p className="text-sm text-gray-400 mt-1">You can safely delete or replace it.</p>
+                </div>
+              )}
+              
+              <Button variant="outline" className="w-full" onClick={() => setIsUsageOpen(false)}>
+                Close
+              </Button>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

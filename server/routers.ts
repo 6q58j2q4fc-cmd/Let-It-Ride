@@ -1029,7 +1029,8 @@ Be conversational, enthusiastic about e-bikes, and always try to help customers 
         description: z.string().optional(),
         mimeType: z.string().optional(),
         fileSize: z.number().optional(),
-        usedIn: z.array(z.string()).optional()
+        usedIn: z.array(z.string()).optional(),
+        displayOrder: z.number().optional()
       }))
       .mutation(async ({ input, ctx }) => {
         const token = ctx.req.cookies?.admin_session;
@@ -1053,6 +1054,39 @@ Be conversational, enthusiastic about e-bikes, and always try to help customers 
         const token = ctx.req.cookies?.admin_session;
         if (!token) throw new Error('Not authenticated');
         return searchSiteImages(input.query);
+      }),
+    
+    reorder: publicProcedure
+      .input(z.object({
+        imageIds: z.array(z.number())
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token) throw new Error('Not authenticated');
+        
+        // Update display order for each image
+        for (let i = 0; i < input.imageIds.length; i++) {
+          await updateSiteImage(input.imageIds[i], { displayOrder: i });
+        }
+        return { success: true };
+      }),
+    
+    getUsage: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token) throw new Error('Not authenticated');
+        
+        const image = await getSiteImageById(input.id);
+        if (!image) throw new Error('Image not found');
+        
+        // Return usage info from the usedIn field
+        return {
+          id: image.id,
+          name: image.name,
+          usedIn: image.usedIn || [],
+          url: image.url
+        };
       })
   })
 });

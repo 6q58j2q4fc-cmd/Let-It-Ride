@@ -333,6 +333,7 @@ export const siteImages = mysqlTable("site_images", {
   fileSize: int("fileSize"),
   mimeType: varchar("mimeType", { length: 100 }),
   usedIn: json("usedIn"), // Array of page/component names where image is used
+  displayOrder: int("displayOrder").default(0).notNull(),
   isActive: boolean("isActive").default(true).notNull(),
   uploadedBy: int("uploadedBy"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

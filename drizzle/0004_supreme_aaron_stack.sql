@@ -1,0 +1,1 @@
+ALTER TABLE `site_images` ADD `displayOrder` int DEFAULT 0 NOT NULL;

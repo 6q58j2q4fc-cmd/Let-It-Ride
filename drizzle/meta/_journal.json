@@ -29,6 +29,13 @@
       "when": 1769631584641,
       "tag": "0003_rapid_hannibal_king",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1769634177510,
+      "tag": "0004_supreme_aaron_stack",
+      "breakpoints": true
     }
   ]
 }

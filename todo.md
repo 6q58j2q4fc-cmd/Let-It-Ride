@@ -311,3 +311,13 @@
 - [x] Enable image replacement while keeping URL references
 - [x] Add replace image button to existing images
 - [x] Write tests for new functionality
+
+
+## Advanced Image Management Features
+- [x] Build in-browser image cropping and resizing editor
+- [x] Add crop/resize button to upload dialog
+- [x] Create image usage tracking system
+- [x] Show which pages each image is used on
+- [x] Add drag-and-drop reordering for images
+- [x] Implement displayOrder field in database
+- [x] Test all new features
