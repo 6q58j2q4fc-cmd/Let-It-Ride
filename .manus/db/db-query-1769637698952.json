@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO coupons (code, description, discountType, discountValue, minPurchase, usageLimit, usedCount, applicableTo, isActive, expiresAt, source)\nVALUES ('TRIPADVISOR-BOGO', 'Buy One Get One Free Tour - Thank you for your TripAdvisor review!', 'bogo', 100.00, 0, 1000, 0, 'tours', true, DATE_ADD(NOW(), INTERVAL 1 YEAR), 'review_reward');",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user mexMZK3NDs3KsAz.621f19aaac4c --database JAjQFNXBbA5Quy72adLon7 --execute INSERT INTO coupons (code, description, discountType, discountValue, minPurchase, usageLimit, usedCount, applicableTo, isActive, expiresAt, source)\nVALUES ('TRIPADVISOR-BOGO', 'Buy One Get One Free Tour - Thank you for your TripAdvisor review!', 'bogo', 100.00, 0, 1000, 0, 'tours', true, DATE_ADD(NOW(), INTERVAL 1 YEAR), 'review_reward');",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 65
+}

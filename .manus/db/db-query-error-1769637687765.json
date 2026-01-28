@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO coupons (code, description, discountType, discountValue, minPurchase, usageLimit, usedCount, validFrom, validUntil, isActive, appliesToTours, appliesToProducts, appliesToRentals)\nVALUES ('TRIPADVISOR-BOGO', 'Buy One Get One Free Tour - Thank you for your TripAdvisor review!', 'bogo', 100.00, 0, 1000, 0, NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), true, true, false, false);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user mexMZK3NDs3KsAz.621f19aaac4c --database JAjQFNXBbA5Quy72adLon7 --execute INSERT INTO coupons (code, description, discountType, discountValue, minPurchase, usageLimit, usedCount, validFrom, validUntil, isActive, appliesToTours, appliesToProducts, appliesToRentals)\nVALUES ('TRIPADVISOR-BOGO', 'Buy One Get One Free Tour - Thank you for your TripAdvisor review!', 'bogo', 100.00, 0, 1000, 0, NOW(), DATE_ADD(NOW(), INTERVAL 1 YEAR), true, true, false, false);",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'validFrom' in 'field list'"
+  ]
+}

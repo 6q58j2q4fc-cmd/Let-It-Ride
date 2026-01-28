@@ -62,26 +62,31 @@ export async function generateDailyBlogPost(): Promise<{ success: boolean; postI
           role: "system",
           content: `You are an expert travel blogger and SEO specialist writing for Let It Ride Electric Bikes in Bend, Oregon. 
           Write engaging, SEO-optimized blog posts that:
-          - Include relevant keywords naturally (e-bike, electric bike, Bend Oregon, tours, Deschutes River, etc.)
+          - Include relevant keywords naturally (e-bike, electric bike, Bend Oregon, tours, Deschutes River, Pedego, Central Oregon, etc.)
           - Are informative and helpful for tourists planning to visit Bend
           - Highlight the benefits of e-bike tours and rentals
           - Include calls-to-action to book tours
-          - Are 800-1200 words in length
+          - Are 1000-1500 words in length for better SEO
           - Use proper headings (H2, H3) for structure
-          - Include local knowledge about Bend, Oregon`
+          - Include local knowledge about Bend, Oregon
+          - Include fun facts about Bend (300+ days of sunshine, 30+ craft breweries, elevation 3,623 ft, etc.)
+          - Mention specific trails: Deschutes River Trail, Phil's Trail, Shevlin Park, Tumalo Creek
+          - Reference local landmarks: Old Mill District, Drake Park, Mirror Pond, Mt. Bachelor
+          - Include practical tips for visitors`
         },
         {
           role: "user",
-          content: `Write a blog post about: "${topic}"
+          content: `Write a comprehensive, SEO-optimized blog post about: "${topic}"
           
           Return the response in this exact JSON format:
           {
-            "title": "SEO-optimized title",
-            "excerpt": "A compelling 150-character excerpt for previews",
-            "content": "Full blog post content in markdown format",
-            "metaTitle": "SEO meta title (60 chars max)",
-            "metaDescription": "SEO meta description (155 chars max)",
-            "tags": ["tag1", "tag2", "tag3"]
+            "title": "SEO-optimized title with primary keyword",
+            "excerpt": "A compelling 150-character excerpt for previews and social sharing",
+            "content": "Full blog post content in markdown format with H2 and H3 headings, bullet points, and a clear call-to-action",
+            "metaTitle": "SEO meta title (60 chars max) - include Bend Oregon",
+            "metaDescription": "SEO meta description (155 chars max) - compelling and keyword-rich",
+            "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+            "keywords": "comma-separated list of 10-15 SEO keywords for this article"
           }`
         }
       ],
@@ -98,9 +103,10 @@ export async function generateDailyBlogPost(): Promise<{ success: boolean; postI
               content: { type: "string" },
               metaTitle: { type: "string" },
               metaDescription: { type: "string" },
-              tags: { type: "array", items: { type: "string" } }
+              tags: { type: "array", items: { type: "string" } },
+              keywords: { type: "string" }
             },
-            required: ["title", "excerpt", "content", "metaTitle", "metaDescription", "tags"],
+            required: ["title", "excerpt", "content", "metaTitle", "metaDescription", "tags", "keywords"],
             additionalProperties: false
           }
         }
@@ -115,7 +121,19 @@ export async function generateDailyBlogPost(): Promise<{ success: boolean; postI
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '') + '-' + nanoid(6);
     
-    // Save to database
+    // Select a featured image based on topic
+    const imageOptions = [
+      '/images/cascade-mountains.jpg',
+      '/images/deschutes-river-trail.jpg',
+      '/images/ebike-scenic.jpg',
+      '/images/ebike-tour-group.jpg',
+      '/images/bend-downtown.jpg',
+      '/hero-group-bikes.jpg',
+      '/tour-rental-center.jpg'
+    ];
+    const featuredImage = imageOptions[Math.floor(Math.random() * imageOptions.length)];
+    
+    // Save to database with enhanced SEO fields
     await createBlogPost({
       title: blogData.title,
       slug,
@@ -125,7 +143,8 @@ export async function generateDailyBlogPost(): Promise<{ success: boolean; postI
       tags: blogData.tags,
       seoTitle: blogData.metaTitle,
       seoDescription: blogData.metaDescription,
-      featuredImage: '/images/cascade-mountains.jpg',
+      seoKeywords: blogData.keywords,
+      featuredImage,
       status: 'published',
       publishedAt: new Date(),
       isAiGenerated: true
