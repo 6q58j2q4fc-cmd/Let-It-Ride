@@ -396,3 +396,15 @@
 - [x] Upload images to S3 storage (21 images uploaded)
 - [x] Update product records with new image URLs
 - [x] Test product pages display correctly with new images
+
+
+## Square API Integration
+- [x] Set up Square environment variables (sandbox and production)
+- [x] Install Square SDK dependency
+- [x] Create Square API helper functions on server
+- [x] Add Square checkout for tour bookings
+- [x] Add Square checkout for e-bike purchases
+- [x] Add Square checkout for rentals
+- [x] Update admin panel with Square connection status
+- [x] Test sandbox payments (verified: Location ID LVY82Y46K6BJF)
+- [ ] Document production deployment steps

@@ -25,6 +25,7 @@ import { ENV } from "./_core/env";
 import { generateDailyBlogPost, generateDailySocialPost, runDailyAutomation } from "./automation";
 import { notifyOwner } from "./_core/notification";
 import jwt from 'jsonwebtoken';
+import * as square from './_core/square';
 
 const stripe = new Stripe(ENV.stripeSecretKey || "", { apiVersion: "2025-12-15.clover" });
 
@@ -1238,6 +1239,129 @@ Be conversational, enthusiastic about e-bikes, and always try to help customers 
   }),
 
   // Site Images Management
+  // Square Payment Integration
+  square: router({
+    // Check if Square is configured
+    getStatus: publicProcedure.query(async () => {
+      const isConfigured = square.isSquareConfigured();
+      if (!isConfigured) {
+        return { configured: false, environment: null, locationId: null, locationName: null };
+      }
+      
+      const verification = await square.verifyCredentials();
+      return {
+        configured: verification.valid,
+        environment: square.getSquareEnvironment(),
+        locationId: verification.locationId,
+        locationName: verification.locationName,
+        error: verification.error
+      };
+    }),
+    
+    // Create checkout for tour booking
+    createTourCheckout: publicProcedure
+      .input(z.object({
+        tourId: z.number(),
+        tourName: z.string(),
+        tourDate: z.string(),
+        tourTime: z.string(),
+        guests: z.number(),
+        customerName: z.string(),
+        customerEmail: z.string(),
+        customerPhone: z.string().optional(),
+        totalPrice: z.number(), // in dollars
+        specialRequests: z.string().optional(),
+        affiliateCode: z.string().optional()
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const origin = ctx.req.headers.origin || 'http://localhost:3000';
+        
+        const result = await square.createQuickPayCheckout({
+          name: `${input.tourName} - ${input.guests} guests`,
+          priceInCents: Math.round(input.totalPrice * 100),
+          redirectUrl: `${origin}/booking-success?source=square&tour=${input.tourId}`,
+          customerEmail: input.customerEmail,
+          referenceId: `tour-${input.tourId}-${Date.now()}`
+        });
+        
+        return { url: result.checkoutUrl, orderId: result.orderId };
+      }),
+    
+    // Create checkout for product order
+    createProductCheckout: publicProcedure
+      .input(z.object({
+        items: z.array(z.object({
+          productId: z.number(),
+          productName: z.string(),
+          quantity: z.number(),
+          price: z.number() // in dollars
+        })),
+        customerName: z.string(),
+        customerEmail: z.string(),
+        customerPhone: z.string().optional(),
+        shippingAddress: z.string().optional(),
+        total: z.number(), // in dollars
+        couponCode: z.string().optional(),
+        affiliateCode: z.string().optional()
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const origin = ctx.req.headers.origin || 'http://localhost:3000';
+        
+        // For multiple items, create a checkout with line items
+        const lineItems = input.items.map(item => ({
+          name: item.productName,
+          quantity: item.quantity.toString(),
+          basePriceMoney: {
+            amount: BigInt(Math.round(item.price * 100)),
+            currency: 'USD' as const
+          }
+        }));
+        
+        const result = await square.createCheckoutLink({
+          orderId: `order-${Date.now()}`,
+          lineItems,
+          redirectUrl: `${origin}/order-success?source=square`,
+          customerEmail: input.customerEmail
+        });
+        
+        return { url: result.checkoutUrl, orderId: result.orderId };
+      }),
+    
+    // Create checkout for rental
+    createRentalCheckout: publicProcedure
+      .input(z.object({
+        bikeType: z.string(),
+        rentalDate: z.string(),
+        duration: z.string(),
+        quantity: z.number(),
+        customerName: z.string(),
+        customerEmail: z.string(),
+        customerPhone: z.string().optional(),
+        totalPrice: z.number() // in dollars
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const origin = ctx.req.headers.origin || 'http://localhost:3000';
+        
+        const result = await square.createQuickPayCheckout({
+          name: `E-Bike Rental: ${input.bikeType} (${input.duration})`,
+          priceInCents: Math.round(input.totalPrice * 100),
+          redirectUrl: `${origin}/rental-success?source=square`,
+          customerEmail: input.customerEmail,
+          referenceId: `rental-${Date.now()}`
+        });
+        
+        return { url: result.checkoutUrl, orderId: result.orderId };
+      }),
+    
+    // Get recent payments (admin only)
+    getRecentPayments: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+      
+      return square.listRecentPayments(10);
+    })
+  }),
+
   siteImages: router({
     getAll: publicProcedure.query(async ({ ctx }) => {
       const token = ctx.req.cookies?.admin_session;

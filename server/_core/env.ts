@@ -10,4 +10,7 @@ export const ENV = {
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
   stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? "",
   stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET ?? "",
+  squareApplicationId: process.env.SQUARE_APPLICATION_ID ?? "",
+  squareAccessToken: process.env.SQUARE_ACCESS_TOKEN ?? "",
+  squareEnvironment: (process.env.SQUARE_ENVIRONMENT ?? "sandbox") as "sandbox" | "production",
 };
