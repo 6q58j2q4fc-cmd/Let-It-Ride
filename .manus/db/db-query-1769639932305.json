@@ -1,0 +1,136 @@
+{
+  "query": "SELECT id, name, slug, image FROM products LIMIT 25;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user mexMZK3NDs3KsAz.621f19aaac4c --database JAjQFNXBbA5Quy72adLon7 --execute SELECT id, name, slug, image FROM products LIMIT 25;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Pedego Avenue",
+      "slug": "pedego-avenue",
+      "image": "/pedego-avenue.webp"
+    },
+    {
+      "id": "2",
+      "name": "Pedego Interceptor",
+      "slug": "pedego-interceptor",
+      "image": "/pedego-interceptor.webp"
+    },
+    {
+      "id": "3",
+      "name": "Pedego Interceptor Platinum Edition",
+      "slug": "pedego-interceptor-platinum",
+      "image": "/pedego-interceptor-platinum.webp"
+    },
+    {
+      "id": "4",
+      "name": "Pedego Boomerang",
+      "slug": "pedego-boomerang",
+      "image": "/pedego-boomerang.webp"
+    },
+    {
+      "id": "5",
+      "name": "Pedego Boomerang Platinum Edition",
+      "slug": "pedego-boomerang-platinum",
+      "image": "/pedego-boomerang-platinum.webp"
+    },
+    {
+      "id": "6",
+      "name": "Pedego Element",
+      "slug": "pedego-element",
+      "image": "/pedego-element.webp"
+    },
+    {
+      "id": "7",
+      "name": "Pedego Element Platinum Edition",
+      "slug": "pedego-element-platinum",
+      "image": "/pedego-element-platinum.webp"
+    },
+    {
+      "id": "8",
+      "name": "Pedego City Commuter",
+      "slug": "pedego-city-commuter",
+      "image": "/pedego-city-commuter.webp"
+    },
+    {
+      "id": "9",
+      "name": "Pedego Cargo",
+      "slug": "pedego-cargo",
+      "image": "/pedego-cargo.webp"
+    },
+    {
+      "id": "10",
+      "name": "Pedego MOTO",
+      "slug": "pedego-moto",
+      "image": "/pedego-moto.webp"
+    },
+    {
+      "id": "11",
+      "name": "Pedego Fat Tire Trike",
+      "slug": "pedego-fat-tire-trike",
+      "image": "/pedego-fat-tire-trike.webp"
+    },
+    {
+      "id": "12",
+      "name": "Urtopia Carbon Classic",
+      "slug": "urtopia-carbon-classic",
+      "image": "/urtopia-carbon-classic.webp"
+    },
+    {
+      "id": "13",
+      "name": "Urtopia Carbon Classic Step-Thru",
+      "slug": "urtopia-carbon-classic-step-thru",
+      "image": "/urtopia-carbon-classic-st.webp"
+    },
+    {
+      "id": "14",
+      "name": "Urtopia Carbon 1 Pro",
+      "slug": "urtopia-carbon-1-pro",
+      "image": "/urtopia-carbon-1-pro.webp"
+    },
+    {
+      "id": "15",
+      "name": "Urtopia Carbon 1 Step-Thru",
+      "slug": "urtopia-carbon-1-step-thru",
+      "image": "/urtopia-carbon-1-st.webp"
+    },
+    {
+      "id": "16",
+      "name": "Urtopia Joy Carbon",
+      "slug": "urtopia-joy-carbon",
+      "image": "/urtopia-joy-carbon.webp"
+    },
+    {
+      "id": "17",
+      "name": "Urtopia Joy Carbon Ultra",
+      "slug": "urtopia-joy-carbon-ultra",
+      "image": "/urtopia-joy-ultra.webp"
+    },
+    {
+      "id": "18",
+      "name": "Urtopia Carbon Fold 1",
+      "slug": "urtopia-carbon-fold-1",
+      "image": "/urtopia-carbon-fold-1.webp"
+    },
+    {
+      "id": "19",
+      "name": "Urtopia Carbon Fold Step-Thru",
+      "slug": "urtopia-carbon-fold-step-thru",
+      "image": "/urtopia-carbon-fold-st.webp"
+    },
+    {
+      "id": "20",
+      "name": "Urtopia Carbon Fusion Pro",
+      "slug": "urtopia-carbon-fusion-pro",
+      "image": "/urtopia-fusion-pro.webp"
+    },
+    {
+      "id": "21",
+      "name": "Urtopia Carbon Fusion GT",
+      "slug": "urtopia-carbon-fusion-gt",
+      "image": "/urtopia-fusion-gt.webp"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tslug\timage\n1\tPedego Avenue\tpedego-avenue\t/pedego-avenue.webp\n2\tPedego Interceptor\tpedego-interceptor\t/pedego-interceptor.webp\n3\tPedego Interceptor Platinum Edition\tpedego-interceptor-platinum\t/pedego-interceptor-platinum.webp\n4\tPedego Boomerang\tpedego-boomerang\t/pedego-boomerang.webp\n5\tPedego Boomerang Platinum Edition\tpedego-boomerang-platinum\t/pedego-boomerang-platinum.webp\n6\tPedego Element\tpedego-element\t/pedego-element.webp\n7\tPedego Element Platinum Edition\tpedego-element-platinum\t/pedego-element-platinum.webp\n8\tPedego City Commuter\tpedego-city-commuter\t/pedego-city-commuter.webp\n9\tPedego Cargo\tpedego-cargo\t/pedego-cargo.webp\n10\tPedego MOTO\tpedego-moto\t/pedego-moto.webp\n11\tPedego Fat Tire Trike\tpedego-fat-tire-trike\t/pedego-fat-tire-trike.webp\n12\tUrtopia Carbon Classic\turtopia-carbon-classic\t/urtopia-carbon-classic.webp\n13\tUrtopia Carbon Classic Step-Thru\turtopia-carbon-classic-step-thru\t/urtopia-carbon-classic-st.webp\n14\tUrtopia Carbon 1 Pro\turtopia-carbon-1-pro\t/urtopia-carbon-1-pro.webp\n15\tUrtopia Carbon 1 Step-Thru\turtopia-carbon-1-step-thru\t/urtopia-carbon-1-st.webp\n16\tUrtopia Joy Carbon\turtopia-joy-carbon\t/urtopia-joy-carbon.webp\n17\tUrtopia Joy Carbon Ultra\turtopia-joy-carbon-ultra\t/urtopia-joy-ultra.webp\n18\tUrtopia Carbon Fold 1\turtopia-carbon-fold-1\t/urtopia-carbon-fold-1.webp\n19\tUrtopia Carbon Fold Step-Thru\turtopia-carbon-fold-step-thru\t/urtopia-carbon-fold-st.webp\n20\tUrtopia Carbon Fusion Pro\turtopia-carbon-fusion-pro\t/urtopia-fusion-pro.webp\n21\tUrtopia Carbon Fusion GT\turtopia-carbon-fusion-gt\t/urtopia-fusion-gt.webp\n",
+  "stderr": "",
+  "execution_time_ms": 93
+}
