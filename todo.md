@@ -407,4 +407,5 @@
 - [x] Add Square checkout for rentals
 - [x] Update admin panel with Square connection status
 - [x] Test sandbox payments (verified: Location ID LVY82Y46K6BJF)
-- [ ] Document production deployment steps
+- [x] Switch to production mode (Location: Let it Ride Electric, LLC, ID: L1J9R07CD0045)
+- [x] Verify production credentials working
