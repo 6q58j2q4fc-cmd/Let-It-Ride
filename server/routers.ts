@@ -7,16 +7,17 @@ import {
   createBooking, getBookingsByUser, getAllBookings, updateBookingStatus,
   createOrder, getOrdersByUser, getAllOrders,
   createBlogPost, getAllBlogPosts, getPublishedBlogPosts, getBlogPostBySlug, updateBlogPost,
-  createCoupon, getCouponByCode, getAllCoupons,
-  createEmailSubscriber, getAllEmailSubscribers,
+  createCoupon, getCouponByCode, getAllCoupons, incrementCouponUsage,
+  createEmailSubscriber, getAllEmailSubscribers, updateEmailSubscriber,
   createAffiliate, getAffiliateByUserId, getAllAffiliates, updateAffiliateEarnings,
   createAffiliateSale, getAffiliateSales,
-  createSocialPost, getPendingSocialPosts, getAllSocialPosts,
+  createSocialPost, getPendingSocialPosts, getAllSocialPosts, updateSocialPostStatus,
   createReviewRequest, getPendingReviewRequests,
-  createGamePlay, getGamePlaysByUser,
+  createGamePlay, getGamePlaysByUser, getAllGamePlays, getGameStats,
   createServiceAppointment, getAllServiceAppointments, getServiceAppointmentById, updateServiceAppointment,
   createAdminCredential, verifyAdminCredentials, getAdminByUsername, getAdminById, getAllAdmins, updateAdminPassword,
-  createSiteImage, getAllSiteImages, getSiteImagesByCategory, getSiteImageById, updateSiteImage, deleteSiteImage, searchSiteImages
+  createSiteImage, getAllSiteImages, getSiteImagesByCategory, getSiteImageById, updateSiteImage, deleteSiteImage, searchSiteImages,
+  getDashboardStats, getRecentActivity, getAllProducts, createProduct, updateProduct, getAllTours, createTour, updateTour
 } from "./db";
 import { invokeLLM } from "./_core/llm";
 import Stripe from "stripe";
@@ -964,6 +965,185 @@ Be conversational, enthusiastic about e-bikes, and always try to help customers 
       
       return getAllAdmins();
     })
+  }),
+
+  // Admin Dashboard - Real Live Data
+  adminDashboard: router({
+    getStats: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+      return getDashboardStats();
+    }),
+    
+    getRecentActivity: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+      return getRecentActivity(10);
+    }),
+    
+    getGameStats: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+      return getGameStats();
+    }),
+    
+    getAllGamePlays: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+      return getAllGamePlays();
+    }),
+    
+    // Products management
+    getAllProducts: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+      return getAllProducts(false);
+    }),
+    
+    createProduct: publicProcedure
+      .input(z.object({
+        name: z.string(),
+        slug: z.string(),
+        description: z.string().optional(),
+        price: z.string(),
+        salePrice: z.string().optional(),
+        category: z.enum(['cruiser', 'tandem', 'cargo', 'mountain', 'fat-tire', 'accessory']),
+        brand: z.string().optional(),
+        image: z.string().optional(),
+        stock: z.number().default(0),
+        isActive: z.boolean().default(true)
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+        return createProduct(input);
+      }),
+    
+    updateProduct: publicProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        description: z.string().optional(),
+        price: z.string().optional(),
+        salePrice: z.string().optional(),
+        stock: z.number().optional(),
+        isActive: z.boolean().optional()
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+        const { id, ...data } = input;
+        return updateProduct(id, data);
+      }),
+    
+    // Tours management
+    getAllTours: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+      return getAllTours(false);
+    }),
+    
+    createTour: publicProcedure
+      .input(z.object({
+        name: z.string(),
+        slug: z.string(),
+        description: z.string().optional(),
+        duration: z.string(),
+        price: z.string(),
+        maxGuests: z.number().optional(),
+        image: z.string().optional(),
+        highlights: z.array(z.string()).optional(),
+        included: z.array(z.string()).optional(),
+        isActive: z.boolean().default(true)
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+        return createTour(input);
+      }),
+    
+    updateTour: publicProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        description: z.string().optional(),
+        price: z.string().optional(),
+        maxGuests: z.number().optional(),
+        isActive: z.boolean().optional()
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+        const { id, ...data } = input;
+        return updateTour(id, data);
+      }),
+    
+    // Email subscribers management
+    getAllSubscribers: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+      return getAllEmailSubscribers();
+    }),
+    
+    updateSubscriber: publicProcedure
+      .input(z.object({
+        id: z.number(),
+        isActive: z.boolean().optional()
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+        const { id, ...data } = input;
+        return updateEmailSubscriber(id, data);
+      }),
+    
+    // Coupons management
+    getAllCoupons: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+      return getAllCoupons();
+    }),
+    
+    createCoupon: publicProcedure
+      .input(z.object({
+        code: z.string(),
+        discountType: z.enum(['percentage', 'fixed']),
+        discountValue: z.string(),
+        minPurchase: z.string().optional(),
+        maxUses: z.number().optional(),
+        expiresAt: z.date().optional(),
+        isActive: z.boolean().default(true)
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+        return createCoupon(input);
+      }),
+    
+    // Affiliates management
+    getAllAffiliates: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+      return getAllAffiliates();
+    }),
+    
+    // Social posts management
+    getAllSocialPosts: publicProcedure.query(async ({ ctx }) => {
+      const token = ctx.req.cookies?.admin_session;
+      if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+      return getAllSocialPosts();
+    }),
+    
+    updateSocialPostStatus: publicProcedure
+      .input(z.object({
+        id: z.number(),
+        status: z.enum(['queued', 'posted', 'failed'])
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const token = ctx.req.cookies?.admin_session;
+        if (!token && ctx.user?.role !== 'admin') throw new Error('Not authenticated');
+        return updateSocialPostStatus(input.id, input.status);
+      })
   }),
 
   // Site Images Management

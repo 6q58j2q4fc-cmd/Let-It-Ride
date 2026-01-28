@@ -739,3 +739,142 @@ export async function searchSiteImages(query: string) {
     ))
     .orderBy(desc(siteImages.createdAt));
 }
+
+
+// Admin Dashboard Stats - Real Live Data
+export async function getDashboardStats() {
+  const db = await getDb();
+  if (!db) return {
+    todayRevenue: 0,
+    todayBookings: 0,
+    pendingBookings: 0,
+    totalBookings: 0,
+    totalOrders: 0,
+    totalRevenue: 0,
+    emailSubscribers: 0,
+    affiliateEarnings: 0,
+    gamePlaysToday: 0,
+    couponsWonToday: 0,
+    pendingServiceAppointments: 0,
+    totalBlogPosts: 0,
+    totalProducts: 0
+  };
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // Today's bookings and revenue
+  const todayBookingsResult = await db.select({
+    count: sql<number>`count(*)`,
+    revenue: sql<number>`COALESCE(sum(CAST(totalPrice AS DECIMAL(10,2))), 0)`
+  }).from(bookings).where(gte(bookings.createdAt, today));
+
+  // Pending bookings
+  const pendingBookingsResult = await db.select({
+    count: sql<number>`count(*)`
+  }).from(bookings).where(eq(bookings.status, 'pending'));
+
+  // Total bookings
+  const totalBookingsResult = await db.select({
+    count: sql<number>`count(*)`,
+    revenue: sql<number>`COALESCE(sum(CAST(totalPrice AS DECIMAL(10,2))), 0)`
+  }).from(bookings).where(
+    sql`status IN ('confirmed', 'completed')`
+  );
+
+  // Total orders and revenue
+  const ordersResult = await db.select({
+    count: sql<number>`count(*)`,
+    revenue: sql<number>`COALESCE(sum(CAST(total AS DECIMAL(10,2))), 0)`
+  }).from(orders).where(
+    sql`status IN ('paid', 'processing', 'shipped', 'delivered')`
+  );
+
+  // Email subscribers
+  const subscribersResult = await db.select({
+    count: sql<number>`count(*)`
+  }).from(emailSubscribers).where(eq(emailSubscribers.isActive, true));
+
+  // Affiliate earnings
+  const affiliateResult = await db.select({
+    total: sql<number>`COALESCE(sum(CAST(totalEarnings AS DECIMAL(10,2))), 0)`
+  }).from(affiliates);
+
+  // Game plays today
+  const gamePlaysResult = await db.select({
+    count: sql<number>`count(*)`,
+    wins: sql<number>`sum(case when won = true then 1 else 0 end)`
+  }).from(gamePlays).where(gte(gamePlays.createdAt, today));
+
+  // Pending service appointments
+  const serviceResult = await db.select({
+    count: sql<number>`count(*)`
+  }).from(serviceAppointments).where(eq(serviceAppointments.status, 'pending'));
+
+  // Total blog posts
+  const blogResult = await db.select({
+    count: sql<number>`count(*)`
+  }).from(blogPosts).where(eq(blogPosts.status, 'published'));
+
+  // Total products
+  const productsResult = await db.select({
+    count: sql<number>`count(*)`
+  }).from(products).where(eq(products.isActive, true));
+
+  return {
+    todayRevenue: Number(todayBookingsResult[0]?.revenue || 0),
+    todayBookings: Number(todayBookingsResult[0]?.count || 0),
+    pendingBookings: Number(pendingBookingsResult[0]?.count || 0),
+    totalBookings: Number(totalBookingsResult[0]?.count || 0),
+    totalOrders: Number(ordersResult[0]?.count || 0),
+    totalRevenue: Number(totalBookingsResult[0]?.revenue || 0) + Number(ordersResult[0]?.revenue || 0),
+    emailSubscribers: Number(subscribersResult[0]?.count || 0),
+    affiliateEarnings: Number(affiliateResult[0]?.total || 0),
+    gamePlaysToday: Number(gamePlaysResult[0]?.count || 0),
+    couponsWonToday: Number(gamePlaysResult[0]?.wins || 0),
+    pendingServiceAppointments: Number(serviceResult[0]?.count || 0),
+    totalBlogPosts: Number(blogResult[0]?.count || 0),
+    totalProducts: Number(productsResult[0]?.count || 0)
+  };
+}
+
+// Get recent activity for admin dashboard
+export async function getRecentActivity(limit = 10) {
+  const db = await getDb();
+  if (!db) return { bookings: [], orders: [], appointments: [] };
+
+  const recentBookings = await db.select().from(bookings).orderBy(desc(bookings.createdAt)).limit(limit);
+  const recentOrders = await db.select().from(orders).orderBy(desc(orders.createdAt)).limit(limit);
+  const recentAppointments = await db.select().from(serviceAppointments).orderBy(desc(serviceAppointments.createdAt)).limit(limit);
+
+  return {
+    bookings: recentBookings,
+    orders: recentOrders,
+    appointments: recentAppointments
+  };
+}
+
+// Get all game plays for admin
+export async function getAllGamePlays() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(gamePlays).orderBy(desc(gamePlays.createdAt));
+}
+
+// Get game stats
+export async function getGameStats() {
+  const db = await getDb();
+  if (!db) return { totalPlays: 0, totalWins: 0, uniquePlayers: 0 };
+
+  const result = await db.select({
+    totalPlays: sql<number>`count(*)`,
+    totalWins: sql<number>`sum(case when won = true then 1 else 0 end)`,
+    uniquePlayers: sql<number>`count(distinct sessionId)`
+  }).from(gamePlays);
+
+  return {
+    totalPlays: Number(result[0]?.totalPlays || 0),
+    totalWins: Number(result[0]?.totalWins || 0),
+    uniquePlayers: Number(result[0]?.uniquePlayers || 0)
+  };
+}
