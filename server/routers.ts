@@ -964,7 +964,98 @@ Be conversational, enthusiastic about e-bikes, and always try to help customers 
       if (!token) throw new Error('Not authenticated');
       
       return getAllAdmins();
-    })
+    }),
+    
+    // Passwordless login - just username
+    loginPasswordless: publicProcedure
+      .input(z.object({
+        username: z.string().min(1)
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const admin = await getAdminByUsername(input.username);
+        if (!admin || !admin.isActive) {
+          throw new Error('Username not found. Please create an account first.');
+        }
+        
+        // Set admin session cookie (long-lived for convenience)
+        const token = jwt.sign(
+          { adminId: admin.id, username: admin.username, isAdmin: true },
+          ENV.jwtSecret || 'admin-secret-key',
+          { expiresIn: '30d' } // 30 days for convenience
+        );
+        
+        ctx.res.cookie('admin_session', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+        });
+        
+        return {
+          success: true,
+          username: admin.username,
+          admin: {
+            id: admin.id,
+            username: admin.username,
+            displayName: admin.displayName,
+            email: admin.email
+          }
+        };
+      }),
+    
+    // Passwordless account creation
+    createAdminPasswordless: publicProcedure
+      .input(z.object({
+        username: z.string().min(3),
+        displayName: z.string().optional(),
+        email: z.string().email().optional()
+      }))
+      .mutation(async ({ input, ctx }) => {
+        // Check if username exists
+        const existing = await getAdminByUsername(input.username);
+        if (existing) {
+          throw new Error('Username already taken. Please choose another.');
+        }
+        
+        // Create admin with a random internal password (not used for login)
+        const randomPassword = Math.random().toString(36).slice(-16) + Math.random().toString(36).slice(-16);
+        
+        await createAdminCredential({
+          username: input.username,
+          password: randomPassword,
+          displayName: input.displayName,
+          email: input.email
+        });
+        
+        // Get the newly created admin
+        const admin = await getAdminByUsername(input.username);
+        if (!admin) throw new Error('Failed to create account');
+        
+        // Auto-login with long session
+        const token = jwt.sign(
+          { adminId: admin.id, username: admin.username, isAdmin: true },
+          ENV.jwtSecret || 'admin-secret-key',
+          { expiresIn: '30d' }
+        );
+        
+        ctx.res.cookie('admin_session', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 30 * 24 * 60 * 60 * 1000
+        });
+        
+        return {
+          success: true,
+          username: admin.username,
+          admin: {
+            id: admin.id,
+            username: admin.username,
+            displayName: admin.displayName,
+            email: admin.email
+          }
+        };
+      })
   }),
 
   // Admin Dashboard - Real Live Data

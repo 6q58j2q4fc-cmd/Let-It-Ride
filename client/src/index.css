@@ -852,3 +852,47 @@ html {
     }
   }
 }
+
+/* Electric text glow animation for logo */
+.electric-text-glow {
+  background: linear-gradient(90deg, #fbbf24, #fcd34d, #fef08a, #fcd34d, #fbbf24);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: electric-text-shine 2s linear infinite;
+  text-shadow: none;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6)) drop-shadow(0 0 16px rgba(251, 191, 36, 0.4));
+}
+
+@keyframes electric-text-shine {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Electric text with visible glow */
+.electric-text-visible {
+  color: #fbbf24;
+  text-shadow: 
+    0 0 10px rgba(251, 191, 36, 0.8),
+    0 0 20px rgba(251, 191, 36, 0.6),
+    0 0 30px rgba(251, 191, 36, 0.4),
+    0 0 40px rgba(251, 191, 36, 0.2);
+  animation: electric-flicker 3s ease-in-out infinite;
+}
+
+@keyframes electric-flicker {
+  0%, 100% { 
+    text-shadow: 
+      0 0 10px rgba(251, 191, 36, 0.8),
+      0 0 20px rgba(251, 191, 36, 0.6),
+      0 0 30px rgba(251, 191, 36, 0.4);
+  }
+  50% { 
+    text-shadow: 
+      0 0 15px rgba(251, 191, 36, 1),
+      0 0 30px rgba(251, 191, 36, 0.8),
+      0 0 45px rgba(251, 191, 36, 0.6),
+      0 0 60px rgba(251, 191, 36, 0.4);
+  }
+}

@@ -359,3 +359,14 @@
 - [x] Align design aesthetic with New Wheel and Visit Bend (calm, easy, approachable)
 - [x] Create clear path from landing to booking/buying
 - [x] Test all design changes
+
+
+## Admin Login & Logo Updates
+- [x] Fix admin login to use passwordless authentication (username only)
+- [x] Allow manager to create unique username without password
+- [x] Store and remember admin sessions to prevent lockouts
+- [x] Update logo with bigger "ELECTRIC BIKES" text
+- [x] Add tagline "Bend's Electric Bike Shop & E-Tours"
+- [x] Use bright electric lettering for "Electric Bikes" part
+- [x] Add Square API integration section to admin panel
+- [x] Test all changes

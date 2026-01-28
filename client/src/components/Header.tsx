@@ -102,13 +102,15 @@ function AnimatedLogo({ size = 'default' }: { size?: 'default' | 'large' }) {
           </span>
           <Sparkles className={`${isLarge ? 'w-5 h-5' : 'w-4 h-4'} text-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity`} />
         </div>
-        <div className="flex items-center gap-2">
-          <span className={`${isLarge ? 'text-sm' : 'text-xs'} font-semibold text-primary/80 tracking-wide uppercase`}>
-            Electric Bikes
+        {/* Bigger ELECTRIC BIKES with bright electric styling */}
+        <div className={`${isLarge ? 'text-lg' : 'text-base'} font-black tracking-wider uppercase`}>
+          <span className="electric-text-visible">
+            ELECTRIC BIKES
           </span>
-          <span className="w-1 h-1 rounded-full bg-primary/40" />
-          <span className={`${isLarge ? 'text-sm' : 'text-xs'} text-muted-foreground`}>
-            Bend, OR
+        </div>
+        <div className="flex items-center gap-1">
+          <span className={`${isLarge ? 'text-xs' : 'text-[10px]'} text-muted-foreground font-medium tracking-wide`}>
+            Bend's Electric Bike Shop & E-Tours
           </span>
         </div>
       </div>

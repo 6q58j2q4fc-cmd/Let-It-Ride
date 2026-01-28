@@ -13,7 +13,8 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Loader2, LogOut, Image as ImageIcon, Upload, Trash2, Edit, Search, 
-  Grid, List, Zap, User, Settings, RefreshCw, Eye, Download, FolderUp, Replace, Crop, GripVertical, MapPin
+  Grid, List, Zap, User, Settings, RefreshCw, Eye, Download, FolderUp, Replace, Crop, GripVertical, MapPin,
+  CreditCard, ExternalLink, CheckCircle2, XCircle, AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import { ImageEditor } from "@/components/ImageEditor";
@@ -509,6 +510,10 @@ export default function AdminPanel() {
               <ImageIcon className="w-4 h-4" />
               Photo Management
             </TabsTrigger>
+            <TabsTrigger value="payments" className="flex items-center gap-2">
+              <CreditCard className="w-4 h-4" />
+              Payments
+            </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-2">
               <Settings className="w-4 h-4" />
               Settings
@@ -903,6 +908,160 @@ export default function AdminPanel() {
                 </div>
               </Card>
             )}
+          </TabsContent>
+
+          {/* Payments Tab - Square API Integration */}
+          <TabsContent value="payments" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center">
+                    <svg viewBox="0 0 24 24" className="w-8 h-8 text-white" fill="currentColor">
+                      <path d="M3 3h18v18H3V3zm16 16V5H5v14h14zM7 7h4v4H7V7zm6 0h4v4h-4V7zm-6 6h4v4H7v-4zm6 0h4v4h-4v-4z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <CardTitle>Square Payment Integration</CardTitle>
+                    <CardDescription>Connect Square to accept payments for tours, rentals, and e-bike sales</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Connection Status */}
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold text-yellow-800">Square API Not Connected</h4>
+                      <p className="text-sm text-yellow-700 mt-1">
+                        Connect your Square account to enable payment processing for tours, rentals, and e-bike sales.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Setup Instructions */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-gray-900">Setup Instructions</h4>
+                  
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                      <div>
+                        <p className="font-medium">Create a Square Developer Account</p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Visit the Square Developer Dashboard to create an application and get your API credentials.
+                        </p>
+                        <a 
+                          href="https://developer.squareup.com/apps" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-sm text-green-600 hover:text-green-700 mt-2"
+                        >
+                          Open Square Developer Dashboard
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                      <div>
+                        <p className="font-medium">Get Your API Credentials</p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Copy your <strong>Application ID</strong> and <strong>Access Token</strong> from the Square Dashboard.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                      <div>
+                        <p className="font-medium">Configure Environment Variables</p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Add your Square credentials to the project's environment settings:
+                        </p>
+                        <div className="mt-2 p-3 bg-gray-900 rounded text-sm font-mono text-gray-100 overflow-x-auto">
+                          <div>SQUARE_APPLICATION_ID=your_app_id</div>
+                          <div>SQUARE_ACCESS_TOKEN=your_access_token</div>
+                          <div>SQUARE_LOCATION_ID=your_location_id</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                      <div>
+                        <p className="font-medium">Set Up Webhooks (Optional)</p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Configure Square webhooks to receive real-time payment notifications.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Features */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-gray-900">Features Enabled with Square</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-start gap-3 p-4 border rounded-lg">
+                      <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5" />
+                      <div>
+                        <p className="font-medium">Tour Bookings</p>
+                        <p className="text-sm text-gray-600">Accept payments for guided e-bike tours</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 border rounded-lg">
+                      <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5" />
+                      <div>
+                        <p className="font-medium">E-Bike Rentals</p>
+                        <p className="text-sm text-gray-600">Process rental payments and deposits</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 border rounded-lg">
+                      <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5" />
+                      <div>
+                        <p className="font-medium">E-Bike Sales</p>
+                        <p className="text-sm text-gray-600">Sell Pedego and Urtopia e-bikes online</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-4 border rounded-lg">
+                      <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5" />
+                      <div>
+                        <p className="font-medium">Service Appointments</p>
+                        <p className="text-sm text-gray-600">Collect deposits for service work</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Current Payment Status */}
+                <Alert>
+                  <AlertDescription>
+                    <strong>Note:</strong> The website currently uses Stripe for payment processing. Once Square is configured, 
+                    you can switch payment providers or use both depending on your needs.
+                  </AlertDescription>
+                </Alert>
+
+                {/* Help Link */}
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div>
+                    <p className="font-medium">Need help setting up Square?</p>
+                    <p className="text-sm text-gray-600">Contact support for assistance with payment integration</p>
+                  </div>
+                  <a 
+                    href="https://squareup.com/help" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                  >
+                    Square Help Center
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Settings Tab */}
