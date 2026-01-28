@@ -14,7 +14,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Loader2, LogOut, Image as ImageIcon, Upload, Trash2, Edit, Search, 
   Grid, List, Zap, User, Settings, RefreshCw, Eye, Download, FolderUp, Replace, Crop, GripVertical, MapPin,
-  CreditCard, ExternalLink, CheckCircle2, XCircle, AlertCircle
+  CreditCard, ExternalLink, CheckCircle2, XCircle, AlertCircle, Video, Play, Film
 } from "lucide-react";
 import { toast } from "sonner";
 import { ImageEditor } from "@/components/ImageEditor";
@@ -41,12 +41,15 @@ type SiteImage = {
   id: number;
   name: string;
   category: string;
+  mediaType: 'image' | 'video';
   url: string;
+  thumbnailUrl?: string | null;
   fileKey?: string | null;
   altText?: string | null;
   description?: string | null;
   width?: number | null;
   height?: number | null;
+  duration?: number | null;
   fileSize?: number | null;
   mimeType?: string | null;
   usedIn?: unknown;
@@ -97,6 +100,7 @@ export default function AdminPanel() {
   const [uploadForm, setUploadForm] = useState({
     name: "",
     category: "general" as typeof CATEGORIES[number]["value"],
+    mediaType: "image" as "image" | "video",
     altText: "",
     description: "",
     file: null as File | null,
@@ -128,9 +132,9 @@ export default function AdminPanel() {
 
   const createImageMutation = trpc.siteImages.create.useMutation({
     onSuccess: () => {
-      toast.success("Image uploaded successfully");
+      toast.success(uploadForm.mediaType === 'video' ? "Video uploaded successfully" : "Image uploaded successfully");
       setIsUploadOpen(false);
-      setUploadForm({ name: "", category: "general", altText: "", description: "", file: null });
+      setUploadForm({ name: "", category: "general", mediaType: "image", altText: "", description: "", file: null });
       setPreviewImage(null);
       refetchImages();
     },
@@ -218,10 +222,36 @@ export default function AdminPanel() {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setUploadForm(prev => ({ ...prev, file, name: prev.name || file.name.split('.')[0] }));
-      const reader = new FileReader();
-      reader.onload = (e) => setPreviewImage(e.target?.result as string);
-      reader.readAsDataURL(file);
+      // Detect if it's a video file
+      const isVideo = file.type.startsWith('video/');
+      setUploadForm(prev => ({ 
+        ...prev, 
+        file, 
+        name: prev.name || file.name.split('.')[0],
+        mediaType: isVideo ? 'video' : 'image'
+      }));
+      
+      if (isVideo) {
+        // Create video thumbnail preview
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        video.onloadedmetadata = () => {
+          video.currentTime = 1; // Seek to 1 second for thumbnail
+        };
+        video.onseeked = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(video, 0, 0);
+          setPreviewImage(canvas.toDataURL('image/jpeg'));
+        };
+        video.src = URL.createObjectURL(file);
+      } else {
+        const reader = new FileReader();
+        reader.onload = (e) => setPreviewImage(e.target?.result as string);
+        reader.readAsDataURL(file);
+      }
     }
   };
 
@@ -272,10 +302,11 @@ export default function AdminPanel() {
 
       const uploadResult = await uploadResponse.json();
 
-      // Create image record in database
+      // Create image/video record in database
       createImageMutation.mutate({
         name: uploadForm.name,
         category: uploadForm.category,
+        mediaType: uploadForm.mediaType,
         url: uploadResult.url,
         fileKey: uploadResult.fileKey,
         altText: uploadForm.altText || undefined,
@@ -580,14 +611,14 @@ export default function AdminPanel() {
                     <DialogTrigger asChild>
                       <Button className="bg-green-600 hover:bg-green-700">
                         <Upload className="w-4 h-4 mr-2" />
-                        Upload Image
+                        Upload Media
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-md">
                       <DialogHeader>
-                        <DialogTitle>Upload New Image</DialogTitle>
+                        <DialogTitle>Upload New Media</DialogTitle>
                         <DialogDescription>
-                          Add a new image to the website library
+                          Add images or videos to the website library
                         </DialogDescription>
                       </DialogHeader>
                       
@@ -598,17 +629,30 @@ export default function AdminPanel() {
                           onClick={() => fileInputRef.current?.click()}
                         >
                           {previewImage ? (
-                            <img src={previewImage} alt="Preview" className="max-h-40 mx-auto rounded" />
+                            <div className="relative">
+                              <img src={previewImage} alt="Preview" className="max-h-40 mx-auto rounded" />
+                              {uploadForm.mediaType === 'video' && (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <div className="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center">
+                                    <Play className="w-6 h-6 text-white ml-1" />
+                                  </div>
+                                </div>
+                              )}
+                              <Badge className="absolute top-2 right-2" variant={uploadForm.mediaType === 'video' ? 'default' : 'secondary'}>
+                                {uploadForm.mediaType === 'video' ? <><Film className="w-3 h-3 mr-1" /> Video</> : <><ImageIcon className="w-3 h-3 mr-1" /> Image</>}
+                              </Badge>
+                            </div>
                           ) : (
                             <>
                               <Upload className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-                              <p className="text-sm text-gray-500">Click to select an image</p>
+                              <p className="text-sm text-gray-500">Click to select an image or video</p>
+                              <p className="text-xs text-gray-400 mt-1">Supports: JPG, PNG, WebP, MP4, WebM, MOV</p>
                             </>
                           )}
                           <input
                             ref={fileInputRef}
                             type="file"
-                            accept="image/*"
+                            accept="image/*,video/mp4,video/webm,video/quicktime"
                             className="hidden"
                             onChange={handleFileSelect}
                           />
@@ -665,8 +709,8 @@ export default function AdminPanel() {
                           />
                         </div>
 
-                        {/* Crop/Edit Button */}
-                        {uploadForm.file && (
+                        {/* Crop/Edit Button - only for images */}
+                        {uploadForm.file && uploadForm.mediaType === 'image' && (
                           <Button 
                             variant="outline"
                             className="w-full border-orange-500 text-orange-600 hover:bg-orange-50"
@@ -675,6 +719,16 @@ export default function AdminPanel() {
                             <Crop className="w-4 h-4 mr-2" />
                             Crop / Resize Image
                           </Button>
+                        )}
+
+                        {/* Video info */}
+                        {uploadForm.file && uploadForm.mediaType === 'video' && (
+                          <Alert>
+                            <Film className="w-4 h-4" />
+                            <AlertDescription>
+                              Videos will be uploaded for hero sections. For best results, use MP4 format with H.264 encoding.
+                            </AlertDescription>
+                          </Alert>
                         )}
 
                         <Button 
@@ -690,7 +744,7 @@ export default function AdminPanel() {
                           ) : (
                             <>
                               <Upload className="w-4 h-4 mr-2" />
-                              Upload Image
+                              Upload {uploadForm.mediaType === 'video' ? 'Video' : 'Image'}
                             </>
                           )}
                         </Button>

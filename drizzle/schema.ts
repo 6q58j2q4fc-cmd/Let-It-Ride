@@ -319,20 +319,23 @@ export const adminCredentials = mysqlTable("admin_credentials", {
 export type AdminCredential = typeof adminCredentials.$inferSelect;
 export type InsertAdminCredential = typeof adminCredentials.$inferInsert;
 
-// Site images table for managing all website images
+// Site images/media table for managing all website images and videos
 export const siteImages = mysqlTable("site_images", {
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   category: mysqlEnum("category", ["tours", "rentals", "products", "blog", "gallery", "hero", "about", "general"]).notNull(),
+  mediaType: mysqlEnum("mediaType", ["image", "video"]).default("image").notNull(),
   url: text("url").notNull(),
+  thumbnailUrl: text("thumbnailUrl"), // For video thumbnail/poster image
   fileKey: varchar("fileKey", { length: 500 }),
   altText: varchar("altText", { length: 500 }),
   description: text("description"),
   width: int("width"),
   height: int("height"),
+  duration: int("duration"), // Video duration in seconds
   fileSize: int("fileSize"),
   mimeType: varchar("mimeType", { length: 100 }),
-  usedIn: json("usedIn"), // Array of page/component names where image is used
+  usedIn: json("usedIn"), // Array of page/component names where media is used
   displayOrder: int("displayOrder").default(0).notNull(),
   isActive: boolean("isActive").default(true).notNull(),
   uploadedBy: int("uploadedBy"),

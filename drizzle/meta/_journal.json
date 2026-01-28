@@ -36,6 +36,13 @@
       "when": 1769634177510,
       "tag": "0004_supreme_aaron_stack",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1769639124739,
+      "tag": "0005_chilly_randall",
+      "breakpoints": true
     }
   ]
 }

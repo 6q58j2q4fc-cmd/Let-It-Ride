@@ -370,3 +370,21 @@
 - [x] Use bright electric lettering for "Electric Bikes" part
 - [x] Add Square API integration section to admin panel
 - [x] Test all changes
+
+
+## Hero Video Capability
+- [x] Add video upload functionality to admin panel photo management
+- [x] Support video file types (mp4, webm, mov)
+- [x] Create hero video player component with autoplay, loop, muted
+- [x] Add video/image toggle option for hero sections
+- [x] Implement fallback to static image if video fails to load
+- [x] Test video playback on homepage hero section
+
+## Product Inventory Review
+- [x] Research current Pedego Bend inventory and pricing from pedegobend.com
+- [x] Research current Urtopia inventory and pricing from newurtopia.com
+- [x] Update Pedego e-bike prices in database (11 products)
+- [x] Update Urtopia e-bike prices in database (10 products)
+- [x] Verify all product specs match source websites
+- [x] Update any missing or incorrect product images
+- [x] Test all product pages display correctly
