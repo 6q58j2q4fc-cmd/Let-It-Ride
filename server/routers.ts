@@ -1024,8 +1024,11 @@ Be conversational, enthusiastic about e-bikes, and always try to help customers 
         name: z.string().optional(),
         category: z.enum(['tours', 'rentals', 'products', 'blog', 'gallery', 'hero', 'about', 'general']).optional(),
         url: z.string().optional(),
+        fileKey: z.string().optional(),
         altText: z.string().optional(),
         description: z.string().optional(),
+        mimeType: z.string().optional(),
+        fileSize: z.number().optional(),
         usedIn: z.array(z.string()).optional()
       }))
       .mutation(async ({ input, ctx }) => {

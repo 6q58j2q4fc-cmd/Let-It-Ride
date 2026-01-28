@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Loader2, LogOut, Image as ImageIcon, Upload, Trash2, Edit, Search, 
-  Grid, List, Zap, User, Settings, RefreshCw, Eye, Download
+  Grid, List, Zap, User, Settings, RefreshCw, Eye, Download, FolderUp, Replace
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -57,6 +57,15 @@ export default function AdminPanel() {
   const [selectedImage, setSelectedImage] = useState<SiteImage | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const bulkFileInputRef = useRef<HTMLInputElement>(null);
+  const replaceFileInputRef = useRef<HTMLInputElement>(null);
+  const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
+  const [bulkFiles, setBulkFiles] = useState<File[]>([]);
+  const [bulkCategory, setBulkCategory] = useState<typeof CATEGORIES[number]["value"]>("general");
+  const [bulkUploadProgress, setBulkUploadProgress] = useState<{ current: number; total: number } | null>(null);
+  const [isReplaceOpen, setIsReplaceOpen] = useState(false);
+  const [replaceFile, setReplaceFile] = useState<File | null>(null);
+  const [replacePreview, setReplacePreview] = useState<string | null>(null);
 
   // Form state for upload
   const [uploadForm, setUploadForm] = useState({
@@ -230,6 +239,141 @@ export default function AdminPanel() {
     if (confirm("Are you sure you want to delete this image?")) {
       deleteImageMutation.mutate({ id });
     }
+  };
+
+  // Handle bulk file selection
+  const handleBulkFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setBulkFiles(files);
+  };
+
+  // Handle bulk upload
+  const handleBulkUpload = async () => {
+    if (bulkFiles.length === 0) {
+      toast.error("Please select files to upload");
+      return;
+    }
+
+    setBulkUploadProgress({ current: 0, total: bulkFiles.length });
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (let i = 0; i < bulkFiles.length; i++) {
+      const file = bulkFiles[i];
+      setBulkUploadProgress({ current: i + 1, total: bulkFiles.length });
+
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const uploadResponse = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+          credentials: 'include'
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error('Upload failed');
+        }
+
+        const uploadResult = await uploadResponse.json();
+
+        await createImageMutation.mutateAsync({
+          name: file.name.split('.')[0],
+          category: bulkCategory,
+          url: uploadResult.url,
+          fileKey: uploadResult.fileKey,
+          mimeType: uploadResult.mimeType,
+          fileSize: uploadResult.fileSize,
+        });
+
+        successCount++;
+      } catch (error) {
+        console.error(`Failed to upload ${file.name}:`, error);
+        errorCount++;
+      }
+    }
+
+    setBulkUploadProgress(null);
+    setBulkFiles([]);
+    setIsBulkImportOpen(false);
+    refetchImages();
+
+    if (errorCount === 0) {
+      toast.success(`Successfully uploaded ${successCount} images`);
+    } else {
+      toast.warning(`Uploaded ${successCount} images, ${errorCount} failed`);
+    }
+  };
+
+  // Handle replace file selection
+  const handleReplaceFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setReplaceFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => setReplacePreview(e.target?.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Handle image replacement
+  const [isReplacing, setIsReplacing] = useState(false);
+  
+  const handleReplace = async () => {
+    if (!selectedImage || !replaceFile) {
+      toast.error("Please select a file");
+      return;
+    }
+
+    setIsReplacing(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', replaceFile);
+
+      const uploadResponse = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const uploadResult = await uploadResponse.json();
+
+      // Update the image record with new URL but keep same ID
+      await updateImageMutation.mutateAsync({
+        id: selectedImage.id,
+        name: selectedImage.name,
+        category: selectedImage.category as typeof CATEGORIES[number]["value"],
+        url: uploadResult.url,
+        fileKey: uploadResult.fileKey,
+        mimeType: uploadResult.mimeType,
+        fileSize: uploadResult.fileSize,
+      });
+
+      toast.success("Image replaced successfully");
+      setIsReplaceOpen(false);
+      setReplaceFile(null);
+      setReplacePreview(null);
+      setSelectedImage(null);
+      refetchImages();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Replace failed');
+    } finally {
+      setIsReplacing(false);
+    }
+  };
+
+  // Open replace dialog
+  const openReplaceDialog = (image: SiteImage) => {
+    setSelectedImage(image);
+    setReplaceFile(null);
+    setReplacePreview(null);
+    setIsReplaceOpen(true);
   };
 
   if (authLoading) {
@@ -456,6 +600,103 @@ export default function AdminPanel() {
                       </div>
                     </DialogContent>
                   </Dialog>
+                  {/* Bulk Import Button */}
+                  <Dialog open={isBulkImportOpen} onOpenChange={setIsBulkImportOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" className="border-green-600 text-green-600 hover:bg-green-50">
+                        <FolderUp className="w-4 h-4 mr-2" />
+                        Bulk Import
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Bulk Import Images</DialogTitle>
+                        <DialogDescription>
+                          Upload multiple images at once to the website library
+                        </DialogDescription>
+                      </DialogHeader>
+                      
+                      <div className="space-y-4">
+                        {/* File Input */}
+                        <div 
+                          className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-green-500 transition-colors"
+                          onClick={() => bulkFileInputRef.current?.click()}
+                        >
+                          {bulkFiles.length > 0 ? (
+                            <div className="space-y-2">
+                              <FolderUp className="w-8 h-8 mx-auto text-green-500" />
+                              <p className="text-sm font-medium text-green-600">{bulkFiles.length} files selected</p>
+                              <p className="text-xs text-gray-500">
+                                {bulkFiles.map(f => f.name).slice(0, 3).join(', ')}
+                                {bulkFiles.length > 3 && ` +${bulkFiles.length - 3} more`}
+                              </p>
+                            </div>
+                          ) : (
+                            <>
+                              <FolderUp className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                              <p className="text-sm text-gray-500">Click to select multiple images</p>
+                            </>
+                          )}
+                          <input
+                            ref={bulkFileInputRef}
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            className="hidden"
+                            onChange={handleBulkFileSelect}
+                          />
+                        </div>
+
+                        {/* Category */}
+                        <div className="space-y-2">
+                          <Label>Category for all images</Label>
+                          <Select 
+                            value={bulkCategory} 
+                            onValueChange={(v) => setBulkCategory(v as typeof CATEGORIES[number]["value"])}
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {CATEGORIES.map((cat) => (
+                                <SelectItem key={cat.value} value={cat.value}>
+                                  {cat.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Progress */}
+                        {bulkUploadProgress && (
+                          <Alert>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <AlertDescription>
+                              Uploading {bulkUploadProgress.current} of {bulkUploadProgress.total} images...
+                            </AlertDescription>
+                          </Alert>
+                        )}
+
+                        <Button 
+                          className="w-full bg-green-600 hover:bg-green-700"
+                          onClick={handleBulkUpload}
+                          disabled={!!bulkUploadProgress || bulkFiles.length === 0}
+                        >
+                          {bulkUploadProgress ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              Uploading...
+                            </>
+                          ) : (
+                            <>
+                              <FolderUp className="w-4 h-4 mr-2" />
+                              Upload {bulkFiles.length || ''} Images
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </CardContent>
             </Card>
@@ -519,6 +760,9 @@ export default function AdminPanel() {
                         <Button size="sm" variant="secondary" onClick={() => window.open(image.url, '_blank')}>
                           <Eye className="w-4 h-4" />
                         </Button>
+                        <Button size="sm" variant="secondary" onClick={() => openReplaceDialog(image)}>
+                          <Replace className="w-4 h-4" />
+                        </Button>
                         <Button size="sm" variant="secondary" onClick={() => handleEdit(image)}>
                           <Edit className="w-4 h-4" />
                         </Button>
@@ -559,6 +803,9 @@ export default function AdminPanel() {
                       <div className="flex items-center gap-2">
                         <Button size="sm" variant="ghost" onClick={() => window.open(image.url, '_blank')}>
                           <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => openReplaceDialog(image)}>
+                          <Replace className="w-4 h-4" />
                         </Button>
                         <Button size="sm" variant="ghost" onClick={() => handleEdit(image)}>
                           <Edit className="w-4 h-4" />
@@ -685,6 +932,88 @@ export default function AdminPanel() {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Replace Image Dialog */}
+      <Dialog open={isReplaceOpen} onOpenChange={setIsReplaceOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Replace Image</DialogTitle>
+            <DialogDescription>
+              Upload a new file to replace "{selectedImage?.name}". The image ID and references will be preserved.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {/* Current Image */}
+            {selectedImage && (
+              <div className="space-y-2">
+                <Label>Current Image</Label>
+                <div className="border rounded-lg p-2 bg-gray-50">
+                  <img 
+                    src={selectedImage.url} 
+                    alt={selectedImage.name}
+                    className="max-h-32 mx-auto rounded"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* New File Input */}
+            <div 
+              className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-green-500 transition-colors"
+              onClick={() => replaceFileInputRef.current?.click()}
+            >
+              {replacePreview ? (
+                <div className="space-y-2">
+                  <img src={replacePreview} alt="New image preview" className="max-h-32 mx-auto rounded" />
+                  <p className="text-sm text-green-600 font-medium">New image selected</p>
+                </div>
+              ) : (
+                <>
+                  <Replace className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                  <p className="text-sm text-gray-500">Click to select replacement image</p>
+                </>
+              )}
+              <input
+                ref={replaceFileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleReplaceFileSelect}
+              />
+            </div>
+
+            <Alert>
+              <AlertDescription>
+                The new image will replace the existing one. All references to this image across the website will automatically use the new file.
+              </AlertDescription>
+            </Alert>
+
+            <div className="flex gap-2">
+              <Button 
+                className="flex-1 bg-green-600 hover:bg-green-700"
+                onClick={handleReplace}
+                disabled={isReplacing || !replaceFile}
+              >
+                {isReplacing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Replacing...
+                  </>
+                ) : (
+                  <>
+                    <Replace className="w-4 h-4 mr-2" />
+                    Replace Image
+                  </>
+                )}
+              </Button>
+              <Button variant="outline" onClick={() => setIsReplaceOpen(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

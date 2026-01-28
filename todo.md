@@ -301,3 +301,13 @@
 - [x] Organize images by category (tours, rentals, products, blog, gallery)
 - [x] Add image preview and metadata display
 - [x] Write tests for admin authentication and photo management
+
+
+## Admin Account & Image Management Enhancements
+- [x] Create admin account seed script with initial credentials
+- [x] Add npm script to run seed and create first admin
+- [x] Add bulk image import functionality to admin panel
+- [x] Create batch import UI for multiple images
+- [x] Enable image replacement while keeping URL references
+- [x] Add replace image button to existing images
+- [x] Write tests for new functionality
