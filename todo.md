@@ -435,3 +435,10 @@
 - [x] Test all blog post pages work (/blog/best-ebike-trails-bend-oregon, etc.)
 - [x] Verify 404 page handles unknown routes correctly
 - [x] All pages working - site needs to be PUBLISHED for public shareable links
+
+
+## Neon Hero Text
+- [x] Add neon "BEND'S ELECTRIC BIKE SHOP AND TOURS" text to homepage hero
+- [x] Create glowing neon effect with CSS animations (green glow with flicker)
+- [x] Center text prominently across hero section
+- [x] Test neon effect displays correctly

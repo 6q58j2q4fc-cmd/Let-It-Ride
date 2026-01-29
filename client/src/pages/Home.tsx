@@ -166,19 +166,23 @@ export default function Home() {
         </div>
         
         <div className="container relative z-10 py-16">
-          <div className="max-w-2xl">
-            {/* Simple, bold headline */}
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              Hello Fun.
-            </h1>
-            
+          {/* Neon Sign - Center of Hero */}
+          <div className="flex justify-center mb-8">
+            <div className="neon-container">
+              <h1 className="neon-text-green">
+                BEND'S ELECTRIC BIKE<br />SHOP AND TOURS
+              </h1>
+            </div>
+          </div>
+          
+          <div className="max-w-2xl mx-auto text-center">
             {/* Clean subheadline */}
             <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
               E-bike tours, rentals & sales in Bend, Oregon.
             </p>
             
             {/* Simple CTA buttons */}
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 justify-center">
               <Link href="/tours">
                 <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 font-semibold">
                   Book a Tour
