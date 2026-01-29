@@ -449,3 +449,9 @@
 - [x] Make text float transparently over hero image
 - [x] Enhance neon glow effect for better visibility without background
 - [x] Create top-notch aesthetic design (multi-layer glow, dark outline, smooth pulse animation)
+
+
+## Neon Text Outline Style
+- [x] Remove glow effect from main text
+- [x] Make letters have empty centers (outline only)
+- [x] Create clean neon tube aesthetic with stroke only
