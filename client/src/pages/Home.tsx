@@ -152,59 +152,75 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       <Header />
       
-      {/* Clean Hero Section - Inspired by New Wheel & Visit Bend */}
-      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-        {/* Full-bleed background image */}
+      {/* Premium Hero Section - World-Class Design */}
+      <section className="relative min-h-[100vh] flex items-center overflow-hidden">
+        {/* Full-bleed background with parallax effect */}
         <div className="absolute inset-0">
           <img 
             src="/hero-group-bikes.webp"
             alt="E-bike adventures in Bend, Oregon"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover scale-105 animate-slow-zoom"
           />
-          {/* Subtle gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+          {/* Premium multi-layer gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
         </div>
         
-        <div className="container relative z-10 py-16">
-          {/* Neon Sign - Floating Over Hero */}
-          <div className="flex justify-center mb-12">
-            <h1 className="neon-text-floating">
+        <div className="container relative z-10 py-20">
+          {/* Premium Headline - Outline Style */}
+          <div className="flex justify-center mb-8">
+            <h1 className="hero-headline-premium">
               BEND'S ELECTRIC BIKE<br />SHOP AND TOURS
             </h1>
           </div>
           
-          <div className="max-w-2xl mx-auto text-center">
-            {/* Clean subheadline */}
-            <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
-              E-bike tours, rentals & sales in Bend, Oregon.
+          <div className="max-w-3xl mx-auto text-center">
+            {/* Elegant subheadline with premium typography */}
+            <p className="text-lg md:text-xl lg:text-2xl text-white/80 mb-12 leading-relaxed font-light tracking-wide" style={{ fontFamily: 'Sora, sans-serif' }}>
+              Premium guided tours, rentals & sales in the heart of Central Oregon
             </p>
             
-            {/* Simple CTA buttons */}
-            <div className="flex flex-wrap gap-4 justify-center">
+            {/* Premium CTA buttons with sophisticated styling */}
+            <div className="flex flex-wrap gap-5 justify-center">
               <Link href="/tours">
-                <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6 font-semibold">
-                  Book a Tour
-                </Button>
+                <button className="premium-btn-primary group">
+                  <span className="relative z-10 flex items-center gap-2">
+                    Book a Tour
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </button>
               </Link>
               <Link href="/rentals">
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 font-semibold bg-transparent"
-                >
-                  Rent a Bike
-                </Button>
+                <button className="premium-btn-outline group">
+                  <span className="relative z-10">Rent a Bike</span>
+                </button>
               </Link>
               <Link href="/shop">
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6 font-semibold bg-transparent"
-                >
-                  Shop E-Bikes
-                </Button>
+                <button className="premium-btn-outline group">
+                  <span className="relative z-10">Shop E-Bikes</span>
+                </button>
               </Link>
             </div>
+            
+            {/* Trust indicators */}
+            <div className="mt-16 flex items-center justify-center gap-8 text-white/60">
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                <span className="text-sm font-medium" style={{ fontFamily: 'Sora, sans-serif' }}>189+ 5-Star Reviews</span>
+              </div>
+              <div className="hidden md:block w-px h-4 bg-white/30" />
+              <div className="hidden md:flex items-center gap-2">
+                <Award className="w-5 h-5 text-green-400" />
+                <span className="text-sm font-medium" style={{ fontFamily: 'Sora, sans-serif' }}>TripAdvisor Excellence</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center pt-2">
+            <div className="w-1.5 h-3 bg-white/60 rounded-full animate-scroll-down" />
           </div>
         </div>
       </section>
