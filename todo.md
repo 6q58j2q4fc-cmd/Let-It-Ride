@@ -422,3 +422,16 @@
 - [x] Verify admin signup page has working shareable link (/admin-signup)
 - [x] Test admin signup flow for new managers
 - [x] Document webhook URL: /api/square/webhook
+
+
+## Domain Link Issues Fix
+- [x] Audit all routes in App.tsx for correct paths
+- [x] Check all navigation links in Header component
+- [x] Verify all internal links use relative paths (no hardcoded domains found)
+- [x] Fix any hardcoded domain references (none found)
+- [x] Test admin-login and admin-signup pages are accessible (/admin-login, /admin-signup work)
+- [x] Test all tour detail pages work (/tours/short-and-sweet, /tours/deschutes-river, /tours/taste-of-bend)
+- [x] Test all product detail pages work (/shop/pedego-interceptor, etc.)
+- [x] Test all blog post pages work (/blog/best-ebike-trails-bend-oregon, etc.)
+- [x] Verify 404 page handles unknown routes correctly
+- [x] All pages working - site needs to be PUBLISHED for public shareable links
