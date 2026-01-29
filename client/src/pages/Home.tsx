@@ -166,13 +166,11 @@ export default function Home() {
         </div>
         
         <div className="container relative z-10 py-16">
-          {/* Neon Sign - Center of Hero */}
-          <div className="flex justify-center mb-8">
-            <div className="neon-container">
-              <h1 className="neon-text-green">
-                BEND'S ELECTRIC BIKE<br />SHOP AND TOURS
-              </h1>
-            </div>
+          {/* Neon Sign - Floating Over Hero */}
+          <div className="flex justify-center mb-12">
+            <h1 className="neon-text-floating">
+              BEND'S ELECTRIC BIKE<br />SHOP AND TOURS
+            </h1>
           </div>
           
           <div className="max-w-2xl mx-auto text-center">

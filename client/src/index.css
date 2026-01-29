@@ -987,3 +987,110 @@ html {
     0 0 20px rgba(57, 255, 20, 0.2),
     inset 0 0 30px rgba(0, 0, 0, 0.5);
 }
+
+
+/* ⚡ FLOATING NEON TEXT - NO BACKGROUND ⚡ */
+.neon-text-floating {
+  font-family: 'Pacifico', 'Brush Script MT', cursive;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 400;
+  text-align: center;
+  color: #fff;
+  text-shadow:
+    /* Inner white glow */
+    0 0 7px #fff,
+    0 0 10px #fff,
+    0 0 21px #fff,
+    /* Green neon glow - multiple layers for depth */
+    0 0 42px #39ff14,
+    0 0 82px #39ff14,
+    0 0 92px #39ff14,
+    0 0 102px #39ff14,
+    0 0 151px #39ff14,
+    /* Extra outer glow for visibility */
+    0 0 200px rgba(57, 255, 20, 0.5),
+    /* Dark outline for contrast against any background */
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    -2px -2px 4px rgba(0, 0, 0, 0.8),
+    2px -2px 4px rgba(0, 0, 0, 0.8),
+    -2px 2px 4px rgba(0, 0, 0, 0.8);
+  animation: neon-pulse 2s ease-in-out infinite;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  /* Subtle text stroke for extra definition */
+  -webkit-text-stroke: 1px rgba(57, 255, 20, 0.3);
+  /* Drop shadow for depth */
+  filter: drop-shadow(0 10px 30px rgba(57, 255, 20, 0.4));
+}
+
+@keyframes neon-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 7px #fff,
+      0 0 10px #fff,
+      0 0 21px #fff,
+      0 0 42px #39ff14,
+      0 0 82px #39ff14,
+      0 0 92px #39ff14,
+      0 0 102px #39ff14,
+      0 0 151px #39ff14,
+      0 0 200px rgba(57, 255, 20, 0.5),
+      2px 2px 4px rgba(0, 0, 0, 0.8),
+      -2px -2px 4px rgba(0, 0, 0, 0.8),
+      2px -2px 4px rgba(0, 0, 0, 0.8),
+      -2px 2px 4px rgba(0, 0, 0, 0.8);
+    filter: drop-shadow(0 10px 30px rgba(57, 255, 20, 0.4));
+  }
+  50% {
+    text-shadow:
+      0 0 10px #fff,
+      0 0 20px #fff,
+      0 0 30px #fff,
+      0 0 60px #39ff14,
+      0 0 100px #39ff14,
+      0 0 120px #39ff14,
+      0 0 140px #39ff14,
+      0 0 180px #39ff14,
+      0 0 250px rgba(57, 255, 20, 0.7),
+      2px 2px 4px rgba(0, 0, 0, 0.8),
+      -2px -2px 4px rgba(0, 0, 0, 0.8),
+      2px -2px 4px rgba(0, 0, 0, 0.8),
+      -2px 2px 4px rgba(0, 0, 0, 0.8);
+    filter: drop-shadow(0 10px 40px rgba(57, 255, 20, 0.6));
+  }
+}
+
+/* Alternative warm neon (orange/yellow) */
+.neon-text-floating-warm {
+  font-family: 'Pacifico', 'Brush Script MT', cursive;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 400;
+  text-align: center;
+  color: #fff;
+  text-shadow:
+    0 0 7px #fff,
+    0 0 10px #fff,
+    0 0 21px #fff,
+    0 0 42px #ff9500,
+    0 0 82px #ff9500,
+    0 0 92px #ff6b00,
+    0 0 102px #ff6b00,
+    0 0 151px #ff6b00,
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    -2px -2px 4px rgba(0, 0, 0, 0.8),
+    2px -2px 4px rgba(0, 0, 0, 0.8),
+    -2px 2px 4px rgba(0, 0, 0, 0.8);
+  animation: neon-pulse-warm 2s ease-in-out infinite;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  filter: drop-shadow(0 10px 30px rgba(255, 149, 0, 0.4));
+}
+
+@keyframes neon-pulse-warm {
+  0%, 100% {
+    filter: drop-shadow(0 10px 30px rgba(255, 149, 0, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 10px 40px rgba(255, 149, 0, 0.6));
+  }
+}
