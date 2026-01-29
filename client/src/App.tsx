@@ -62,6 +62,7 @@ function Router() {
       
       {/* Custom Admin Login (separate from Manus OAuth) */}
       <Route path="/admin-login" component={AdminLogin} />
+      <Route path="/admin-signup" component={AdminLogin} />
       <Route path="/admin-panel" component={AdminPanel} />
       
       {/* 404 */}

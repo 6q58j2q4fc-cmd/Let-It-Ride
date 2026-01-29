@@ -13,4 +13,5 @@ export const ENV = {
   squareApplicationId: process.env.SQUARE_APPLICATION_ID ?? "",
   squareAccessToken: process.env.SQUARE_ACCESS_TOKEN ?? "",
   squareEnvironment: (process.env.SQUARE_ENVIRONMENT ?? "sandbox") as "sandbox" | "production",
+  squareWebhookSignatureKey: process.env.SQUARE_WEBHOOK_SIGNATURE_KEY ?? "",
 };

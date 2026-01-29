@@ -409,3 +409,16 @@
 - [x] Test sandbox payments (verified: Location ID LVY82Y46K6BJF)
 - [x] Switch to production mode (Location: Let it Ride Electric, LLC, ID: L1J9R07CD0045)
 - [x] Verify production credentials working
+
+
+## Square Webhooks & Admin Signup
+- [x] Create Square webhook endpoint at /api/square/webhook
+- [x] Add webhook signature verification for security
+- [x] Handle payment.completed event for order confirmations
+- [x] Handle payment.updated event for status changes
+- [x] Handle refund.created event for refund notifications
+- [x] Handle order.created and order.updated events
+- [x] Update order/booking status in database on payment events
+- [x] Verify admin signup page has working shareable link (/admin-signup)
+- [x] Test admin signup flow for new managers
+- [x] Document webhook URL: /api/square/webhook

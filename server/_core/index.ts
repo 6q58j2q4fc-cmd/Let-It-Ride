@@ -8,6 +8,7 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { handleStripeWebhook } from "../stripe-webhook";
+import { handleSquareWebhook } from "../square-webhook";
 import { generateSitemap, generateRSSFeed, generateAtomFeed, generateRobotsTxt } from "../seo-feeds";
 import { handleDailyCron, getAutomationStatus, healthCheck } from "../cron-handler";
 import { storagePut } from "../storage";
@@ -40,6 +41,9 @@ async function startServer() {
   
   // Stripe webhook must be before body parser for signature verification
   app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
+  
+  // Square webhook must be before body parser for signature verification
+  app.post('/api/square/webhook', express.raw({ type: 'application/json' }), handleSquareWebhook);
   
   // SEO feeds - sitemap, RSS, Atom, robots.txt
   app.get('/sitemap.xml', generateSitemap);

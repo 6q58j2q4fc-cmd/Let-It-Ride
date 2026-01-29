@@ -9,13 +9,22 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, User, Zap, UserPlus, LogIn } from "lucide-react";
 
 export default function AdminLogin() {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const [username, setUsername] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [isNewUser, setIsNewUser] = useState(false);
+  // Auto-detect if on signup route
+  const isSignupRoute = location === "/admin-signup";
+  const [isNewUser, setIsNewUser] = useState(isSignupRoute);
   const [rememberedUsers, setRememberedUsers] = useState<string[]>([]);
+
+  // Update isNewUser when route changes
+  useEffect(() => {
+    if (isSignupRoute) {
+      setIsNewUser(true);
+    }
+  }, [isSignupRoute]);
 
   // Load remembered usernames from localStorage
   useEffect(() => {
