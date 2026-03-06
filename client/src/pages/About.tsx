@@ -53,7 +53,7 @@ export default function About() {
             </div>
             <div className="relative">
               <img 
-                src="/images/downtown-bend.jpg"
+                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663234433834/JAjQFNXBbA5Quy72adLon7/downtown-bend_32aa49e7.jpg"
                 alt="Let It Ride team"
                 className="rounded-2xl shadow-2xl"
               />

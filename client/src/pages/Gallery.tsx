@@ -23,7 +23,7 @@ const galleryImages = [
   },
   {
     id: 3,
-    src: '/showroom-rentals.webp',
+    src: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663234433834/JAjQFNXBbA5Quy72adLon7/showroom-rentals_fe018efd.webp',
     title: 'Pedego Electric Bikes Bend',
     category: 'store',
     description: 'The official Pedego dealer in Bend, Oregon - your destination for premium electric bikes.',
@@ -37,14 +37,14 @@ const galleryImages = [
   },
   {
     id: 5,
-    src: '/tour-rental-center.webp',
+    src: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663234433834/JAjQFNXBbA5Quy72adLon7/tour-rental-center_ff692e69.webp',
     title: 'Trail Adventure',
     category: 'tours',
     description: 'Exploring the stunning trails around Central Oregon on our guided e-bike tours.',
   },
   {
     id: 6,
-    src: '/hero-group-bikes.webp',
+    src: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663234433834/JAjQFNXBbA5Quy72adLon7/hero-group-bikes_e0dc8d68.webp',
     title: 'Cascade Mountain Views',
     category: 'scenery',
     description: 'The breathtaking Cascade Mountains provide a stunning backdrop for every ride in Bend.',

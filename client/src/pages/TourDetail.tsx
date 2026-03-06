@@ -42,7 +42,7 @@ const toursData: Record<string, any> = {
     price: 100,
     shortDescription: 'Cruise along the beautiful Deschutes River with stunning scenery.',
     description: 'Take a tour of the Deschutes River as it winds through and around the city of Bend, while riding our premium electric bikes. You will find yourself cruising along the river with our guide, enjoying the sights and sounds without breaking a sweat. Enjoy awesome scenery and wildlife, while your guide shares historic stories of Bend and the local area with plenty of opportunities to take pictures and ask questions.',
-    image: '/images/deschutes-river-trail.jpg',
+    image: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663234433834/JAjQFNXBbA5Quy72adLon7/deschutes-river-trail_ab82c02b.jpg',
     highlights: ['Scenic river views', 'Wildlife spotting', 'Historic stories', 'Nature trails'],
     included: ['Premium Pedego e-bike', 'Helmet', 'Expert guide', 'Water bottle', 'Trail snacks'],
     maxGuests: 8,

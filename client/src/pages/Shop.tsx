@@ -162,7 +162,7 @@ const products = [
     category: 'cargo',
     price: 3895,
     salePrice: 3495,
-    image: '/images/products/pedego-cargo.jpg',
+    image: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663234433834/JAjQFNXBbA5Quy72adLon7/pedego-cargo_911daa26.jpg',
     shortDescription: 'Haul it all! Extended range up to 132 miles with optional battery. Top speed 20/28 MPH.',
     brand: 'Pedego',
     isFeatured: true,
@@ -377,33 +377,28 @@ export default function Shop() {
       <Header />
       
       {/* Hero */}
-      <section className="relative py-20 bg-gradient-to-br from-primary via-primary to-green-700 text-primary-foreground overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-32 h-32 border-4 border-white rounded-full animate-pulse" />
-          <div className="absolute bottom-10 right-10 w-24 h-24 border-4 border-yellow-400 rounded-full animate-bounce" />
-          <Zap className="absolute top-20 right-20 w-16 h-16 text-yellow-400 animate-pulse" />
-        </div>
+      <section className="relative py-20 bg-[oklch(0.14_0.03_148)] text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`, backgroundSize: '28px 28px' }} />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
         <div className="container relative">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 px-4 py-1 bg-white/20 backdrop-blur rounded-full text-sm font-medium mb-4">
-              <Zap className="w-4 h-4 text-yellow-400" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-sm font-medium mb-5">
+              <Zap className="w-3.5 h-3.5 text-amber-400" />
               Central Oregon's Only Pedego Dealer
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Shop Pedego Electric Bikes
-            </h1>
-            <p className="text-xl opacity-90 mb-6">
-              America's #1 electric bike brand. Premium quality, exceptional comfort, 
-              and industry-leading 5-year warranty. Prices updated to match official Pedego pricing.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <a href="tel:5413063177">
-                <Button size="lg" variant="secondary" className="gap-2">
-                  <Phone className="w-4 h-4" />
-                  Call (541) 306-3177
-                </Button>
-              </a>
             </div>
+            <h1 className="heading-display text-4xl md:text-5xl text-white mb-4">
+              Shop Pedego <span className="text-gradient-amber">Electric Bikes</span>
+            </h1>
+            <p className="text-lg text-white/65 leading-relaxed max-w-xl mb-7">
+              America's #1 electric bike brand. Premium quality, exceptional comfort,
+              and industry-leading 5-year warranty.
+            </p>
+            <a href="tel:5413063177">
+              <button className="flex items-center gap-2 px-6 py-3 rounded-full border-2 border-white/25 hover:border-white/50 text-white font-semibold text-sm transition-all duration-200 hover:bg-white/8">
+                <Phone className="w-4 h-4" />
+                Call (541) 306-3177
+              </button>
+            </a>
           </div>
         </div>
       </section>
@@ -558,7 +553,7 @@ export default function Shop() {
       </section>
 
       {/* Why Pedego */}
-      <section className="py-16 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950 dark:to-emerald-950">
+      <section className="py-16 section-subtle border-t border-border">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Why Choose Pedego?</h2>
@@ -566,27 +561,25 @@ export default function Shop() {
               America's #1 selling electric bike brand, known for quality, comfort, and exceptional customer service.
             </p>
           </div>
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-4 gap-5">
             {[
               { title: '5-Year Warranty', desc: 'Industry-leading warranty coverage', icon: '🛡️' },
               { title: 'Made for Comfort', desc: 'Ergonomic design for all-day riding', icon: '🪑' },
               { title: 'Powerful Motors', desc: 'Up to 500W for effortless hills', icon: '⚡' },
               { title: 'Local Support', desc: 'Expert service right here in Bend', icon: '🔧' }
             ].map((item, i) => (
-              <Card key={i} className="text-center">
-                <CardHeader>
-                  <div className="text-4xl mb-2">{item.icon}</div>
-                  <CardTitle className="text-lg">{item.title}</CardTitle>
-                  <CardDescription>{item.desc}</CardDescription>
-                </CardHeader>
-              </Card>
+              <div key={i} className="feature-card text-center">
+                <div className="text-3xl mb-3">{item.icon}</div>
+                <div className="font-bold text-sm text-foreground mb-1" style={{ fontFamily: 'Sora, sans-serif' }}>{item.title}</div>
+                <div className="text-xs text-muted-foreground">{item.desc}</div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Service Info */}
-      <section className="py-16 bg-secondary">
+      <section className="py-16 bg-white border-t border-border">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-4">E-Bike Service & Repairs</h2>
@@ -594,20 +587,20 @@ export default function Shop() {
               We service both electric and traditional bicycles. Two complimentary service check-ups 
               on any bike purchased through our shop!
             </p>
-            <div className="grid sm:grid-cols-3 gap-4 mb-8">
-              <div className="p-4 bg-background rounded-lg">
-                <div className="text-2xl font-bold text-primary">$60-$120</div>
-                <div className="text-sm text-muted-foreground">Tune Up</div>
+              <div className="grid sm:grid-cols-3 gap-4 mb-8">
+                <div className="p-5 bg-secondary rounded-2xl border border-border">
+                  <div className="stat-number">$60-$120</div>
+                  <div className="text-sm text-muted-foreground mt-1">Tune Up</div>
+                </div>
+                <div className="p-5 bg-secondary rounded-2xl border border-border">
+                  <div className="stat-number">$100/hr</div>
+                  <div className="text-sm text-muted-foreground mt-1">Service Rate</div>
+                </div>
+                <div className="p-5 bg-secondary rounded-2xl border border-border">
+                  <div className="stat-number">$125-$250</div>
+                  <div className="text-sm text-muted-foreground mt-1">E-Bike Build</div>
+                </div>
               </div>
-              <div className="p-4 bg-background rounded-lg">
-                <div className="text-2xl font-bold text-primary">$100/hr</div>
-                <div className="text-sm text-muted-foreground">Service Rate</div>
-              </div>
-              <div className="p-4 bg-background rounded-lg">
-                <div className="text-2xl font-bold text-primary">$125-$250</div>
-                <div className="text-sm text-muted-foreground">E-Bike Build</div>
-              </div>
-            </div>
             <a href="tel:5413063177">
               <Button size="lg" className="gap-2">
                 <Phone className="w-4 h-4" />

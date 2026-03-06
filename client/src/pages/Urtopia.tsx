@@ -150,7 +150,7 @@ export default function Urtopia() {
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-3xl blur-2xl" />
               <img 
-                src="/urtopia-lifestyle.jpg" 
+                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663234433834/JAjQFNXBbA5Quy72adLon7/urtopia-lifestyle_b7149a18.jpg" 
                 alt="Urtopia Carbon E-Bike"
                 className="relative rounded-2xl shadow-2xl w-full"
               />

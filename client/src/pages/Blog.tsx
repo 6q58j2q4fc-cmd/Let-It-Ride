@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { SEOHead, PAGE_SEO } from '@/components/SEOHead';
-import { Calendar, Clock, ChevronRight, User, Loader2 } from 'lucide-react';
+import { Calendar, Clock, ChevronRight, User, Loader2, BookOpen } from 'lucide-react';
 import { trpc } from '@/lib/trpc';
 
 // Default static posts for fallback
@@ -59,7 +59,7 @@ const defaultBlogPosts = [
     slug: 'deschutes-river-trail-ebike',
     title: 'Exploring the Deschutes River Trail by E-Bike',
     excerpt: 'A detailed guide to riding the beautiful Deschutes River Trail, including tips, stops, and what to expect.',
-    featuredImage: '/images/deschutes-river-trail.jpg',
+    featuredImage: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663234433834/JAjQFNXBbA5Quy72adLon7/deschutes-river-trail_ab82c02b.jpg',
     category: 'Trails & Routes',
     publishedAt: new Date('2026-01-01'),
     content: '',
@@ -109,16 +109,19 @@ export default function Blog() {
       <Header />
       
       {/* Hero */}
-      <section className="relative py-20 bg-primary text-primary-foreground">
-        <div className="container">
+      <section className="relative py-20 bg-[oklch(0.14_0.03_148)] text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '28px 28px' }} />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+        <div className="container relative">
           <div className="max-w-2xl">
-            <span className="inline-block px-4 py-1 bg-white/20 backdrop-blur rounded-full text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-sm font-medium mb-5">
+              <BookOpen className="w-3.5 h-3.5 text-amber-400" />
               Let It Ride Blog
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              E-Bike Adventures & Local Tips
+            </div>
+            <h1 className="heading-display text-4xl md:text-5xl text-white mb-4">
+              E-Bike Adventures &amp; <span className="text-gradient-amber">Local Tips</span>
             </h1>
-            <p className="text-xl opacity-90">
+            <p className="text-lg text-white/65 leading-relaxed max-w-xl">
               Discover the best trails, local secrets, and e-bike tips for exploring Bend, Oregon.
             </p>
           </div>
@@ -126,17 +129,20 @@ export default function Blog() {
       </section>
 
       {/* Categories */}
-      <section className="py-8 border-b">
+      <section className="py-5 border-b border-border bg-white">
         <div className="container">
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
-              <Button 
-                key={cat} 
-                variant={cat === 'All' ? 'default' : 'outline'}
-                size="sm"
+              <button
+                key={cat}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                  cat === 'All'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'border border-border hover:border-primary hover:text-primary text-muted-foreground'
+                }`}
               >
                 {cat}
-              </Button>
+              </button>
             ))}
           </div>
         </div>
@@ -154,90 +160,86 @@ export default function Blog() {
             <>
               {/* Featured Post */}
               {blogPosts.length > 0 && (
-                <Card className="mb-12 overflow-hidden">
+                <div className="mb-12 rounded-2xl overflow-hidden border border-border shadow-[0_4px_24px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.11)] transition-shadow duration-300">
                   <div className="grid md:grid-cols-2 gap-0">
-                    <div className="relative h-64 md:h-auto">
-                      <img 
-                        src={blogPosts[0].featuredImage || '/images/cascade-mountains.jpg'} 
+                    <div className="relative h-64 md:h-auto min-h-[280px]">
+                      <img
+                        src={blogPosts[0].featuredImage || '/images/cascade-mountains.jpg'}
                         alt={blogPosts[0].title}
                         className="w-full h-full object-cover"
                       />
-                      <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                      <span className="absolute top-4 left-4 px-3 py-1.5 bg-amber-400 text-amber-950 text-xs font-bold rounded-full">
                         {blogPosts[0].isAiGenerated ? 'New' : 'Featured'}
-                      </Badge>
+                      </span>
                     </div>
-                    <div className="p-8 flex flex-col justify-center">
-                      <Badge variant="outline" className="w-fit mb-4">
+                    <div className="p-8 lg:p-10 bg-white flex flex-col justify-center">
+                      <span className="inline-block px-3 py-1 rounded-full bg-primary/8 text-primary text-xs font-semibold mb-4">
                         {blogPosts[0].category || 'Adventures'}
-                      </Badge>
-                      <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                      </span>
+                      <h2 className="heading-section text-2xl md:text-3xl text-foreground mb-4">
                         {blogPosts[0].title}
                       </h2>
-                      <p className="text-muted-foreground mb-4">
+                      <p className="text-muted-foreground mb-5 text-sm leading-relaxed">
                         {blogPosts[0].excerpt}
                       </p>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          {new Date(blogPosts[0].publishedAt || new Date()).toLocaleDateString('en-US', { 
-                            month: 'long', 
-                            day: 'numeric', 
-                            year: 'numeric' 
-                          })}
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground mb-6">
+                        <span className="flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5" />
+                          {new Date(blogPosts[0].publishedAt || new Date()).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                         </span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
+                        <span className="flex items-center gap-1.5">
+                          <Clock className="h-3.5 w-3.5" />
                           {estimateReadTime(blogPosts[0].content || '')}
                         </span>
                       </div>
                       <Link href={`/blog/${blogPosts[0].slug}`}>
-                        <Button>
+                        <button className="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-all duration-200 shadow-md hover:-translate-y-0.5 w-fit" style={{ fontFamily: 'Sora, sans-serif' }}>
                           Read Article
-                          <ChevronRight className="ml-2 h-4 w-4" />
-                        </Button>
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
                       </Link>
                     </div>
                   </div>
-                </Card>
+                </div>
               )}
 
               {/* Post Grid */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {blogPosts.slice(1).map((post) => (
-                  <Card key={post.id} className="card-hover overflow-hidden">
-                    <div className="relative h-48">
-                      <img 
-                        src={post.featuredImage || '/images/cascade-mountains.jpg'} 
+                  <div key={post.id} className="group bg-white rounded-2xl overflow-hidden border border-border shadow-[0_2px_12px_rgba(0,0,0,0.05)] hover:-translate-y-2 hover:shadow-[0_12px_40px_rgba(0,0,0,0.10)] transition-all duration-300">
+                    <div className="relative h-48 overflow-hidden">
+                      <img
+                        src={post.featuredImage || '/images/cascade-mountains.jpg'}
                         alt={post.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                     </div>
-                    <CardHeader>
-                      <Badge variant="outline" className="w-fit mb-2">
+                    <div className="p-5">
+                      <span className="inline-block px-2.5 py-1 rounded-full bg-primary/8 text-primary text-xs font-semibold mb-3">
                         {post.category || 'Adventures'}
-                      </Badge>
-                      <CardTitle className="line-clamp-2">{post.title}</CardTitle>
-                      <CardDescription className="line-clamp-2">
+                      </span>
+                      <h3 className="font-bold text-foreground line-clamp-2 mb-2 leading-snug" style={{ fontFamily: 'Sora, sans-serif' }}>
+                        {post.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-4">
                         {post.excerpt}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardFooter className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Calendar className="h-4 w-4" />
-                        {new Date(post.publishedAt || new Date()).toLocaleDateString('en-US', { 
-                          month: 'short', 
-                          day: 'numeric' 
-                        })}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <Calendar className="h-3.5 w-3.5" />
+                          {new Date(post.publishedAt || new Date()).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </span>
+                        <Link href={`/blog/${post.slug}`}>
+                          <button className="flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 transition-colors">
+                            Read More
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </button>
+                        </Link>
                       </div>
-                      <Link href={`/blog/${post.slug}`}>
-                        <Button variant="ghost" size="sm">
-                          Read More
-                          <ChevronRight className="ml-1 h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </CardFooter>
-                  </Card>
+                    </div>
+                  </div>
                 ))}
               </div>
 
@@ -253,7 +255,7 @@ export default function Blog() {
       </section>
 
       {/* Newsletter CTA */}
-      <section className="py-16 bg-secondary">
+      <section className="py-16 section-subtle border-t border-border">
         <div className="container">
           <div className="text-center max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
@@ -261,12 +263,12 @@ export default function Blog() {
               Subscribe to our newsletter for the latest e-bike tips, trail updates, and exclusive offers.
             </p>
             <div className="flex gap-2 max-w-md mx-auto">
-              <input 
-                type="email" 
+              <input
+                type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-2 rounded-lg border bg-background"
+                className="flex-1 px-4 py-3 rounded-full border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
               />
-              <Button>Subscribe</Button>
+              <button className="px-6 py-3 rounded-full bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-colors" style={{ fontFamily: 'Sora, sans-serif' }}>Subscribe</button>
             </div>
           </div>
         </div>

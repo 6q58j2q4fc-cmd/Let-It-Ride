@@ -63,7 +63,7 @@ const bikeTypes = [
   },
   {
     name: 'Pedego Cargo',
-    image: '/tour-rental-center.webp',
+    image: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663234433834/JAjQFNXBbA5Quy72adLon7/tour-rental-center_ff692e69.webp',
     description: 'Extended cargo area for kids, pets, or gear. Great for family adventures!',
     range: '40+ miles',
     speed: '20 mph',
