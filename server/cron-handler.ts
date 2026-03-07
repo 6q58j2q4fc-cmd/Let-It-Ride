@@ -36,8 +36,7 @@ export async function handleDailyCron(req: Request, res: Response) {
       timestamp: new Date().toISOString(),
       results: {
         blog: results.blog,
-        social: results.social,
-        wordpress: results.wordpress
+        social: results.social
       }
     });
     

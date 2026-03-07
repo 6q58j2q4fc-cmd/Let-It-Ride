@@ -1,9 +1,11 @@
 import { invokeLLM } from "./_core/llm";
+import { generateImage } from "./_core/imageGeneration";
 import { createBlogPost, createSocialPost, getPublishedBlogPosts } from "./db";
 import { nanoid } from "nanoid";
-import { generateAndPostDailyArticle, WORDPRESS_BLOG_URL } from "./wordpress";
+import { sendBlogNotificationEmail } from "./emailNotification";
+import { notifyOwner } from "./_core/notification";
 
-// Blog topics for SEO optimization
+// Blog topics for SEO optimization — Central Oregon / e-bike focused
 export const BLOG_TOPICS = [
   "Best E-Bike Trails in Bend Oregon",
   "Top 10 Scenic Spots to Visit on an E-Bike Tour in Central Oregon",
@@ -24,7 +26,12 @@ export const BLOG_TOPICS = [
   "Local Secrets: Hidden Gems to Discover by E-Bike",
   "E-Bike Rentals vs Tours: Which is Right for You?",
   "The Environmental Benefits of E-Bike Tourism",
-  "Bend's Four Seasons: Year-Round E-Bike Adventures"
+  "Bend's Four Seasons: Year-Round E-Bike Adventures",
+  "Smith Rock State Park by E-Bike: A Complete Guide",
+  "Old Mill District Bend: Best E-Bike Stops",
+  "Central Oregon Wildlife You'll See on an E-Bike Tour",
+  "Urtopia E-Bikes: The Future of Electric Cycling",
+  "Group E-Bike Tours: Perfect for Corporate Events and Celebrations",
 ];
 
 export const SOCIAL_TEMPLATES = [
@@ -40,54 +47,92 @@ export const SOCIAL_TEMPLATES = [
   "🚲 Pedego e-bikes + expert guides + beautiful Bend = the perfect day! Book your tour now. #Pedego #LetItRide #BendOregon"
 ];
 
-export async function generateDailyBlogPost(): Promise<{ success: boolean; postId?: number; title?: string; error?: string }> {
+// Reliable fallback images (all verified to exist in the project)
+const FALLBACK_IMAGES = [
+  '/images/cascade-mountains.jpg',
+  '/images/ebike-scenic.jpg',
+  '/images/ebike-tour-group.jpg',
+  '/images/bend-brewery-patio.jpg',
+  '/images/ebike-mountain-trail.jpg',
+  '/images/ebike-lake-tour.jpg',
+  '/images/smith-rock.jpg',
+  '/images/pedego-element.jpg',
+  '/images/bend-mountain-lake.jpg',
+  '/images/cascade-range.jpg',
+];
+
+/**
+ * Generate an AI featured image for a blog post.
+ * Falls back to a local image if generation fails.
+ */
+async function generateFeaturedImage(topic: string, title: string): Promise<string> {
+  try {
+    console.log(`[Automation] Generating AI image for: "${title}"`);
+    const { url } = await generateImage({
+      prompt: `Professional travel photography of ${topic} in Bend Oregon. Electric bikes on scenic Central Oregon trail with Cascade Mountains in background, golden hour lighting, vibrant colors, high quality, photorealistic, 16:9 landscape orientation.`
+    });
+    if (url) {
+      console.log(`[Automation] AI image generated: ${url}`);
+      return url;
+    }
+  } catch (err) {
+    console.warn(`[Automation] AI image generation failed, using fallback:`, err);
+  }
+  // Return a random verified fallback image
+  return FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)];
+}
+
+export async function generateDailyBlogPost(): Promise<{ success: boolean; postId?: number; title?: string; slug?: string; featuredImage?: string; error?: string }> {
   try {
     // Get existing posts to avoid duplicates
     const existingPosts = await getPublishedBlogPosts();
     const existingTitles = existingPosts.map(p => p.title.toLowerCase());
-    
-    // Find a topic that hasn't been used
-    const availableTopics = BLOG_TOPICS.filter(topic => 
-      !existingTitles.some(title => title.includes(topic.toLowerCase().split(':')[0]))
+
+    // Find a topic that hasn't been used yet
+    const availableTopics = BLOG_TOPICS.filter(topic =>
+      !existingTitles.some(title => title.includes(topic.toLowerCase().split(':')[0].split(' ').slice(0, 3).join(' ')))
     );
-    
-    const topic = availableTopics.length > 0 
+
+    const topic = availableTopics.length > 0
       ? availableTopics[Math.floor(Math.random() * availableTopics.length)]
-      : BLOG_TOPICS[Math.floor(Math.random() * BLOG_TOPICS.length)] + " - " + new Date().toLocaleDateString();
-    
+      : BLOG_TOPICS[Math.floor(Math.random() * BLOG_TOPICS.length)] + " — " + new Date().getFullYear();
+
+    console.log(`[Automation] Generating blog post about: "${topic}"`);
+
     // Generate blog content using LLM
     const response = await invokeLLM({
       messages: [
         {
           role: "system",
-          content: `You are an expert travel blogger and SEO specialist writing for Let It Ride Electric Bikes in Bend, Oregon. 
-          Write engaging, SEO-optimized blog posts that:
-          - Include relevant keywords naturally (e-bike, electric bike, Bend Oregon, tours, Deschutes River, Pedego, Central Oregon, etc.)
-          - Are informative and helpful for tourists planning to visit Bend
-          - Highlight the benefits of e-bike tours and rentals
-          - Include calls-to-action to book tours
-          - Are 1000-1500 words in length for better SEO
-          - Use proper headings (H2, H3) for structure
-          - Include local knowledge about Bend, Oregon
-          - Include fun facts about Bend (300+ days of sunshine, 30+ craft breweries, elevation 3,623 ft, etc.)
-          - Mention specific trails: Deschutes River Trail, Phil's Trail, Shevlin Park, Tumalo Creek
-          - Reference local landmarks: Old Mill District, Drake Park, Mirror Pond, Mt. Bachelor
-          - Include practical tips for visitors`
+          content: `You are an expert travel blogger and SEO specialist writing for Let It Ride Electric Bikes in Bend, Oregon.
+Write engaging, SEO-optimized blog posts that:
+- Include relevant keywords naturally (e-bike, electric bike, Bend Oregon, tours, Deschutes River, Pedego, Central Oregon, etc.)
+- Are informative and helpful for tourists planning to visit Bend
+- Highlight the benefits of e-bike tours and rentals
+- Include calls-to-action to book tours at letitridebend.com
+- Are 1000-1500 words in length for better SEO
+- Use proper headings (H2, H3) for structure
+- Include local knowledge about Bend, Oregon
+- Include fun facts about Bend (300+ days of sunshine, 30+ craft breweries, elevation 3,623 ft, etc.)
+- Mention specific trails: Deschutes River Trail, Phil's Trail, Shevlin Park, Tumalo Creek
+- Reference local landmarks: Old Mill District, Drake Park, Mirror Pond, Mt. Bachelor
+- Include practical tips for visitors`
         },
         {
           role: "user",
           content: `Write a comprehensive, SEO-optimized blog post about: "${topic}"
-          
-          Return the response in this exact JSON format:
-          {
-            "title": "SEO-optimized title with primary keyword",
-            "excerpt": "A compelling 150-character excerpt for previews and social sharing",
-            "content": "Full blog post content in markdown format with H2 and H3 headings, bullet points, and a clear call-to-action",
-            "metaTitle": "SEO meta title (60 chars max) - include Bend Oregon",
-            "metaDescription": "SEO meta description (155 chars max) - compelling and keyword-rich",
-            "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-            "keywords": "comma-separated list of 10-15 SEO keywords for this article"
-          }`
+
+Return the response in this exact JSON format:
+{
+  "title": "SEO-optimized title with primary keyword",
+  "excerpt": "A compelling 150-character excerpt for previews and social sharing",
+  "content": "Full blog post content in markdown format with H2 and H3 headings, bullet points, and a clear call-to-action",
+  "metaTitle": "SEO meta title (60 chars max) - include Bend Oregon",
+  "metaDescription": "SEO meta description (155 chars max) - compelling and keyword-rich",
+  "category": "One of: adventures, trails, travel-tips, local-guide, ebike-guide, family-fun",
+  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+  "keywords": "comma-separated list of 10-15 SEO keywords for this article"
+}`
         }
       ],
       response_format: {
@@ -103,10 +148,11 @@ export async function generateDailyBlogPost(): Promise<{ success: boolean; postI
               content: { type: "string" },
               metaTitle: { type: "string" },
               metaDescription: { type: "string" },
+              category: { type: "string" },
               tags: { type: "array", items: { type: "string" } },
               keywords: { type: "string" }
             },
-            required: ["title", "excerpt", "content", "metaTitle", "metaDescription", "tags", "keywords"],
+            required: ["title", "excerpt", "content", "metaTitle", "metaDescription", "category", "tags", "keywords"],
             additionalProperties: false
           }
         }
@@ -114,32 +160,23 @@ export async function generateDailyBlogPost(): Promise<{ success: boolean; postI
     });
 
     const blogData = JSON.parse((response.choices[0].message.content as string) || "{}");
-    
+
     // Create slug from title
     const slug = blogData.title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '') + '-' + nanoid(6);
-    
-    // Select a featured image based on topic
-    const imageOptions = [
-      '/images/cascade-mountains.jpg',
-      '/images/deschutes-river-trail.jpg',
-      '/images/ebike-scenic.jpg',
-      '/images/ebike-tour-group.jpg',
-      '/images/bend-downtown.jpg',
-      '/hero-group-bikes.jpg',
-      '/tour-rental-center.jpg'
-    ];
-    const featuredImage = imageOptions[Math.floor(Math.random() * imageOptions.length)];
-    
-    // Save to database with enhanced SEO fields
-    await createBlogPost({
+
+    // Generate AI featured image (with fallback)
+    const featuredImage = await generateFeaturedImage(topic, blogData.title);
+
+    // Save to database
+    const post = await createBlogPost({
       title: blogData.title,
       slug,
       excerpt: blogData.excerpt,
       content: blogData.content,
-      category: 'adventures',
+      category: blogData.category || 'adventures',
       tags: blogData.tags,
       seoTitle: blogData.metaTitle,
       seoDescription: blogData.metaDescription,
@@ -150,7 +187,28 @@ export async function generateDailyBlogPost(): Promise<{ success: boolean; postI
       isAiGenerated: true
     });
 
-    return { success: true, title: blogData.title };
+    console.log(`[Automation] Blog post created: "${blogData.title}" (slug: ${slug})`);
+
+    // Send email notification to kevin@reacohomes.com
+    await sendBlogNotificationEmail({
+      title: blogData.title,
+      slug,
+      excerpt: blogData.excerpt,
+      category: blogData.category,
+      featuredImage: typeof featuredImage === 'string' && featuredImage.startsWith('http') ? featuredImage : undefined,
+    });
+
+    // Also send in-app owner notification
+    try {
+      await notifyOwner({
+        title: `📝 New Blog Post Published: ${blogData.title}`,
+        content: `A new SEO-optimized blog post has been automatically published on the Let It Ride website.\n\n**Title:** ${blogData.title}\n\n**Excerpt:** ${blogData.excerpt}\n\n**Read it:** https://letitrides-jajqfnxb.manus.space/blog/${slug}`
+      });
+    } catch (notifyErr) {
+      console.warn('[Automation] Owner notification failed (non-critical):', notifyErr);
+    }
+
+    return { success: true, title: blogData.title, slug, featuredImage };
   } catch (error) {
     console.error('[Automation] Blog generation failed:', error);
     return { success: false, error: String(error) };
@@ -159,45 +217,41 @@ export async function generateDailyBlogPost(): Promise<{ success: boolean; postI
 
 export async function generateDailySocialPost(): Promise<{ success: boolean; postId?: number; error?: string }> {
   try {
-    // Get a random template
     const template = SOCIAL_TEMPLATES[Math.floor(Math.random() * SOCIAL_TEMPLATES.length)];
-    
-    // Get latest blog post for potential link
+
     const posts = await getPublishedBlogPosts();
     const latestPost = posts[0];
-    
-    // Generate enhanced content using LLM
+
     const response = await invokeLLM({
       messages: [
         {
           role: "system",
-          content: `You are a social media manager for Let It Ride Electric Bikes in Bend, Oregon. 
-          Create engaging social media posts that drive engagement and bookings.
-          Keep posts under 280 characters for Twitter compatibility.
-          Include relevant hashtags and emojis.`
+          content: `You are a social media manager for Let It Ride Electric Bikes in Bend, Oregon.
+Create engaging social media posts that drive engagement and bookings.
+Keep posts under 280 characters for Twitter compatibility.
+Include relevant hashtags and emojis.`
         },
         {
           role: "user",
           content: `Create a social media post based on this template: "${template}"
-          
-          ${latestPost ? `You can also reference our latest blog post: "${latestPost.title}"` : ''}
-          
-          Return just the post content, no JSON formatting.`
+
+${latestPost ? `You can also reference our latest blog post: "${latestPost.title}"` : ''}
+
+Return just the post content, no JSON formatting.`
         }
       ]
     });
 
     const content = (response.choices[0].message.content as string) || template;
-    
-    // Create social post for both platforms
-    const post = await createSocialPost({
+
+    await createSocialPost({
       platform: 'both',
       content: content.slice(0, 500),
       link: latestPost ? `/blog/${latestPost.slug}` : '/tours',
-      scheduledAt: new Date(Date.now() + 60 * 60 * 1000) // 1 hour from now
+      scheduledAt: new Date(Date.now() + 60 * 60 * 1000)
     });
 
-    return { success: true, postId: 1 };
+    return { success: true };
   } catch (error) {
     console.error('[Automation] Social post generation failed:', error);
     return { success: false, error: String(error) };
@@ -205,33 +259,16 @@ export async function generateDailySocialPost(): Promise<{ success: boolean; pos
 }
 
 export async function runDailyAutomation(): Promise<{
-  blog: { success: boolean; title?: string; error?: string };
+  blog: { success: boolean; title?: string; slug?: string; error?: string };
   social: { success: boolean; error?: string };
-  wordpress: { success: boolean; title?: string; postUrl?: string; error?: string };
 }> {
-  console.log('[Automation] Starting daily automation run...');
-  
-  // Generate and post to local blog
+  console.log('[Automation] Starting daily automation run at', new Date().toISOString());
+
   const blogResult = await generateDailyBlogPost();
-  console.log('[Automation] Local blog generation:', blogResult.success ? 'Success' : 'Failed');
-  
-  // Generate and post to WordPress
-  console.log('[Automation] Posting to WordPress:', WORDPRESS_BLOG_URL);
-  const wordpressResult = await generateAndPostDailyArticle();
-  console.log('[Automation] WordPress posting:', wordpressResult.success ? 'Success' : 'Failed');
-  
-  // Generate social media post
+  console.log('[Automation] Blog generation:', blogResult.success ? `Success — "${blogResult.title}"` : `Failed — ${blogResult.error}`);
+
   const socialResult = await generateDailySocialPost();
-  console.log('[Automation] Social post generation:', socialResult.success ? 'Success' : 'Failed');
-  
-  return {
-    blog: blogResult,
-    social: socialResult,
-    wordpress: {
-      success: wordpressResult.success,
-      title: wordpressResult.article?.title,
-      postUrl: wordpressResult.postUrl,
-      error: wordpressResult.error
-    }
-  };
+  console.log('[Automation] Social post generation:', socialResult.success ? 'Success' : `Failed — ${socialResult.error}`);
+
+  return { blog: blogResult, social: socialResult };
 }

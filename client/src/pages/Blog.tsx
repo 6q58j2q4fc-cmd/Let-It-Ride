@@ -167,6 +167,7 @@ export default function Blog() {
                         src={blogPosts[0].featuredImage || '/images/cascade-mountains.jpg'}
                         alt={blogPosts[0].title}
                         className="w-full h-full object-cover"
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/images/cascade-mountains.jpg'; }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                       <span className="absolute top-4 left-4 px-3 py-1.5 bg-amber-400 text-amber-950 text-xs font-bold rounded-full">
@@ -213,6 +214,7 @@ export default function Blog() {
                         src={post.featuredImage || '/images/cascade-mountains.jpg'}
                         alt={post.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/images/cascade-mountains.jpg'; }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                     </div>

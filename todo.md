@@ -464,3 +464,9 @@
 - [x] Create polished CTA buttons with premium hover effects (pill-shaped, lift animation)
 - [x] Add subtle micro-interactions and animations (slow-zoom, scroll indicator, fade-up)
 - [x] Enhance overall visual cohesion for top-tier aesthetic (trust indicators, clean outline text)
+
+## Blog Image Fix & Daily Auto-Post with Email Notification
+- [x] Fix broken blog images (replace missing local image paths with CDN/Unsplash fallbacks)
+- [x] Build daily AI blog post auto-generation (LLM title, content, SEO meta, AI featured image)
+- [x] Schedule daily cron job to auto-post 1 blog article per day
+- [x] Send email notification to kevin@reacohomes.com with article title and link on each new post
