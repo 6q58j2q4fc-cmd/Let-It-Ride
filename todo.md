@@ -470,3 +470,10 @@
 - [x] Build daily AI blog post auto-generation (LLM title, content, SEO meta, AI featured image)
 - [x] Schedule daily cron job to auto-post 1 blog article per day
 - [x] Send email notification to kevin@reacohomes.com with article title and link on each new post
+
+## Zidy Integration & Legal Pages (10DLC Compliance)
+- [x] Add Zidy webchat script to index.html
+- [x] Create /privacy-policy page with provided content
+- [x] Create /terms-and-conditions page with SMS program content
+- [x] Register both routes in App.tsx
+- [x] Add footer links to both pages

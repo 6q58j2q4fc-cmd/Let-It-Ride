@@ -29,6 +29,8 @@ import { CustomerServiceChat } from "./components/CustomerServiceChat";
 import { CartProvider } from "./contexts/CartContext";
 import AdminLogin from "./pages/AdminLogin";
 import AdminPanel from "./pages/AdminPanel";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 function Router() {
   return (
@@ -65,6 +67,10 @@ function Router() {
       <Route path="/admin-signup" component={AdminLogin} />
       <Route path="/admin-panel" component={AdminPanel} />
       
+      {/* Legal pages */}
+      <Route path="/privacy-policy" component={PrivacyPolicy} />
+      <Route path="/terms-and-conditions" component={TermsAndConditions} />
+
       {/* 404 */}
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />

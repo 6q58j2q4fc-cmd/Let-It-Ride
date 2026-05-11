@@ -197,11 +197,11 @@ export function Footer() {
               <span>© {new Date().getFullYear()} Let It Ride Electric Bikes. All rights reserved.</span>
             </div>
             <div className="flex gap-5">
-              <Link href="/privacy" className="hover:text-white/70 transition-colors">
+              <Link href="/privacy-policy" className="hover:text-white/70 transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="hover:text-white/70 transition-colors">
-                Terms of Service
+              <Link href="/terms-and-conditions" className="hover:text-white/70 transition-colors">
+                Terms &amp; Conditions
               </Link>
             </div>
           </div>
